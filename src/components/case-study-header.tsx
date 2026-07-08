@@ -21,7 +21,7 @@ function ArrowBackIcon() {
 export function CaseStudyHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-stroke-dark bg-dark-primary">
-      <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-4 px-6 py-4 md:px-16">
+      <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-4 px-6 py-4 md:px-10 lg:px-16">
         <Link
           href="/"
           className="flex items-center gap-3 text-white"
