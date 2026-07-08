@@ -17,6 +17,18 @@
   --text-heading-h2--line-height: 48px;
   --text-heading-h2--font-weight: 600;
 
+  --text-heading-h3: 32px;
+  --text-heading-h3--line-height: 40px;
+  --text-heading-h3--font-weight: 600;
+
+  --text-project-subtitle: 32px;
+  --text-project-subtitle--line-height: 32px;
+  --text-project-subtitle--font-weight: 400;
+
+  --text-overline: 24px;
+  --text-overline--line-height: 32px;
+  --text-overline--font-weight: 400;
+
   --text-heading-h4: 24px;
   --text-heading-h4--line-height: 32px;
   --text-heading-h4--font-weight: 600;
