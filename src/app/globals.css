@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-dm-sans);
+
+  /* Colors — from Figma variables */
+  --color-dark-primary: #121212;
+  --color-stroke-dark: #282828;
+  --color-gray-dark: #535353;
+
+  /* Type scale — from Figma variables */
+  --text-heading-h1: 48px;
+  --text-heading-h1--line-height: 1.15;
+  --text-heading-h1--font-weight: 600;
+
+  --text-heading-h2: 40px;
+  --text-heading-h2--line-height: 1.15;
+  --text-heading-h2--font-weight: 600;
+
+  --text-heading-h4: 24px;
+  --text-heading-h4--line-height: 1.15;
+  --text-heading-h4--font-weight: 600;
+
+  --text-heading-h5: 20px;
+  --text-heading-h5--line-height: 32px;
+  --text-heading-h5--font-weight: 600;
+
+  --text-body-h1: 18px;
+  --text-body-h1--line-height: 32px;
+  --text-body-h1--font-weight: 400;
+
+  --text-body-h2: 16px;
+  --text-body-h2--line-height: 32px;
+  --text-body-h2--font-weight: 300;
+
+  --text-body-h3: 12px;
+  --text-body-h3--line-height: 24px;
+  --text-body-h3--font-weight: 300;
+
+  --radius-token: 4px;
+  --radius-token-lg: 8px;
+}
+
+body {
+  background: var(--color-dark-primary);
+  color: white;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
