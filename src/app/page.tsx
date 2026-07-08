@@ -50,13 +50,13 @@ export default function Home() {
       <SiteHeader />
 
       <main className="flex-1">
-        <section className="mx-auto w-full max-w-[1280px] px-6 pt-16 pb-12 md:px-16 md:pt-40 md:pb-16">
+        <section className="mx-auto w-full max-w-[1280px] px-6 pt-12 pb-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
           <div className="flex flex-col items-start gap-6">
-            <h1 className="max-w-[884px] text-[32px] leading-[1.15] font-semibold text-white md:text-heading-h2">
+            <h1 className="w-full text-[24px] leading-8 font-semibold text-white md:text-heading-h2 md:leading-[48px] lg:max-w-[884px]">
               Over a decade of solving complex B2B problems with clear
               thinking, fewer steps, and better outcomes.
             </h1>
-            <p className="max-w-[599px] text-body-h1 text-white/70">
+            <p className="w-full text-body-h1 text-white/70 md:max-w-[500px] lg:max-w-[599px]">
               Based in Colombia, working globally.
             </p>
             <div className="flex flex-wrap items-start gap-6">
@@ -78,10 +78,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-12 px-6 pb-16 md:gap-16 md:px-16 md:pb-16">
+        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-12 px-6 pb-16 md:px-10 lg:gap-16 lg:px-16">
           <h2 className="w-full text-heading-h5 text-white">Case Studies</h2>
 
-          <div className="flex w-full flex-col gap-12 md:flex-row md:gap-16">
+          <div className="flex w-full flex-col gap-12 md:flex-row md:gap-8 lg:gap-16">
             {featuredCaseStudies.map((cs) => (
               <CaseStudyCard key={cs.href} {...cs} />
             ))}
@@ -91,7 +91,7 @@ export default function Home() {
 
           <h2 className="w-full text-heading-h5 text-white">Showcase</h2>
 
-          <div className="flex w-full flex-col gap-12 md:gap-16">
+          <div className="flex w-full flex-col gap-16">
             {showcaseCaseStudies.map((cs) => (
               <ShowcaseRow key={cs.href} {...cs} />
             ))}

@@ -17,7 +17,7 @@ export function CaseStudyCard({
       href={href}
       className="flex w-full flex-col gap-4 md:flex-1 md:min-w-0"
     >
-      <div className="relative h-[220px] w-full overflow-hidden rounded-token md:h-[315px]">
+      <div className="relative h-[220px] w-full overflow-hidden rounded-token lg:h-[315px]">
         <Image
           src={image}
           alt=""
