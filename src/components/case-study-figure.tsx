@@ -7,6 +7,7 @@ export function CaseStudyFigure({
   aspectClassName,
   captionClassName = "text-white/70",
   gapClassName = "gap-2",
+  roundedClassName = "rounded-xl",
 }: {
   src: string;
   caption: string;
@@ -14,11 +15,12 @@ export function CaseStudyFigure({
   aspectClassName?: string;
   captionClassName?: string;
   gapClassName?: string;
+  roundedClassName?: string;
 }) {
   return (
     <div className={`flex w-full flex-col items-start ${gapClassName}`}>
       <div
-        className={`relative w-full overflow-hidden rounded-xl ${aspectClassName ?? ""}`}
+        className={`relative w-full overflow-hidden ${roundedClassName} ${aspectClassName ?? ""}`}
         style={
           aspectClassName
             ? undefined

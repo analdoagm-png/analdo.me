@@ -8,7 +8,10 @@ export function CaseStudyDecisionBlock({
   figureCaption,
   figureAspect,
   figureAspectClassName,
+  figureRoundedClassName,
   reverseOnDesktop = false,
+  mdGapClassName = "md:gap-16",
+  figureCaptionHiddenAtDesktop = false,
 }: {
   label: string;
   title: string;
@@ -17,11 +20,14 @@ export function CaseStudyDecisionBlock({
   figureCaption: string;
   figureAspect?: string;
   figureAspectClassName?: string;
+  figureRoundedClassName?: string;
   reverseOnDesktop?: boolean;
+  mdGapClassName?: string;
+  figureCaptionHiddenAtDesktop?: boolean;
 }) {
   return (
     <div
-      className={`flex w-full flex-col items-start gap-6 md:gap-16 lg:items-start lg:gap-12 ${
+      className={`flex w-full flex-col items-start gap-6 lg:items-start lg:gap-12 ${mdGapClassName} ${
         reverseOnDesktop ? "lg:flex-row-reverse" : "lg:flex-row"
       }`}
     >
@@ -36,7 +42,8 @@ export function CaseStudyDecisionBlock({
           caption={figureCaption}
           aspect={figureAspect}
           aspectClassName={figureAspectClassName}
-          captionClassName="text-white/70 lg:text-white"
+          roundedClassName={figureRoundedClassName}
+          captionClassName={`text-white/70 lg:text-white${figureCaptionHiddenAtDesktop ? " lg:hidden" : ""}`}
         />
       </div>
     </div>
