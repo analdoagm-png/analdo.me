@@ -5,11 +5,13 @@ export function ProjectImage({
   aspect = "2880/1800",
   aspectClassName,
   roundedClassName = "rounded-lg",
+  priority = false,
 }: {
   src: string;
   aspect?: string;
   aspectClassName?: string;
   roundedClassName?: string;
+  priority?: boolean;
 }) {
   return (
     <div
@@ -25,7 +27,8 @@ export function ProjectImage({
         alt=""
         fill
         className="object-cover"
-        sizes="100vw"
+        sizes="(min-width: 1280px) 1280px, 100vw"
+        priority={priority}
       />
     </div>
   );

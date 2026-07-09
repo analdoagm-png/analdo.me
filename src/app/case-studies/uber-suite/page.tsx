@@ -32,6 +32,7 @@ export default function UberSuiteCaseStudy() {
           <ProjectImage
             src="/images/uber-suite/project-image-1.png"
             aspect="3200/3274"
+            priority
           />
           <ProjectImage
             src="/images/uber-suite/project-image-2.png"

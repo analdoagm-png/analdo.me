@@ -8,6 +8,7 @@ export function CaseStudyFigure({
   captionClassName = "text-white/70",
   gapClassName = "gap-2",
   roundedClassName = "rounded-xl",
+  priority = false,
 }: {
   src: string;
   caption: string;
@@ -16,6 +17,7 @@ export function CaseStudyFigure({
   captionClassName?: string;
   gapClassName?: string;
   roundedClassName?: string;
+  priority?: boolean;
 }) {
   return (
     <div className={`flex w-full flex-col items-start ${gapClassName}`}>
@@ -27,7 +29,14 @@ export function CaseStudyFigure({
             : { aspectRatio: aspect.replace("/", " / ") }
         }
       >
-        <Image src={src} alt="" fill className="object-cover" sizes="100vw" />
+        <Image
+          src={src}
+          alt=""
+          fill
+          className="object-cover"
+          sizes="(min-width: 1280px) 1280px, 100vw"
+          priority={priority}
+        />
       </div>
       <p className={`w-full text-center text-body-h3 ${captionClassName}`}>
         {caption}

@@ -41,6 +41,7 @@ export default function ArrowheadTransitCaseStudy() {
             aspect="2880/1800"
             gapClassName="gap-4 lg:gap-16"
             roundedClassName="rounded-lg lg:rounded-xl"
+            priority
           />
 
           <Divider />

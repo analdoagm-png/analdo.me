@@ -41,6 +41,7 @@ export default function GoRightCaseStudy() {
             caption="Exhibit A — staging.protaskit.com, before GoRight had a brand or a consistent pattern. Desktop and mobile spoke different visual languages."
             aspect="2000/1235"
             gapClassName="gap-4 lg:gap-16"
+            priority
           />
 
           <Divider />

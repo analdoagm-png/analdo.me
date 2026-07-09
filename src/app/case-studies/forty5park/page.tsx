@@ -29,7 +29,10 @@ export default function Forty5ParkCaseStudy() {
             description="Real estate acquisitions involve dozens of variables, yet most teams still rely on spreadsheets and gut instinct. I designed Forty5Park to replace that friction — a single platform where acquisition managers can evaluate deals, forecast valuations up to a year ahead, and benchmark properties against sector peers, all without switching tools."
           />
 
-          <ProjectImage src="/images/forty5park/project-image-1.png" />
+          <ProjectImage
+            src="/images/forty5park/project-image-1.png"
+            priority
+          />
           <ProjectImage src="/images/forty5park/project-image-2.png" />
 
           <CaseStudySectionBlock

@@ -32,6 +32,7 @@ export default function GithubSecurityFindingsCaseStudy() {
           <ProjectImage
             src="/images/github-security/project-image-1.png"
             aspect="3360/3188"
+            priority
           />
           <ProjectImage
             src="/images/github-security/project-image-2.png"
