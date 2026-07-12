@@ -87,12 +87,41 @@ the ones touched so far:
   browser-default blue), and `@media (prefers-reduced-motion: reduce)` neutralizes all
   transitions/animations site-wide. Don't add per-element `focus:` overrides unless a
   specific element genuinely needs to deviate.
-- **Hover language is intentionally narrow**: plain text links dim to `text-white/60`
-  (`transition-colors duration-200`); the case-study card/row images get a contained 5%
-  zoom (`group-hover:scale-105 duration-500 ease-out`). Don't introduce a third hover
-  pattern without a reason — restraint is the point.
+- **Hover/active language** (expanded in the interaction-design pass — see below): plain
+  text links dim to `text-white/60` on hover, `text-white/40` on `:active`
+  (`transition-colors duration-200`); case-study card/row images get a contained 5% zoom
+  (`group-hover:scale-105 duration-500 ease-out`); `CaseStudyCard` additionally shifts its
+  border `stroke-dark` → `gray-dark`, gains an ambient `hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]`,
+  and presses with `active:scale-[0.99]`. Still a closed set — don't add a fourth pattern
+  without a reason, but the set is now 3 (dim, zoom, lift), not 2.
 - Every page's `<main>` has `id="main-content"`; `SiteHeader`/`CaseStudyHeader` render a
   `.skip-link` as their first child targeting it.
+
+## Motion convention
+
+Every page has a zero-JS, page-load-only entrance: `.animate-fade-up` (defined once in
+`globals.css` — 12px translateY + opacity, 700ms `cubic-bezier(0.16, 1, 0.3, 1)`, `both`
+fill mode) baked into the root className of nearly every content component, not applied
+ad hoc per page. It's a page-load animation, not a scroll-triggered reveal — this project
+is Server Components only (see Stack), so there's no client-side IntersectionObserver
+option without a real architecture change. Side-by-side items (home cards, points-grid
+items, image pairs) get a small per-item `animationDelay` stagger (60–80ms via inline
+`style`, computed from `.map()` index server-side); sequential full-width blocks (most of
+a case study page) don't need mutual staggering and just use the base timing. Elements
+inside a `md:hidden`/`lg:hidden` responsive variant correctly restart their animation when
+the breakpoint makes them visible — don't "fix" a `getComputedStyle().opacity === 0` check
+against a hidden-at-this-breakpoint element, it's not a bug. The reduced-motion fallback is
+free: the existing global `@media (prefers-reduced-motion: reduce)` rule already forces
+`animation-duration: 0.01ms` on everything, including new keyframes.
+
+## Typography conventions
+
+- Headings (`h1`–`h3`) and short centered display statements (`CaseStudyCallout`,
+  `CaseStudyStatement`) get `text-balance`; long-form paragraphs get `text-pretty`.
+- Line-length caps on body prose use real `ch` units (`max-w-[70ch]`), not guessed pixel
+  values — a `lg:max-w-[720px]` that looked reasonable was actually ~80ch at that font
+  size, and two callout paragraphs had no cap at all and ran edge-to-edge on wide
+  viewports. `ch` is self-correcting if the font or size ever changes; a pixel guess isn't.
 
 ## Work completed so far
 
@@ -132,3 +161,19 @@ the ones touched so far:
   sides. Bare text nodes as direct children of a `flex` container become anonymous flex
   items and get `gap` spacing too — wrap punctuation that needs to hug a sibling, don't
   leave it bare
+- Font/motion/typography/interaction polish pass (via `/impeccable` where invoked — note:
+  on this machine the `impeccable` skill's `scripts/` and `reference/*.md` files aren't
+  installed, only its top-level `SKILL.md` is; `npx impeccable install` was declined as an
+  unverified-package execution risk, so every `/impeccable <command>` this session was
+  followed manually using the guidance embedded in the `SKILL.md` prompt itself — don't
+  assume `node .claude/skills/impeccable/scripts/context.mjs` etc. exist, check first):
+  - Loaded DM Sans as a true variable font instead of three fixed static weights — fixed
+    the `Chip` component's `font-bold` rendering as browser-synthesized faux-bold
+  - Added the page-load `animate-fade-up` entrance (home hero + cards first, then
+    extended to every content block on all 5 case study pages) — see Motion convention
+  - Typography pass — see Typography conventions above
+  - Interaction pass: `CaseStudyCard` hover now moves the border color and adds an
+    ambient shadow (previously only the thumbnail image reacted), a forward-arrow slides
+    in next to card titles on hover (reusing `CaseStudyHeader`'s existing back-arrow
+    motif instead of inventing a new one), and every primary link/card got an `:active`
+    press state that was previously missing entirely (hover-only, no touch/click feedback)
