@@ -20,7 +20,7 @@ export default function Forty5ParkCaseStudy() {
 
       <main id="main-content" className="flex-1">
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-16 pb-16 md:gap-16 md:px-16">
-          <h1 className="max-w-[884px] text-heading-h3 text-white md:text-heading-h1">
+          <h1 className="max-w-[884px] animate-fade-up text-balance text-heading-h3 text-white md:text-heading-h1">
             Forty5Park
           </h1>
 

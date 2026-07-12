@@ -24,7 +24,7 @@ export function CaseStudyFigure({
   return (
     <div className={`flex w-full flex-col items-start ${gapClassName}`}>
       <div
-        className={`relative w-full overflow-hidden bg-stroke-dark ${roundedClassName} ${aspectClassName ?? ""}`}
+        className={`relative w-full overflow-hidden bg-stroke-dark ${roundedClassName} ${aspectClassName ?? ""} animate-fade-up ${priority ? "[animation-delay:200ms]" : ""}`}
         style={
           aspectClassName
             ? undefined

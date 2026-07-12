@@ -98,7 +98,7 @@ export default function ArrowheadTransitCaseStudy() {
                 eyebrow="The Decisions"
                 title="Three calls that shaped how it actually got used"
               />
-              <p className="w-full text-body-h2 text-white md:text-body-h1 lg:max-w-[720px]">
+              <p className="w-full animate-fade-up text-pretty text-body-h2 text-white md:text-body-h1 lg:max-w-[70ch]">
                 The brief was simple — replace the database, cut manual
                 entry, connect drivers and dispatch. Getting there took a
                 few specific, and occasionally uncomfortable, calls.
@@ -147,7 +147,7 @@ export default function ArrowheadTransitCaseStudy() {
                 eyebrow="How I Got There"
                 title="Audit, interviews, flows — then screens"
               />
-              <p className="w-full text-body-h2 text-white md:text-body-h1 lg:max-w-[720px]">
+              <p className="w-full animate-fade-up text-pretty text-body-h2 text-white md:text-body-h1 lg:max-w-[70ch]">
                 I started with a design audit of the existing tool, then sat
                 down with dispatchers to walk through their day-to-day.
                 Those conversations became golden-path flows and a sitemap
@@ -184,7 +184,7 @@ export default function ArrowheadTransitCaseStudy() {
                 eyebrow="The Platform"
                 title="What dispatch, drivers, and billing actually see now"
               />
-              <p className="w-full text-body-h2 text-white md:text-body-h1 lg:max-w-[720px]">
+              <p className="w-full animate-fade-up text-pretty text-body-h2 text-white md:text-body-h1 lg:max-w-[70ch]">
                 One dashboard replaced the Access file — trips this week,
                 incoming referrals, and available drivers, all live.
               </p>
@@ -246,11 +246,11 @@ export default function ArrowheadTransitCaseStudy() {
             />
           </div>
 
-          <div className="flex w-full flex-col items-start gap-4 rounded-xl border border-gray-dark p-8">
-            <p className="w-full text-heading-h5 text-white">
+          <div className="flex w-full animate-fade-up flex-col items-start gap-4 rounded-xl border border-gray-dark p-8">
+            <p className="w-full text-balance text-heading-h5 text-white">
               The database is gone.
             </p>
-            <p className="w-full text-body-h2 text-white/70 lg:text-body-h1">
+            <p className="w-full text-pretty text-body-h2 text-white/70 lg:max-w-[70ch] lg:text-body-h1">
               Dispatchers plan two weeks out instead of two or three days.
               Drivers show up in the system instead of on a paper form.
               Referrals land in one queue instead of three separate
@@ -260,7 +260,7 @@ export default function ArrowheadTransitCaseStudy() {
             </p>
           </div>
 
-          <p className="w-full text-center text-body-h3 text-white/70 lg:text-body-h2">
+          <p className="w-full animate-fade-up text-center text-body-h3 text-white/70 lg:text-body-h2">
             ROLE — Lead Product Designer, product ideation through design
             &amp; development handoff.
             <br className="hidden lg:block" /> Handoff documented in

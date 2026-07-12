@@ -96,7 +96,7 @@ export default function GoRightCaseStudy() {
               eyebrow="The Decisions"
               title="Three calls that shaped how it actually got used"
             />
-            <p className="w-full text-body-h2 text-white md:text-body-h1 lg:max-w-[720px]">
+            <p className="w-full animate-fade-up text-pretty text-body-h2 text-white md:text-body-h1 lg:max-w-[70ch]">
               The brief was parity, progression, accessibility, immediate
               value. Getting there took a few specific calls — including one
               where the right move was reversing course.
@@ -149,7 +149,7 @@ export default function GoRightCaseStudy() {
               eyebrow="How I Got There"
               title="Audit, workshops, a journey map — then screens"
             />
-            <p className="w-full text-body-h2 text-white md:text-body-h1 lg:max-w-[720px]">
+            <p className="w-full animate-fade-up text-pretty text-body-h2 text-white md:text-body-h1 lg:max-w-[70ch]">
               I audited the existing platform, then ran product ideation
               workshops with technicians, stakeholders, and on-road
               managers. Those sessions mapped the navigation, the
@@ -191,7 +191,7 @@ export default function GoRightCaseStudy() {
               eyebrow="The Platform"
               title="What managers and technicians see now"
             />
-            <p className="w-full text-body-h2 text-white md:text-body-h1 lg:max-w-[720px]">
+            <p className="w-full animate-fade-up text-pretty text-body-h2 text-white md:text-body-h1 lg:max-w-[70ch]">
               One dashboard, branded and live — task counts, submitted vs.
               received, reports, and activity, all in the same system
               technicians report into.
@@ -273,11 +273,11 @@ export default function GoRightCaseStudy() {
             ]}
           />
 
-          <div className="flex w-full flex-col items-center gap-4 rounded-xl border border-gray-dark p-8">
-            <p className="w-full text-heading-h5 text-white">
+          <div className="flex w-full animate-fade-up flex-col items-center gap-4 rounded-xl border border-gray-dark p-8">
+            <p className="w-full text-balance text-heading-h5 text-white">
               Technicians stopped calling it in.
             </p>
-            <p className="w-full text-body-h2 text-white/70 md:text-body-h1">
+            <p className="w-full text-pretty text-body-h2 text-white/70 md:max-w-[70ch] md:text-body-h1">
               Status lives in one place now — a technician&rsquo;s next
               task, a manager&rsquo;s overview, and a report at the end of
               the week all pull from the same live signal. Beta testers
@@ -288,7 +288,7 @@ export default function GoRightCaseStudy() {
             </p>
           </div>
 
-          <p className="w-full text-center text-body-h3 text-white/70 md:text-body-h2">
+          <p className="w-full animate-fade-up text-center text-body-h3 text-white/70 md:text-body-h2">
             ROLE — Lead Product Designer, from requirements gathering
             through this iteration of the Merlin platform.
             <br className="hidden lg:block" /> Ideation workshops and

@@ -16,10 +16,11 @@ export function CaseStudyImagePair({
       {[
         { src: srcA, alt: altA },
         { src: srcB, alt: altB },
-      ].map(({ src, alt }) => (
+      ].map(({ src, alt }, index) => (
         <div
           key={src}
-          className="relative h-[240px] w-full overflow-hidden rounded-lg bg-stroke-dark md:h-[400px] md:flex-1 md:min-w-0 lg:h-[683.688px]"
+          className="relative h-[240px] w-full animate-fade-up overflow-hidden rounded-lg bg-stroke-dark md:h-[400px] md:flex-1 md:min-w-0 lg:h-[683.688px]"
+          style={{ animationDelay: `${index * 80}ms` }}
         >
           <Image
             src={src}

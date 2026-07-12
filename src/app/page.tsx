@@ -54,11 +54,11 @@ export default function Home() {
       <main id="main-content" className="flex-1">
         <section className="mx-auto w-full max-w-[1280px] px-6 pt-12 pb-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
           <div className="flex flex-col items-start gap-6">
-            <h1 className="w-full text-[24px] leading-8 font-semibold text-white md:text-heading-h2 md:leading-[48px] lg:max-w-[884px]">
+            <h1 className="w-full animate-fade-up text-balance text-[24px] leading-8 font-semibold text-white md:text-heading-h2 md:leading-[48px] lg:max-w-[884px]">
               Over a decade of solving complex B2B problems with clear
               thinking, fewer steps, and better outcomes.
             </h1>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 animate-fade-up [animation-delay:100ms]">
               <p className="text-body-h1 text-white/70">
                 Based in Colombia, working globally with
               </p>
@@ -70,18 +70,18 @@ export default function Home() {
               <span className="text-body-h1 text-white/70">&</span>
               <Chip label="Codex" />
             </div>
-            <div className="flex flex-wrap items-start gap-6">
+            <div className="flex flex-wrap items-start gap-6 animate-fade-up [animation-delay:200ms]">
               <a
                 href="mailto:analdoagm@gmail.com?subject="
                 target="_blank"
-                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60"
+                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
               >
                 / Contact me
               </a>
               <a
                 href="https://www.linkedin.com/in/analdo-gomez-17768a3b"
                 target="_blank"
-                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60"
+                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
               >
                 / LinkedIn
               </a>
@@ -92,7 +92,12 @@ export default function Home() {
         <section className="mx-auto w-full max-w-[1280px] px-6 pb-16 md:px-10 lg:px-16">
           <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
             {caseStudies.map((cs, index) => (
-              <CaseStudyCard key={cs.href} {...cs} priority={index === 0} />
+              <CaseStudyCard
+                key={cs.href}
+                {...cs}
+                priority={index === 0}
+                style={{ animationDelay: `${index * 70}ms` }}
+              />
             ))}
           </div>
         </section>

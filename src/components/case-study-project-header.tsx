@@ -12,9 +12,9 @@ export function CaseStudyProjectHeader({
   intro: string;
 }) {
   return (
-    <div className="flex w-full flex-col items-start gap-6">
+    <div className="flex w-full flex-col items-start gap-6 animate-fade-up">
       <div className="flex w-full flex-col items-start">
-        <h1 className="w-full text-heading-h3 text-white md:text-heading-h1">
+        <h1 className="w-full text-balance text-heading-h3 text-white md:text-heading-h1">
           {title}
         </h1>
         <p className="w-full text-overline text-white/70 md:text-project-subtitle">
@@ -33,7 +33,7 @@ export function CaseStudyProjectHeader({
         </div>
       </div>
 
-      <p className="w-full text-body-h2 text-white md:text-body-h1 lg:max-w-[720px]">
+      <p className="w-full text-pretty text-body-h2 text-white md:text-body-h1 lg:max-w-[70ch]">
         {intro}
       </p>
     </div>

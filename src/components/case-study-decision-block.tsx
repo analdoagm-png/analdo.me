@@ -31,10 +31,14 @@ export function CaseStudyDecisionBlock({
         reverseOnDesktop ? "lg:flex-row-reverse" : "lg:flex-row"
       }`}
     >
-      <div className="flex w-full flex-col items-start gap-2 lg:w-[400px] lg:shrink-0">
+      <div className="flex w-full flex-col items-start gap-2 animate-fade-up lg:w-[400px] lg:shrink-0">
         <p className="text-body-h3 text-white">{label}</p>
-        <h3 className="w-full text-heading-h5 text-white">{title}</h3>
-        <p className="w-full text-body-h2 text-white/70">{description}</p>
+        <h3 className="w-full text-balance text-heading-h5 text-white">
+          {title}
+        </h3>
+        <p className="w-full text-pretty text-body-h2 text-white/70">
+          {description}
+        </p>
       </div>
       <div className="w-full lg:flex-1 lg:min-w-0">
         <CaseStudyFigure
