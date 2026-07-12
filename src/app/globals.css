@@ -51,6 +51,7 @@
 
   --radius-token: 4px;
   --radius-token-lg: 8px;
+  --radius-token-xl: 12px;
 }
 
 body {

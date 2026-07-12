@@ -1,11 +1,11 @@
 export function SiteFooter() {
   return (
-    <footer className="w-full">
+    <footer className="w-full border-t border-stroke-dark">
       <div className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-4 px-6 py-6 md:flex-row md:items-center md:px-10 lg:items-start lg:px-16 lg:py-16 lg:h-40">
-        <p className="w-full text-body-h2 text-white/70 lg:flex-1">
+        <p className="w-full text-body-h2 text-white/70 md:w-auto md:flex-1">
           © Analdo Gomez / 2026
         </p>
-        <div className="flex items-start gap-4">
+        <div className="flex shrink-0 items-start gap-4">
           <a
             href="mailto:analdoagm@gmail.com?subject="
             target="_blank"

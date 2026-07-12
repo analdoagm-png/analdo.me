@@ -1,46 +1,50 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyCard } from "@/components/case-study-card";
-import { ShowcaseRow } from "@/components/showcase-row";
+import { Chip } from "@/components/chip";
 
-const featuredCaseStudies = [
-  {
-    href: "/case-studies/arrowhead-transit",
-    image: "/images/arrowhead-transit.png",
-    title: "Arrowhead Transit",
-    description:
-      "Rebuilt Arrowhead Transit's single-file Access database into a live dispatch platform, extending booking horizon from 2-3 days to 2+ weeks.",
-  },
+const heroChips = ["Figma", "Claude", "Codex"];
+
+const caseStudies = [
   {
     href: "/case-studies/goright",
     image: "/images/goright.png",
     title: "GoRight",
     description:
-      "Replaced GoRight's inconsistent web/mobile dispatch tool with one live system — 4 of 5 beta transportation companies stayed on as testers.",
+      "Replaced GoRight's inconsistent web/mobile dispatch tool with one live system — 4 of 5 beta transportation companies stayed on as paying customers.",
+    chips: ["Case Study", "Dispatch", "Desktop", "Mobile"],
   },
-];
-
-const showcaseCaseStudies = [
+  {
+    href: "/case-studies/arrowhead-transit",
+    image: "/images/arrowhead-transit.png",
+    title: "Arrowhead Transit",
+    description:
+      "Rebuilt Arrowhead Transit's single-file Access database into a live dispatch platform, extending booking and tracking across web and mobile.",
+    chips: ["Case Study", "Dispatch", "Desktop"],
+  },
   {
     href: "/case-studies/forty5park",
     image: "/images/forty5park.png",
     title: "Forty5Park",
     description:
-      "AI-powered platform for real estate companies to manage acquisitions, forecast property valuations up to a year ahead, and benchmark against sector peers.",
+      "AI-powered platform for real estate companies to manage acquisitions, forecast property valuations using machine learning, and streamline due diligence workflows.",
+    chips: ["Showcase", "Real Estate", "AI", "Desktop"],
   },
   {
     href: "/case-studies/uber-suite",
     image: "/images/uber-suite.png",
     title: "Uber Suite",
     description:
-      "An all-in-one internal toolset for Uber, streamlining communication, boosting employee engagement, and enabling fast, AI-driven knowledge discovery across the organization.",
+      "An all-in-one internal toolset for Uber, streamlining communication, boosting employee engagement, and simplifying operations across global teams.",
+    chips: ["Showcase", "Enterprise", "Desktop", "Mobile"],
   },
   {
     href: "/case-studies/github-security-findings",
     image: "/images/github-security.png",
     title: "Github's Security Findings",
     description:
-      "GH's Security Findings helps CTOs and managers ensure code security and reliability by tracking alerts, notifying the right stakeholders, and guiding issues to resolution through a clear, streamlined workflow.",
+      "GH's Security Findings helps CTOs and managers ensure code security and reliability by tracking alerts, vulnerabilities, and dependency risks across repositories.",
+    chips: ["Showcase", "Security", "Desktop"],
   },
 ];
 
@@ -56,9 +60,14 @@ export default function Home() {
               Over a decade of solving complex B2B problems with clear
               thinking, fewer steps, and better outcomes.
             </h1>
-            <p className="w-full text-body-h1 text-white/70 md:max-w-[500px] lg:max-w-[599px]">
-              Based in Colombia, working globally.
-            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-body-h1 text-white/70">
+                Based in Colombia, working globally with
+              </p>
+              {heroChips.map((chip) => (
+                <Chip key={chip} label={chip} />
+              ))}
+            </div>
             <div className="flex flex-wrap items-start gap-6">
               <a
                 href="mailto:analdoagm@gmail.com?subject="
@@ -78,22 +87,10 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-12 px-6 pb-16 md:px-10 lg:gap-16 lg:px-16">
-          <h2 className="w-full text-heading-h5 text-white">Case Studies</h2>
-
-          <div className="flex w-full flex-col gap-12 md:flex-row md:gap-8 lg:gap-16">
-            {featuredCaseStudies.map((cs) => (
-              <CaseStudyCard key={cs.href} {...cs} />
-            ))}
-          </div>
-
-          <div className="h-px w-full bg-gray-dark" />
-
-          <h2 className="w-full text-heading-h5 text-white">Showcase</h2>
-
-          <div className="flex w-full flex-col gap-16">
-            {showcaseCaseStudies.map((cs) => (
-              <ShowcaseRow key={cs.href} {...cs} />
+        <section className="mx-auto w-full max-w-[1280px] px-6 pb-16 md:px-10 lg:px-16">
+          <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+            {caseStudies.map((cs, index) => (
+              <CaseStudyCard key={cs.href} {...cs} priority={index === 0} />
             ))}
           </div>
         </section>
