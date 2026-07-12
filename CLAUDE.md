@@ -124,3 +124,11 @@ the ones touched so far:
   above)
 - Pushed directly to `main` (commit `406aae0`) after browser-verifying all three
   breakpoints — no PR for this change
+- Hero chip copy tweak: the "Figma, Claude & Codex" list needed a comma hugging the
+  Figma chip (no gap) and a normal-spaced `&` between Claude and Codex. Pattern used:
+  wrap a chip + its tight trailing punctuation in one `inline-flex items-center` span
+  with no `gap`, so the punctuation sits flush against the chip; standalone connector
+  words (like `&`) go directly in the parent flex row and pick up its `gap-2` on both
+  sides. Bare text nodes as direct children of a `flex` container become anonymous flex
+  items and get `gap` spacing too — wrap punctuation that needs to hug a sibling, don't
+  leave it bare

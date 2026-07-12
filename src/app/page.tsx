@@ -3,8 +3,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyCard } from "@/components/case-study-card";
 import { Chip } from "@/components/chip";
 
-const heroChips = ["Figma", "Claude", "Codex"];
-
 const caseStudies = [
   {
     href: "/case-studies/goright",
@@ -64,9 +62,13 @@ export default function Home() {
               <p className="text-body-h1 text-white/70">
                 Based in Colombia, working globally with
               </p>
-              {heroChips.map((chip) => (
-                <Chip key={chip} label={chip} />
-              ))}
+              <span className="inline-flex items-center">
+                <Chip label="Figma" />
+                <span className="text-body-h1 text-white/70">,</span>
+              </span>
+              <Chip label="Claude" />
+              <span className="text-body-h1 text-white/70">&</span>
+              <Chip label="Codex" />
             </div>
             <div className="flex flex-wrap items-start gap-6">
               <a
