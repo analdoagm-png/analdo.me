@@ -14,11 +14,16 @@ source file (`portfolio-sourcefile`, fileKey `ti7TCH6aLLutT4OIAvSQec`) and imple
 
 ## Structure
 
-- `src/app/page.tsx` — home page (hero, case studies grid, showcase list)
+- `src/app/page.tsx` — home page: hero (headline, chip-tagged subtext, contact links) +
+  a single unified `CaseStudyCard` grid for all 5 projects (no more featured/showcase
+  split — that two-tier layout was replaced when the home page was redesigned around
+  Figma's card + chip pattern)
 - `src/app/case-studies/*/page.tsx` — 5 case study pages: Forty5Park, Uber Suite,
   Github's Security Findings, GoRight, Arrowhead Transit
-- `src/components/` — shared, flat (non-nested) component files. Two structural
-  patterns exist:
+- `src/components/` — shared, flat (non-nested) component files. `Chip` is a small shared
+  primitive (pill badge — `stroke-dark` bg, `gray-dark` border, bold 12px label) used in
+  both the hero and every case-study card's tag row. Two structural patterns exist for
+  case study pages:
   - **Simple case studies** (Forty5Park, Uber Suite, Github's Security Findings):
     `CaseStudyHeader` + `CaseStudyIntroBlock`/`CaseStudySectionBlock` + `ProjectImage`
   - **Editorial case studies** (GoRight, Arrowhead Transit): a richer format using
@@ -42,6 +47,18 @@ Several shared components expose override props (`aspectClassName`, `roundedClas
 `mdGapClassName`, `maxWidthClassName`, etc.) because individual case studies deviate from
 each other at specific breakpoints — always re-check the actual Figma frame per page
 rather than assuming a prior case study's values generalize.
+
+On dense components (home page cards), mobile drops one step down the type scale from
+desktop (e.g. title `heading-h5` on mobile → `heading-h4` from `md` up; description
+`body-h2` on mobile → `body-h1` from `md` up) rather than reusing the desktop size at a
+smaller viewport — check per-component whether this step-down is warranted, don't assume
+it's global.
+
+Gotcha: when a flex row switches to `flex-row` at one breakpoint (e.g. `md`) but a child's
+`flex-1`/width override is only set at a later breakpoint (e.g. `lg`), that child still
+claims full width in between and forces the row to wrap. Set the width override on the
+same breakpoint the row layout changes, not a later one (`site-footer.tsx` fixed:
+copyright text needs `md:flex-1` alongside `md:flex-row`, not `lg:flex-1`).
 
 ## Figma workflow
 
@@ -93,3 +110,17 @@ the ones touched so far:
   dim, card image zoom) and a zero-JS image-loading placeholder plus a minimal
   `case-studies/loading.tsx`
 - All work merged to `main` via short-lived feature branches (no long-running branches)
+- Home page redesign (matching a Figma update to the `page-home` frame): replaced the
+  featured/showcase two-tier layout with one `CaseStudyCard` grid (1 col on mobile/tablet,
+  2 col from `lg`) carrying a tag `Chip` row per project; added the same chips to the hero
+  subtext; added `--radius-token-xl` (12px) for the card corner radius, following the
+  existing `radius/N` → `radius-token*` naming from Figma variables. No dedicated
+  tablet/mobile Figma frame existed for this new grid (unlike the footer's explicit
+  breakpoint symbols) — the responsive behavior was extrapolated from the site's existing
+  3-tier convention and eyeballed against content-cramping at each width, not pixel-matched
+  to a source frame
+- Footer fix: added the `border-t border-stroke-dark` top border from the updated Figma
+  footer component, and fixed a tablet-width wrap bug (see the flex-1/breakpoint gotcha
+  above)
+- Pushed directly to `main` (commit `406aae0`) after browser-verifying all three
+  breakpoints — no PR for this change
