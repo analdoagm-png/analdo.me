@@ -15,19 +15,19 @@ export function CaseStudyCard({
   return (
     <Link
       href={href}
-      className="flex w-full flex-col gap-4 md:flex-1 md:min-w-0"
+      className="group flex w-full flex-col gap-4 md:flex-1 md:min-w-0"
     >
-      <div className="relative h-[220px] w-full overflow-hidden rounded-token lg:h-[315px]">
+      <div className="relative h-[220px] w-full overflow-hidden rounded-token bg-stroke-dark lg:h-[315px]">
         <Image
           src={image}
-          alt=""
+          alt={`${title} project thumbnail`}
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           sizes="(min-width: 768px) 50vw, 100vw"
         />
       </div>
       <div className="flex w-full flex-col gap-2">
-        <p className="text-heading-h5 text-white">{title}</p>
+        <h3 className="text-heading-h5 text-white">{title}</h3>
         <p className="text-body-h1 text-white/70">{description}</p>
       </div>
     </Link>

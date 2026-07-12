@@ -18,9 +18,9 @@ export default function UberSuiteCaseStudy() {
     <>
       <CaseStudyHeader />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-16 pb-16 md:gap-16 md:px-16">
-          <h1 className="w-full text-[32px] leading-[1.15] font-semibold text-white md:text-heading-h1">
+          <h1 className="w-full text-heading-h3 text-white md:text-heading-h1">
             Uber Suite
           </h1>
 
@@ -31,11 +31,13 @@ export default function UberSuiteCaseStudy() {
 
           <ProjectImage
             src="/images/uber-suite/project-image-1.png"
+            alt="Uber Search results screen showing employee profile cards for a company-wide people search."
             aspect="3200/3274"
             priority
           />
           <ProjectImage
             src="/images/uber-suite/project-image-2.png"
+            alt="Uber Suite release plan form for configuring a company-wide announcement rollout."
             aspect="3840/2800"
           />
 
@@ -44,14 +46,27 @@ export default function UberSuiteCaseStudy() {
             description="The problem wasn't a lack of tools — it was too many disconnected ones. My focus was on reducing cognitive load for employees navigating across teams, so I built around a unified navigation model and surfaced relevant content based on role and context."
           />
 
-          <ProjectImage src="/images/uber-suite/project-image-3.png" />
+          <ProjectImage
+            src="/images/uber-suite/project-image-3.png"
+            alt="Uber Suite dashboard showing recent announcements and release management tools."
+          />
           <ProjectImage
             src="/images/uber-suite/project-image-4.png"
+            alt="Uber Suite mobile app screens showing team member profiles and a department page."
             aspect="2880/2560"
           />
-          <ProjectImage src="/images/uber-suite/project-image-5.png" />
-          <ProjectImage src="/images/uber-suite/project-image-6.png" />
-          <ProjectImage src="/images/uber-suite/project-image-7.png" />
+          <ProjectImage
+            src="/images/uber-suite/project-image-5.png"
+            alt="Uber Suite messaging tool showing a contextual list of users and channels."
+          />
+          <ProjectImage
+            src="/images/uber-suite/project-image-6.png"
+            alt="Uber Suite messaging tool showing channel search and multi-user selection."
+          />
+          <ProjectImage
+            src="/images/uber-suite/project-image-7.png"
+            alt="Uber Suite messaging thread showing a conversation between team members."
+          />
 
           <CaseStudySectionBlock
             title="Scale changes everything about how people communicate"

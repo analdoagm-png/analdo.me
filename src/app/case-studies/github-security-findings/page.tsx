@@ -18,9 +18,9 @@ export default function GithubSecurityFindingsCaseStudy() {
     <>
       <CaseStudyHeader />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-16 pb-16 md:gap-16 md:px-16">
-          <h1 className="w-full text-[32px] leading-[1.15] font-semibold text-white md:text-heading-h1">
+          <h1 className="w-full text-heading-h3 text-white md:text-heading-h1">
             Github&rsquo;s Security Findings
           </h1>
 
@@ -31,11 +31,13 @@ export default function GithubSecurityFindingsCaseStudy() {
 
           <ProjectImage
             src="/images/github-security/project-image-1.png"
+            alt="Security Findings overview table showing total findings and SLA status metrics across services."
             aspect="3360/3188"
             priority
           />
           <ProjectImage
             src="/images/github-security/project-image-2.png"
+            alt="Security Findings detail view for a specific vulnerability, showing severity, impact, and a recommended resolution."
             aspect="1680/1110"
           />
 
@@ -46,17 +48,29 @@ export default function GithubSecurityFindingsCaseStudy() {
 
           <ProjectImage
             src="/images/github-security/project-image-3.png"
+            alt="Security Findings risk-selection step in the remediation workflow, listing CVEs by risk score."
             aspect="1680/1805"
           />
           <ProjectImage
             src="/images/github-security/project-image-4.png"
+            alt="Security Findings exception-creation dialog for flagging a finding as a false positive or accepted risk."
             aspect="1680/1110"
           />
-          <ProjectImage src="/images/github-security/project-image-5.png" />
-          <ProjectImage src="/images/github-security/project-image-6.png" />
-          <ProjectImage src="/images/github-security/project-image-7.png" />
+          <ProjectImage
+            src="/images/github-security/project-image-5.png"
+            alt="Security Findings job status screen showing a completed remediation export."
+          />
+          <ProjectImage
+            src="/images/github-security/project-image-6.png"
+            alt="Security Findings activity feed showing recent exceptions and status changes."
+          />
+          <ProjectImage
+            src="/images/github-security/project-image-7.png"
+            alt="Security Findings audit trail showing risk history by section and question."
+          />
           <ProjectImage
             src="/images/github-security/project-image-8.png"
+            alt="Security Findings full audit table showing every tracked finding and its resolution status."
             aspect="3360/2400"
           />
 

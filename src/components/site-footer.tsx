@@ -9,14 +9,14 @@ export function SiteFooter() {
           <a
             href="mailto:analdoagm@gmail.com?subject="
             target="_blank"
-            className="text-body-h2 text-white"
+            className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60"
           >
             / Contact me
           </a>
           <a
             href="https://www.linkedin.com/in/analdo-gomez-17768a3b"
             target="_blank"
-            className="text-body-h2 text-white"
+            className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60"
           >
             / LinkedIn
           </a>

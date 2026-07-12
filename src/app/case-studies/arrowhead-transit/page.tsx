@@ -25,7 +25,7 @@ export default function ArrowheadTransitCaseStudy() {
     <>
       <CaseStudyHeader />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-6 p-6 md:gap-16 md:px-10 md:py-16 lg:p-16">
           <CaseStudyProjectHeader
             title="Arrowhead Transit"
@@ -158,16 +158,19 @@ export default function ArrowheadTransitCaseStudy() {
 
             <ProjectImage
               src="/images/arrowhead-transit/process-1.png"
+              alt="Design audit table comparing requirements against design impact for the dispatch workflow."
               aspect="2048/669"
               roundedClassName="rounded-xl"
             />
             <ProjectImage
               src="/images/arrowhead-transit/process-2.png"
+              alt="Sitemap table defining view and edit permissions by role."
               aspect="2048/467"
               roundedClassName="rounded-xl"
             />
             <ProjectImage
               src="/images/arrowhead-transit/process-3.png"
+              alt="Golden-path flowchart mapping a ride from booking through dispatch to completion."
               aspectClassName="aspect-[2048/1025] lg:aspect-[2048/1079]"
               roundedClassName="rounded-xl lg:rounded-none"
             />
@@ -189,21 +192,25 @@ export default function ArrowheadTransitCaseStudy() {
 
             <ProjectImage
               src="/images/arrowhead-transit/platform-1.png"
+              alt="Arrowhead Transit dashboard showing this week's trips and available drivers."
               aspectClassName="aspect-[8/5] lg:aspect-[2048/1623]"
               roundedClassName="rounded-lg lg:rounded-none"
             />
             <ProjectImage
               src="/images/arrowhead-transit/platform-2.png"
+              alt="Arrowhead Transit incoming referrals queue showing new ride requests."
               aspectClassName="aspect-[8/5] lg:aspect-[2048/945]"
               roundedClassName="rounded-lg lg:rounded-none"
             />
             <ProjectImage
               src="/images/arrowhead-transit/platform-3.png"
+              alt="Arrowhead Transit trip detail view with a live route map."
               aspectClassName="aspect-[8/5] lg:aspect-[2048/1165]"
               roundedClassName="rounded-lg lg:rounded-none"
             />
             <ProjectImage
               src="/images/arrowhead-transit/platform-4.png"
+              alt="Arrowhead Transit driver tracking view showing an active route on a map."
               aspectClassName="aspect-[8/5] lg:aspect-[2048/1357]"
               roundedClassName="rounded-lg lg:rounded-none"
             />

@@ -17,7 +17,7 @@ export function CaseStudyStatement({
       </div>
       <div className="hidden w-full items-center justify-center py-8 md:flex lg:py-16">
         <p
-          className={`w-full text-center text-[40px] leading-[48px] tracking-[0.8px] text-white ${maxWidthClassName}`}
+          className={`w-full text-center text-heading-h2 tracking-[0.8px] text-white ${maxWidthClassName}`}
         >
           <span className="font-normal">{lead}</span>
           <span className="font-semibold">{emphasis}</span>

@@ -2,12 +2,14 @@ import Image from "next/image";
 
 export function ProjectImage({
   src,
+  alt,
   aspect = "2880/1800",
   aspectClassName,
   roundedClassName = "rounded-lg",
   priority = false,
 }: {
   src: string;
+  alt: string;
   aspect?: string;
   aspectClassName?: string;
   roundedClassName?: string;
@@ -15,7 +17,7 @@ export function ProjectImage({
 }) {
   return (
     <div
-      className={`relative w-full overflow-hidden ${roundedClassName} ${aspectClassName ?? ""}`}
+      className={`relative w-full overflow-hidden bg-stroke-dark ${roundedClassName} ${aspectClassName ?? ""}`}
       style={
         aspectClassName
           ? undefined
@@ -24,7 +26,7 @@ export function ProjectImage({
     >
       <Image
         src={src}
-        alt=""
+        alt={alt}
         fill
         className="object-cover"
         sizes="(min-width: 1280px) 1280px, 100vw"

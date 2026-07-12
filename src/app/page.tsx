@@ -49,7 +49,7 @@ export default function Home() {
     <>
       <SiteHeader />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <section className="mx-auto w-full max-w-[1280px] px-6 pt-12 pb-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
           <div className="flex flex-col items-start gap-6">
             <h1 className="w-full text-[24px] leading-8 font-semibold text-white md:text-heading-h2 md:leading-[48px] lg:max-w-[884px]">
@@ -63,14 +63,14 @@ export default function Home() {
               <a
                 href="mailto:analdoagm@gmail.com?subject="
                 target="_blank"
-                className="text-body-h2 text-white"
+                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60"
               >
                 / Contact me
               </a>
               <a
                 href="https://www.linkedin.com/in/analdo-gomez-17768a3b"
                 target="_blank"
-                className="text-body-h2 text-white"
+                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60"
               >
                 / LinkedIn
               </a>

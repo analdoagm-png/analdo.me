@@ -14,9 +14,9 @@ export function CaseStudyProjectHeader({
   return (
     <div className="flex w-full flex-col items-start gap-6">
       <div className="flex w-full flex-col items-start">
-        <p className="w-full text-heading-h3 text-white md:text-heading-h1">
+        <h1 className="w-full text-heading-h3 text-white md:text-heading-h1">
           {title}
-        </p>
+        </h1>
         <p className="w-full text-overline text-white/70 md:text-project-subtitle">
           {subtitle}
         </p>

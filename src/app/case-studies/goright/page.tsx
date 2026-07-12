@@ -26,7 +26,7 @@ export default function GoRightCaseStudy() {
     <>
       <CaseStudyHeader />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-6 p-6 md:gap-16 md:px-10 md:py-16 lg:p-16">
           <CaseStudyProjectHeader
             title="GoRight"
@@ -160,21 +160,26 @@ export default function GoRightCaseStudy() {
 
           <CaseStudyImagePair
             srcA="/images/goright/process-pair-1.png"
+            altA="Sitemap diagram mapping navigation and permission boundaries for the Merlin platform."
             srcB="/images/goright/process-pair-2.png"
+            altB="Flowchart mapping the capability set across desktop and mobile roles."
           />
 
           <ProjectImage
             src="/images/goright/process-wide.png"
+            alt="User journey flowchart for the on-road breakdown process, from dispatch to arrival."
             aspect="2048/1025"
           />
 
           <div className="hidden w-full flex-col items-start gap-16 lg:flex">
             <ProjectImage
               src="/images/goright/process-extra-1.png"
+              alt="Workshop board with sticky notes and phone mockups from a product ideation session."
               aspect="2880/1800"
             />
             <ProjectImage
               src="/images/goright/process-extra-2.png"
+              alt="Hand-drawn wireframe sketch annotated during a product ideation workshop."
               aspect="2880/1800"
             />
           </div>
@@ -196,14 +201,17 @@ export default function GoRightCaseStudy() {
           <div className="flex w-full flex-col items-start gap-16 lg:hidden">
             <ProjectImage
               src="/images/goright/platform-compact-1.png"
+              alt="Merlin dashboard showing task counts and submitted-versus-received activity."
               aspect="24/23"
             />
             <ProjectImage
               src="/images/goright/platform-compact-2.png"
+              alt="Merlin task list table showing on-road jobs by status."
               aspect="6/5"
             />
             <ProjectImage
               src="/images/goright/platform-compact-3.png"
+              alt="Merlin task detail view showing live route tracking on a map."
               aspect="6/5"
             />
           </div>
@@ -211,22 +219,27 @@ export default function GoRightCaseStudy() {
           <div className="hidden w-full flex-col items-start gap-16 lg:flex">
             <ProjectImage
               src="/images/goright/platform-desktop-1.png"
+              alt="Merlin dashboard showing task counts and submitted-versus-received activity."
               aspect="2880/2760"
             />
             <ProjectImage
               src="/images/goright/platform-desktop-2.png"
+              alt="Merlin task list table showing on-road jobs by status."
               aspect="2880/2400"
             />
             <ProjectImage
               src="/images/goright/platform-desktop-3.png"
+              alt="Merlin task detail view showing live route tracking on a map."
               aspect="2880/2400"
             />
             <ProjectImage
               src="/images/goright/platform-desktop-4.png"
+              alt="Merlin desktop view showing a technician's assigned task queue."
               aspect="2880/1800"
             />
             <ProjectImage
               src="/images/goright/platform-desktop-5.png"
+              alt="Merlin desktop view showing live route tracking for an active dispatch."
               aspect="2880/1800"
             />
           </div>
