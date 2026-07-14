@@ -64,10 +64,10 @@ export default function Home() {
               </p>
               <span className="inline-flex items-center">
                 <Chip label="Figma" />
-                <span className="text-body-h1 text-white/70">,</span>
               </span>
+              <span className="text-body-h1 text-white/70">,</span>
               <Chip label="Claude" />
-              <span className="text-body-h1 text-white/70">&</span>
+              <span className="text-body-h1 text-white/70">and</span>
               <Chip label="Codex" />
             </div>
             <div className="flex flex-wrap items-start gap-6 animate-fade-up [animation-delay:200ms]">
