@@ -273,11 +273,11 @@ export default function GoRightCaseStudy() {
             ]}
           />
 
-          <div className="flex w-full animate-fade-up flex-col items-center gap-4 rounded-xl border border-gray-dark p-8">
+          <div className="flex w-full animate-fade-up flex-col items-start gap-4 rounded-xl border border-gray-dark p-8">
             <p className="w-full text-balance text-heading-h5 text-white">
               Technicians stopped calling it in.
             </p>
-            <p className="w-full text-pretty text-body-h2 text-white/70 md:max-w-[70ch] md:text-body-h1">
+            <p className="w-full text-pretty text-body-h2 text-white/70 md:text-body-h1">
               Status lives in one place now — a technician&rsquo;s next
               task, a manager&rsquo;s overview, and a report at the end of
               the week all pull from the same live signal. Beta testers

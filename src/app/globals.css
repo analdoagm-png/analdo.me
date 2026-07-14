@@ -3,12 +3,12 @@
 @theme inline {
   --font-sans: var(--font-dm-sans);
 
-  /* Colors — from Figma variables */
+  /* Core color tokens */
   --color-dark-primary: #121212;
   --color-stroke-dark: #282828;
   --color-gray-dark: #535353;
 
-  /* Type scale — from Figma variables */
+  /* Responsive type scale */
   --text-heading-h1: clamp(2.5rem, 2.1rem + 1.25vw, 3rem);
   --text-heading-h1--line-height: 1.12;
   --text-heading-h1--font-weight: 600;

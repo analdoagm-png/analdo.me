@@ -250,7 +250,7 @@ export default function ArrowheadTransitCaseStudy() {
             <p className="w-full text-balance text-heading-h5 text-white">
               The database is gone.
             </p>
-            <p className="w-full text-pretty text-body-h2 text-white/70 lg:max-w-[70ch] lg:text-body-h1">
+            <p className="w-full text-pretty text-body-h2 text-white/70 lg:text-body-h1">
               Dispatchers plan two weeks out instead of two or three days.
               Drivers show up in the system instead of on a paper form.
               Referrals land in one queue instead of three separate

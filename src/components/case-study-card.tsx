@@ -54,22 +54,22 @@ export function CaseStudyCard({
           sizes="(min-width: 1024px) 50vw, 100vw"
         />
       </div>
-      <div className="flex w-full flex-col gap-4 px-4 pb-4">
-        <div className="flex items-center gap-2">
-          <h3 className="text-balance text-heading-h5 text-white md:text-heading-h4">
+      <div className="flex w-full flex-col gap-3 px-4 pb-5 md:px-5">
+        <div className="flex items-center gap-2.5">
+          <h3 className="text-balance text-heading-h4 text-white">
             {title}
           </h3>
           <span
-            className="inline-flex -translate-x-1 text-white opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+            className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
             aria-hidden="true"
           >
             <ArrowForwardIcon />
           </span>
         </div>
-        <p className="text-pretty text-body-h2 text-white/70 md:text-body-h1">
+        <p className="text-pretty text-body-h2 text-white/68">
           {description}
         </p>
-        <div className="flex flex-wrap items-start gap-2">
+        <div className="flex flex-wrap items-start gap-2 pt-1">
           {chips.map((chip) => (
             <Chip key={chip} label={chip} />
           ))}
