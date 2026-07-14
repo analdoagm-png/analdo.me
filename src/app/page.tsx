@@ -2,6 +2,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyCard } from "@/components/case-study-card";
 import { Chip } from "@/components/chip";
+import { ToolIcon } from "@/components/tool-icon";
 
 const caseStudies = [
   {
@@ -58,17 +59,17 @@ export default function Home() {
               Over a decade of solving complex B2B problems with clear
               thinking, fewer steps, and better outcomes.
             </h1>
-            <div className="flex flex-wrap items-center gap-2 animate-fade-up [animation-delay:100ms]">
+            <div className="flex flex-col items-start gap-2 animate-fade-up [animation-delay:100ms] md:flex-row md:flex-wrap md:items-center">
               <p className="text-body-h1 text-white/70">
                 Based in Colombia, working globally with
               </p>
-              <span className="inline-flex items-center">
-                <Chip label="Figma" />
-              </span>
-              <span className="text-body-h1 text-white/70">,</span>
-              <Chip label="Claude" />
-              <span className="text-body-h1 text-white/70">and</span>
-              <Chip label="Codex" />
+              <div className="flex flex-wrap items-center gap-2">
+                <Chip label="Figma" icon={<ToolIcon name="figma" />} />
+                <span className="text-body-h1 text-white/70">,</span>
+                <Chip label="Claude" icon={<ToolIcon name="claude" />} />
+                <span className="text-body-h1 text-white/70">and</span>
+                <Chip label="Codex" icon={<ToolIcon name="codex" />} />
+              </div>
             </div>
             <div className="flex flex-wrap items-start gap-6 animate-fade-up [animation-delay:200ms]">
               <a

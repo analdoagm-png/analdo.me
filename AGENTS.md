@@ -67,11 +67,13 @@ Current high-level design choices:
 
 ## Homepage Copy Pattern
 
-The hero subtext currently reads as a flex row with chips:
+The hero subtext currently reads as a text group followed by a chip group. They stack on mobile and become one wrapping row at `md`:
 
 `Based in Colombia, working globally with` `Figma` `,` `Claude` `and` `Codex`
 
-The comma is its own flex item so the parent `gap-2` gives equal space on both sides. Connector words such as `and` are also standalone flex items. If punctuation needs to hug a chip in a future design, wrap the chip and punctuation in one `inline-flex` item; do not leave hugging punctuation bare.
+The comma is its own flex item in the chip group so `gap-2` gives equal space on both sides. Connector words such as `and` are also standalone flex items. If punctuation needs to hug a chip in a future design, wrap the chip and punctuation in one `inline-flex` item; do not leave hugging punctuation bare.
+
+Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label as the accessible name and do not add a redundant accessible name to the SVG.
 
 ## Accessibility Conventions
 

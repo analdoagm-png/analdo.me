@@ -112,6 +112,10 @@ rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-body-h3 whi
 
 Use chips for concise metadata only. Keep them light; they should support the hierarchy rather than compete with titles.
 
+The shared component supports an optional 14px decorative icon. Use this only when a chip identifies a product or tool and the visible text label supplies its accessible name. The homepage's Figma, Claude, and Codex chips use their corresponding brand marks; project metadata chips stay text-only.
+
+In the homepage tool sentence, the introductory copy and the chip group stack on mobile, then sit inline from `md` upward. The chip group keeps the comma and connector word as separate flex items with `gap-2`.
+
 ### CaseStudyCard
 
 File: `src/components/case-study-card.tsx`
