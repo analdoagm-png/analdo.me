@@ -98,6 +98,10 @@ Standard visual QA widths:
 - Tablet: `768px`
 - Desktop: `1440px`
 
+### Footer
+
+The shared `SiteFooter` centers its copyright and link group on mobile. From `md` upward it returns to a horizontal, left/right-aligned layout. Keep these elements as plain text links with the global focus treatment.
+
 ## Components
 
 ### Chip

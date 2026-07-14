@@ -56,6 +56,7 @@ Current high-level design choices:
 - Body copy should not use very light weights. Use 400 for body text and 500 for small labels.
 - Home project cards use stronger titles (`text-heading-h4`), calmer descriptions (`text-body-h2 text-white/68`), and light chips (`border-white/15 bg-white/[0.04] text-white/72`).
 - Case-study callouts and results boxes should fill their container width and align content left. Do not cap callout paragraph width unless the design explicitly calls for a centered editorial quote.
+- `SiteFooter` centers its copyright and links on mobile, then uses its left/right desktop alignment from `md` upward.
 
 ## Typography
 
