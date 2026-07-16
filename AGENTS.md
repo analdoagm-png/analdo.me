@@ -24,6 +24,7 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 - `src/components/` — shared, flat component files. Avoid nested component folders unless the project structure changes substantially.
 - `src/app/globals.css` — Tailwind v4 `@theme inline` design tokens plus global focus, motion, and font-rendering rules.
 - `DESIGN.md` — design-system documentation. Update it whenever tokens, core component styles, interaction rules, accessibility conventions, or responsive behavior change.
+- `.storybook/` — Storybook configuration. Stories live beside shared components as `src/components/*.stories.tsx`.
 
 ## Responsive Convention
 
@@ -120,6 +121,15 @@ Before handing off layout or design changes:
 - Run `git diff --check`.
 - For visual changes, check at least mobile `390px`, tablet `768px`, and desktop `1440px`. Headless Chrome at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` works for screenshots when the in-app browser bridge is unreliable.
 - Keep previews local unless the user explicitly asks to push, deploy, or open a PR.
+
+## Storybook
+
+- Run `npm run storybook` for the local component workshop at port `6006`.
+- Run `npm run build-storybook` before handing off Storybook configuration or story changes.
+- Import `src/app/globals.css` through `.storybook/preview.tsx`; do not duplicate tokens in story-only styles.
+- Keep stories scoped to shared component states and use the real `public/` assets through the configured static directory. Do not restore generated starter stories.
+- Use the accessibility add-on in the Canvas to review issues as components and stories change.
+- Configure Storybook's viewport toolbar with the portfolio review widths: 390px mobile, 768px tablet, and 1440px desktop. When a component changes across breakpoints, add a fluid story plus pinned stories for these three widths.
 
 ## Git
 

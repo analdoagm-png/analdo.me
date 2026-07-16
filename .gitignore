@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude code local settings (may contain machine-specific permission grants)
 .claude/settings.local.json
+
+*storybook.log
+storybook-static
