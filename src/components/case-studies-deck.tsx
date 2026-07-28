@@ -376,7 +376,7 @@ function ProjectSlide({
             {project.problemTitle}
           </h2>
         </div>
-        <div className="grid gap-0 divide-y divide-white/15 border-y border-white/15">
+        <div className="deck-stagger grid gap-0 divide-y divide-white/15 border-y border-white/15">
           {project.problems.map((problem, index) => (
             <div key={problem.title} className="grid gap-3 py-5 md:grid-cols-[3.5rem_1fr] md:gap-6 md:py-7">
               <p className="text-heading-h5 text-white/42">0{index + 1}</p>
@@ -416,7 +416,7 @@ function ProjectSlide({
             {project.decisionTitle}
           </h2>
         </div>
-        <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
+        <div className="deck-stagger grid gap-5 lg:grid-cols-2 lg:gap-6">
           {project.decisions.map((decision) => (
             <figure key={decision.title} className="flex min-w-0 flex-col gap-4">
               <ExpandableImage
@@ -447,7 +447,7 @@ function ProjectSlide({
           </h2>
           <p className="text-pretty text-body-h1 text-white/68">{project.processDetail}</p>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
+        <div className="deck-stagger grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
           {project.processImages.map((image, index) => (
             <ExpandableImage
               key={image.src}
@@ -505,7 +505,7 @@ function ProjectSlide({
           </h2>
         </div>
         <div
-          className={`grid min-w-0 gap-4 sm:grid-cols-2 lg:gap-5 ${
+          className={`deck-stagger grid min-w-0 gap-4 sm:grid-cols-2 lg:gap-5 ${
             project.platformViews.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
           }`}
         >
@@ -534,7 +534,7 @@ function ProjectSlide({
             The change showed up in how the operation could run.
           </h2>
         </div>
-        <div className="grid gap-8 divide-y divide-white/15 border-y border-white/15 py-7 md:grid-cols-3 md:divide-x md:divide-y-0 md:py-0">
+        <div className="deck-stagger grid gap-8 divide-y divide-white/15 border-y border-white/15 py-7 md:grid-cols-3 md:divide-x md:divide-y-0 md:py-0">
           {project.results.map((result) => (
             <div key={result.value} className="flex flex-col gap-3 py-3 md:px-7 md:py-8 first:md:pl-0 last:md:pr-0">
               <p className="text-balance text-[clamp(2rem,3.7vw,3.75rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-white">
@@ -716,7 +716,7 @@ export function CaseStudiesDeck() {
                 <h2 id="slide-title" ref={headingRef} tabIndex={-1} className="sr-only outline-none">
                   {project.title}, slide {slideIndex + 1} of {slideKinds.length}
                 </h2>
-                <div className="h-full min-h-0 w-full overflow-hidden">
+                <div key={`${project.key}-${slideIndex}`} className="h-full min-h-0 w-full overflow-hidden animate-deck-slide">
                   <ProjectSlide project={project} kind={slideKind!} onExpand={setActiveMedia} />
                 </div>
               </div>

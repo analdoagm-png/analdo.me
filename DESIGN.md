@@ -158,6 +158,8 @@ The presentation route is a focused dark, full-viewport experience at `/case-stu
 - Controls support buttons plus Left/Right Arrow, Page Up/Page Down, Home, and End keys. The first and final slide return to the chooser through their controls.
 - Process and platform visuals expand into a full-viewport lightbox. The image button must retain descriptive alternative text, the visible caption names the view, and Escape, the close button, or the scrim close the lightbox.
 - Additional platform-view slides follow the main platform slide. They show only enough views to orient the audience; larger examination belongs in the lightbox.
+- Active deck slides enter with a 260ms fade-and-rise transition (8px upward travel). It communicates a slide change without competing with the content, and the global reduced-motion rule removes it.
+- Within a slide, primary groups and repeated grid items enter with a 420ms fade-and-rise transition, staggered at 60ms intervals. Apply the `deck-stagger` class only to repeated content grids so supporting items reveal in order without animating every nested element.
 - Maintain the global focus ring and reduced-motion behavior. Navigation is functional without hover and does not depend on animation.
 
 ### CaseStudyCallout
