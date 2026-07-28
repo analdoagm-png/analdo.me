@@ -409,21 +409,21 @@ function ProjectSlide({
 
   if (kind === "decisions") {
     return (
-      <div className="flex h-full flex-col justify-center gap-7 lg:gap-10">
+      <div className="flex h-full max-h-full flex-col justify-center gap-5 lg:gap-6">
         <div className="max-w-3xl">
           <SlideEyebrow>Two decisions</SlideEyebrow>
-          <h2 className="mt-3 text-balance text-[clamp(2.5rem,5vw,5.25rem)] font-semibold leading-[0.98] tracking-[-0.06em] text-white">
+          <h2 className="mt-3 text-balance text-[clamp(2.25rem,4vw,4.25rem)] font-semibold leading-[0.98] tracking-[-0.06em] text-white">
             {project.decisionTitle}
           </h2>
         </div>
-        <div className="grid gap-7 lg:grid-cols-2 lg:gap-10">
+        <div className="grid gap-5 lg:grid-cols-2 lg:gap-6">
           {project.decisions.map((decision) => (
             <figure key={decision.title} className="flex min-w-0 flex-col gap-4">
               <ExpandableImage
                 src={decision.image}
                 alt={decision.alt}
                 label={decision.title}
-                className="aspect-[16/10] w-full"
+                className="aspect-[16/10] w-full lg:h-[clamp(11rem,27vh,20rem)] lg:aspect-auto"
                 onExpand={() => onExpand({ src: decision.image, alt: decision.alt, label: decision.title })}
               />
               <figcaption className="flex max-w-xl flex-col gap-1.5">
@@ -454,7 +454,11 @@ function ProjectSlide({
               src={image.src}
               alt={image.alt}
               label={`Process view ${index + 1}`}
-              className={index === 2 ? "aspect-[16/7] w-full" : "aspect-[4/3] w-full"}
+              className={
+                index === 2
+                  ? "aspect-[16/7] w-full lg:h-[clamp(6.5rem,15vh,12rem)] lg:aspect-auto"
+                  : "aspect-[4/3] w-full lg:h-[clamp(7.5rem,17vh,14rem)] lg:aspect-auto"
+              }
               wrapperClassName={index === 2 ? "sm:col-span-2" : ""}
               onExpand={() => onExpand({ src: image.src, alt: image.alt, label: `Process view ${index + 1}` })}
             />
@@ -493,21 +497,25 @@ function ProjectSlide({
 
   if (kind === "platform-views") {
     return (
-      <div className="flex h-full flex-col justify-center gap-7 lg:gap-10">
+      <div className="flex h-full max-h-full flex-col justify-center gap-5 lg:gap-6">
         <div className="max-w-3xl">
           <SlideEyebrow>More platform views</SlideEyebrow>
-          <h2 className="mt-3 text-balance text-[clamp(2.5rem,5vw,5.25rem)] font-semibold leading-[0.98] tracking-[-0.06em] text-white">
+          <h2 className="mt-3 text-balance text-[clamp(2.25rem,4vw,4.25rem)] font-semibold leading-[0.98] tracking-[-0.06em] text-white">
             Explore the workflows in more detail.
           </h2>
         </div>
-        <div className="grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div
+          className={`grid min-w-0 gap-4 sm:grid-cols-2 lg:gap-5 ${
+            project.platformViews.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+          }`}
+        >
           {project.platformViews.map((view) => (
             <figure key={view.src} className="min-w-0">
               <ExpandableImage
                 src={view.src}
                 alt={view.alt}
                 label={view.label}
-                className="aspect-[16/10] w-full"
+                className="aspect-[16/10] w-full lg:h-[clamp(9rem,24vh,17rem)] lg:aspect-auto"
                 onExpand={() => onExpand(view)}
               />
             </figure>
@@ -640,13 +648,13 @@ export function CaseStudiesDeck() {
   }, [projectKey, slideIndex]);
 
   return (
-    <main id="main-content" className="min-h-[100dvh] w-full min-w-0 overflow-x-hidden bg-dark-primary text-white">
+    <main id="main-content" className="h-[100dvh] w-full min-w-0 overflow-hidden bg-dark-primary text-white">
       <a className="skip-link rounded-token bg-white px-4 py-2 text-body-h3 text-dark-primary" href="#deck-content">
         Skip to presentation
       </a>
 
-      <div className="mx-auto flex min-h-[100dvh] w-full min-w-0 max-w-[1600px] flex-col px-6 py-6 md:px-10 md:py-8 lg:px-16 lg:py-10">
-        <header className="flex items-center justify-between gap-6 border-b border-white/12 pb-4 text-body-h3 text-white/62 md:pb-5">
+      <div className="flex h-full w-full min-w-0 flex-col overflow-hidden py-6 md:py-8 lg:py-10">
+        <header className="flex w-full shrink-0 items-center justify-between gap-6 border-b border-white/12 px-6 pb-4 text-body-h3 text-white/62 md:px-10 md:pb-5 lg:px-16">
           <p>Analdo Gomez</p>
           {project ? (
             <button
@@ -661,9 +669,9 @@ export function CaseStudiesDeck() {
           )}
         </header>
 
-        <div id="deck-content" className="flex flex-1 py-8 md:py-10 lg:py-12">
+        <div id="deck-content" className="flex min-h-0 w-full flex-1 px-6 py-8 md:px-10 md:py-10 lg:px-16 lg:py-12">
           {!project ? (
-            <section className="flex w-full min-w-0 flex-col justify-center" aria-labelledby="deck-chooser-title">
+            <section className="flex h-full min-h-0 w-full min-w-0 flex-col justify-center" aria-labelledby="deck-chooser-title">
               <div className="min-w-0 max-w-3xl">
                 <SlideEyebrow>Case study deck</SlideEyebrow>
                 <h1
@@ -703,12 +711,12 @@ export function CaseStudiesDeck() {
               </div>
             </section>
           ) : (
-            <section className="w-full" aria-live="polite" aria-atomic="true" aria-labelledby="slide-title">
-              <div className="flex min-h-[calc(100dvh-13rem)] w-full items-stretch md:h-[calc(100dvh-13rem)] lg:h-[calc(100dvh-15rem)]">
+            <section className="h-full min-h-0 w-full" aria-live="polite" aria-atomic="true" aria-labelledby="slide-title">
+              <div className="flex h-full min-h-0 w-full items-stretch">
                 <h2 id="slide-title" ref={headingRef} tabIndex={-1} className="sr-only outline-none">
                   {project.title}, slide {slideIndex + 1} of {slideKinds.length}
                 </h2>
-                <div className="h-full w-full">
+                <div className="h-full min-h-0 w-full overflow-hidden">
                   <ProjectSlide project={project} kind={slideKind!} onExpand={setActiveMedia} />
                 </div>
               </div>
@@ -717,7 +725,7 @@ export function CaseStudiesDeck() {
         </div>
 
         {project ? (
-          <footer className="flex items-center justify-between gap-5 border-t border-white/12 pt-4 md:pt-5">
+          <footer className="flex w-full shrink-0 items-center justify-between gap-5 border-t border-white/12 px-6 pt-4 md:px-10 md:pt-5 lg:px-16">
             <p className="text-body-h3 text-white/58">
               {project.title} / {slideIndex + 1} of {slideKinds.length}
             </p>
