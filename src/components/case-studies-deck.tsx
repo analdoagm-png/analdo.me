@@ -305,14 +305,12 @@ function ExpandableImage({
   alt,
   label,
   className = "",
-  wrapperClassName = "",
   onExpand,
 }: {
   src: string;
   alt: string;
   label: string;
   className?: string;
-  wrapperClassName?: string;
   onExpand: () => void;
 }) {
   return (
@@ -320,7 +318,7 @@ function ExpandableImage({
       type="button"
       onClick={onExpand}
       aria-label={`Open ${label} in a larger view`}
-      className={`group block w-full min-w-0 text-left outline-none ${wrapperClassName}`}
+      className="group block w-full min-w-0 text-left outline-none"
     >
       <DeckImage
         src={src}
@@ -332,7 +330,12 @@ function ExpandableImage({
 }
 
 function SlideEyebrow({ children }: { children: React.ReactNode }) {
-  return <p className="text-body-h3 font-medium text-white/58">{children}</p>;
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <p className="text-body-h3 font-medium text-white/58">{children}</p>
+      <span aria-hidden="true" className="h-px w-8 bg-white/35" />
+    </div>
+  );
 }
 
 function ProjectSlide({
@@ -416,9 +419,12 @@ function ProjectSlide({
             {project.decisionTitle}
           </h2>
         </div>
-        <div className="deck-stagger-converge grid gap-5 lg:grid-cols-2 lg:gap-6">
+        <div className="deck-stagger-converge grid gap-5 lg:grid-cols-2 lg:gap-6 lg:divide-x lg:divide-white/15">
           {project.decisions.map((decision) => (
-            <figure key={decision.title} className="flex min-w-0 flex-col gap-4">
+            <figure
+              key={decision.title}
+              className="flex min-w-0 flex-col gap-4 lg:px-6 lg:first:pl-0 lg:last:pr-0"
+            >
               <ExpandableImage
                 src={decision.image}
                 alt={decision.alt}
@@ -449,19 +455,23 @@ function ProjectSlide({
         </div>
         <div className="deck-stagger grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
           {project.processImages.map((image, index) => (
-            <ExpandableImage
+            <figure
               key={image.src}
-              src={image.src}
-              alt={image.alt}
-              label={`Process view ${index + 1}`}
-              className={
-                index === 2
-                  ? "aspect-[16/7] w-full border border-white/10 lg:h-[clamp(8rem,19vh,15rem)] lg:aspect-auto"
-                  : "aspect-[4/3] w-full lg:h-[clamp(7.5rem,17vh,14rem)] lg:aspect-auto"
-              }
-              wrapperClassName={index === 2 ? "sm:col-span-2" : ""}
-              onExpand={() => onExpand({ src: image.src, alt: image.alt, label: `Process view ${index + 1}` })}
-            />
+              className={`flex min-w-0 flex-col gap-2 ${index === 2 ? "sm:col-span-2" : ""}`}
+            >
+              <ExpandableImage
+                src={image.src}
+                alt={image.alt}
+                label={`Process view ${index + 1}`}
+                className={
+                  index === 2
+                    ? "aspect-[16/7] w-full border border-white/10 lg:h-[clamp(8rem,19vh,15rem)] lg:aspect-auto"
+                    : "aspect-[4/3] w-full lg:h-[clamp(7.5rem,17vh,14rem)] lg:aspect-auto"
+                }
+                onExpand={() => onExpand({ src: image.src, alt: image.alt, label: `Process view ${index + 1}` })}
+              />
+              <figcaption className="text-heading-h5 text-white/42">0{index + 1}</figcaption>
+            </figure>
           ))}
         </div>
       </div>
@@ -538,7 +548,7 @@ function ProjectSlide({
         <div className="deck-stagger grid gap-8 divide-y divide-white/15 border-y border-white/15 py-7 md:grid-cols-3 md:divide-x md:divide-y-0 md:py-0">
           {project.results.map((result) => (
             <div key={result.value} className="flex flex-col gap-3 py-3 md:px-7 md:py-8 first:md:pl-0 last:md:pr-0">
-              <p className="text-balance text-[clamp(2rem,3.7vw,3.75rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-white">
+              <p className="text-balance text-[clamp(2.25rem,4.2vw,4.5rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-white">
                 {result.value}
               </p>
               <p className="text-pretty text-body-h2 text-white/68">{result.detail}</p>
