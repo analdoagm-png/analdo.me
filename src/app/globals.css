@@ -103,19 +103,56 @@ button:focus-visible {
   animation: fade-up 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes deck-slide {
+@keyframes deck-slide-forward {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translate(16px, 6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(0, 0);
   }
 }
 
+@keyframes deck-slide-back {
+  from {
+    opacity: 0;
+    transform: translate(-16px, 6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes deck-slide-statement {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/*
+ * Direction communicates forward/back movement through the narrative arc;
+ * the statement variant marks the deck's two big-idea beats (signal, close)
+ * with more travel and a touch of scale so they land with more weight than
+ * a routine content slide. Compound selectors let either modifier override
+ * the default regardless of source order.
+ */
 .animate-deck-slide {
-  animation: deck-slide 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: deck-slide-forward 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-deck-slide.deck-enter-back {
+  animation: deck-slide-back 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-deck-slide.deck-enter-statement {
+  animation: deck-slide-statement 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes deck-element {
@@ -159,6 +196,72 @@ button:focus-visible {
 
 .deck-stagger > :nth-child(4) {
   animation-delay: 300ms;
+}
+
+@keyframes deck-element-left {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes deck-element-right {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/*
+ * Converging variant of .deck-stagger for exactly-two-item grids where the
+ * content is literally two choices meeting in the middle (e.g. the "two
+ * decisions" slide). The first item reveals in from the left, the second
+ * from the right, on the same timing as the default vertical stagger.
+ */
+.deck-stagger-converge > :nth-child(1) {
+  animation: deck-element-left 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 120ms;
+}
+
+.deck-stagger-converge > :nth-child(2) {
+  animation: deck-element-right 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 180ms;
+}
+
+@keyframes lightbox-scrim {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightbox-media {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-lightbox-scrim {
+  animation: lightbox-scrim 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-lightbox-media {
+  animation: lightbox-media 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {

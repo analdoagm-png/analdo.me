@@ -416,7 +416,7 @@ function ProjectSlide({
             {project.decisionTitle}
           </h2>
         </div>
-        <div className="deck-stagger grid gap-5 lg:grid-cols-2 lg:gap-6">
+        <div className="deck-stagger-converge grid gap-5 lg:grid-cols-2 lg:gap-6">
           {project.decisions.map((decision) => (
             <figure key={decision.title} className="flex min-w-0 flex-col gap-4">
               <ExpandableImage
@@ -456,7 +456,7 @@ function ProjectSlide({
               label={`Process view ${index + 1}`}
               className={
                 index === 2
-                  ? "aspect-[16/7] w-full lg:h-[clamp(6.5rem,15vh,12rem)] lg:aspect-auto"
+                  ? "aspect-[16/7] w-full border border-white/10 lg:h-[clamp(8rem,19vh,15rem)] lg:aspect-auto"
                   : "aspect-[4/3] w-full lg:h-[clamp(7.5rem,17vh,14rem)] lg:aspect-auto"
               }
               wrapperClassName={index === 2 ? "sm:col-span-2" : ""}
@@ -510,7 +510,7 @@ function ProjectSlide({
           }`}
         >
           {project.platformViews.map((view) => (
-            <figure key={view.src} className="min-w-0">
+            <figure key={view.src} className="flex min-w-0 flex-col gap-2">
               <ExpandableImage
                 src={view.src}
                 alt={view.alt}
@@ -518,6 +518,7 @@ function ProjectSlide({
                 className="aspect-[16/10] w-full lg:h-[clamp(9rem,24vh,17rem)] lg:aspect-auto"
                 onExpand={() => onExpand(view)}
               />
+              <figcaption className="text-body-h3 font-medium text-white/70">{view.label}</figcaption>
             </figure>
           ))}
         </div>
@@ -549,13 +550,13 @@ function ProjectSlide({
   }
 
   return (
-    <div className="flex h-full items-center">
-      <div className="max-w-5xl">
+    <div className="flex h-full items-center justify-center text-center">
+      <div className="mx-auto max-w-4xl">
         <SlideEyebrow>Outcome</SlideEyebrow>
-        <h2 className="mt-5 text-balance text-[clamp(3.2rem,8vw,8rem)] font-semibold leading-[0.91] tracking-[-0.075em] text-white">
+        <h2 className="mx-auto mt-5 max-w-3xl text-balance text-[clamp(3.4rem,9vw,9rem)] font-semibold leading-[0.9] tracking-[-0.08em] text-white">
           {project.closingTitle}
         </h2>
-        <p className="mt-8 max-w-2xl text-pretty text-body-h1 text-white/70 md:text-[1.35rem]">
+        <p className="mx-auto mt-8 max-w-xl text-pretty text-body-h1 text-white/70 md:text-[1.35rem]">
           {project.closingDetail}
         </p>
       </div>
@@ -566,6 +567,7 @@ function ProjectSlide({
 export function CaseStudiesDeck() {
   const [projectKey, setProjectKey] = useState<ProjectKey | null>(null);
   const [slideIndex, setSlideIndex] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
   const [activeMedia, setActiveMedia] = useState<{ src: string; alt: string; label: string } | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
@@ -573,8 +575,15 @@ export function CaseStudiesDeck() {
   const slideKind = project ? slideKinds[slideIndex] : null;
   const isFirstSlide = slideIndex === 0;
   const isLastSlide = slideIndex === slideKinds.length - 1;
+  const isStatementSlide = slideKind === "signal" || slideKind === "close";
+  const slideTransitionClass = isStatementSlide
+    ? "deck-enter-statement"
+    : direction === -1
+      ? "deck-enter-back"
+      : "";
 
   const selectProject = (key: ProjectKey) => {
+    setDirection(1);
     setProjectKey(key);
     setSlideIndex(0);
   };
@@ -591,6 +600,7 @@ export function CaseStudiesDeck() {
       return;
     }
 
+    setDirection(1);
     setSlideIndex((current) => current + 1);
   }, [chooseAnotherProject, isLastSlide]);
 
@@ -600,6 +610,7 @@ export function CaseStudiesDeck() {
       return;
     }
 
+    setDirection(-1);
     setSlideIndex((current) => current - 1);
   }, [chooseAnotherProject, isFirstSlide]);
 
@@ -619,11 +630,13 @@ export function CaseStudiesDeck() {
 
       if (event.key === "Home") {
         event.preventDefault();
+        setDirection(-1);
         setSlideIndex(0);
       }
 
       if (event.key === "End") {
         event.preventDefault();
+        setDirection(1);
         setSlideIndex(slideKinds.length - 1);
       }
     };
@@ -653,120 +666,123 @@ export function CaseStudiesDeck() {
         Skip to presentation
       </a>
 
-      <div className="flex h-full w-full min-w-0 flex-col overflow-hidden py-6 md:py-8 lg:py-10">
-        <header className="flex w-full shrink-0 items-center justify-between gap-6 border-b border-white/12 px-6 pb-4 text-body-h3 text-white/62 md:px-10 md:pb-5 lg:px-16">
-          <p>Analdo Gomez</p>
-          {project ? (
+      {project ? (
+        <div className="pointer-events-none fixed inset-x-0 top-0 z-40 h-[2px] bg-white/10">
+          <div
+            className="h-full bg-white transition-[width] duration-300 ease-out"
+            style={{ width: `${((slideIndex + 1) / slideKinds.length) * 100}%` }}
+          />
+        </div>
+      ) : null}
+
+      <div id="deck-content" className="flex h-full w-full min-w-0 overflow-hidden px-6 py-8 md:px-10 md:py-10 lg:px-16 lg:py-12">
+        {!project ? (
+          <section className="flex h-full min-h-0 w-full min-w-0 flex-col justify-center" aria-labelledby="deck-chooser-title">
+            <div className="min-w-0 max-w-3xl">
+              <SlideEyebrow>Case study deck</SlideEyebrow>
+              <h1
+                ref={headingRef}
+                id="deck-chooser-title"
+                tabIndex={-1}
+                className="mt-3 max-w-full text-balance text-[clamp(2.75rem,6vw,6rem)] font-semibold leading-[0.91] tracking-[-0.075em] outline-none"
+              >
+                Choose a case study.
+              </h1>
+              <p className="mt-6 max-w-xl text-pretty text-body-h1 text-white/70">
+                Two operational systems rebuilt around clearer information, better decisions, and the people doing the work.
+              </p>
+            </div>
+
+            <div className="mt-8 grid min-w-0 gap-6 lg:mt-10 lg:grid-cols-2 lg:gap-10">
+              {(Object.values(projects) as Project[]).map((caseStudy) => (
+                <button
+                  key={caseStudy.key}
+                  type="button"
+                  onClick={() => selectProject(caseStudy.key)}
+                  className="group flex min-w-0 max-w-full flex-col items-start gap-5 text-left outline-none"
+                >
+                  <DeckImage
+                    src={caseStudy.thumbnailImage}
+                    alt={caseStudy.thumbnailAlt}
+                    className="aspect-[2/1] w-full transition-transform duration-500 ease-out group-hover:scale-[1.01] group-active:scale-[0.99]"
+                  />
+                  <span className="flex flex-col gap-1">
+                    <span className="text-heading-h4 text-white transition-colors duration-200 group-hover:text-white/60 group-active:text-white/40">
+                      {caseStudy.title}
+                    </span>
+                    <span className="text-body-h2 text-white/64">{caseStudy.subtitle}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
+        ) : (
+          <section className="h-full min-h-0 w-full" aria-live="polite" aria-atomic="true" aria-labelledby="slide-title">
+            <div className="flex h-full min-h-0 w-full items-stretch">
+              <h2 id="slide-title" ref={headingRef} tabIndex={-1} className="sr-only outline-none">
+                {project.title}, slide {slideIndex + 1} of {slideKinds.length}
+              </h2>
+              <div
+                key={`${project.key}-${slideIndex}`}
+                className={`h-full min-h-0 w-full overflow-hidden animate-deck-slide ${slideTransitionClass}`}
+              >
+                <ProjectSlide project={project} kind={slideKind!} onExpand={setActiveMedia} />
+              </div>
+            </div>
+          </section>
+        )}
+      </div>
+
+      {project ? (
+        <div className="fixed bottom-6 right-6 z-40 flex flex-wrap items-center justify-end gap-x-4 gap-y-2 rounded-token-lg border border-white/15 bg-dark-primary/90 px-5 py-3 text-body-h3 backdrop-blur-sm md:bottom-10 md:right-10 lg:bottom-16 lg:right-16">
+          <p className="whitespace-nowrap text-white/58">
+            {project.title} / {slideIndex + 1} of {slideKinds.length}
+          </p>
+          <div className="h-4 w-px bg-white/15" aria-hidden="true" />
+          <button
+            type="button"
+            onClick={chooseAnotherProject}
+            className="whitespace-nowrap text-white/70 transition-colors duration-200 hover:text-white active:text-white/40"
+          >
+            Choose a case study
+          </button>
+          {isLastSlide ? (
+            <Link
+              href={project.route}
+              className="whitespace-nowrap transition-colors duration-200 hover:text-white/60 active:text-white/40"
+            >
+              View full case study
+            </Link>
+          ) : null}
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={chooseAnotherProject}
-              className="transition-colors duration-200 hover:text-white active:text-white/40"
+              onClick={previousSlide}
+              className="whitespace-nowrap transition-colors duration-200 hover:text-white/60 active:text-white/40"
             >
-              Choose a case study
+              {isFirstSlide ? "Choose" : "Previous"}
             </button>
-          ) : (
-            <p className="hidden sm:block">Selected case studies</p>
-          )}
-        </header>
-
-        <div id="deck-content" className="flex min-h-0 w-full flex-1 px-6 py-8 md:px-10 md:py-10 lg:px-16 lg:py-12">
-          {!project ? (
-            <section className="flex h-full min-h-0 w-full min-w-0 flex-col justify-center" aria-labelledby="deck-chooser-title">
-              <div className="min-w-0 max-w-3xl">
-                <SlideEyebrow>Case study deck</SlideEyebrow>
-                <h1
-                  ref={headingRef}
-                  id="deck-chooser-title"
-                  tabIndex={-1}
-                  className="mt-3 max-w-full text-balance text-[clamp(2.75rem,6vw,6rem)] font-semibold leading-[0.91] tracking-[-0.075em] outline-none"
-                >
-                  Choose a case study.
-                </h1>
-                <p className="mt-6 max-w-xl text-pretty text-body-h1 text-white/70">
-                  Two operational systems rebuilt around clearer information, better decisions, and the people doing the work.
-                </p>
-              </div>
-
-              <div className="mt-8 grid min-w-0 gap-6 lg:mt-10 lg:grid-cols-2 lg:gap-10">
-                {(Object.values(projects) as Project[]).map((caseStudy) => (
-                  <button
-                    key={caseStudy.key}
-                    type="button"
-                    onClick={() => selectProject(caseStudy.key)}
-                    className="group flex min-w-0 max-w-full flex-col items-start gap-5 text-left outline-none"
-                  >
-                    <DeckImage
-                      src={caseStudy.thumbnailImage}
-                      alt={caseStudy.thumbnailAlt}
-                      className="aspect-[2/1] w-full transition-transform duration-500 ease-out group-hover:scale-[1.01] group-active:scale-[0.99]"
-                    />
-                    <span className="flex flex-col gap-1">
-                      <span className="text-heading-h4 text-white transition-colors duration-200 group-hover:text-white/60 group-active:text-white/40">
-                        {caseStudy.title}
-                      </span>
-                      <span className="text-body-h2 text-white/64">{caseStudy.subtitle}</span>
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </section>
-          ) : (
-            <section className="h-full min-h-0 w-full" aria-live="polite" aria-atomic="true" aria-labelledby="slide-title">
-              <div className="flex h-full min-h-0 w-full items-stretch">
-                <h2 id="slide-title" ref={headingRef} tabIndex={-1} className="sr-only outline-none">
-                  {project.title}, slide {slideIndex + 1} of {slideKinds.length}
-                </h2>
-                <div key={`${project.key}-${slideIndex}`} className="h-full min-h-0 w-full overflow-hidden animate-deck-slide">
-                  <ProjectSlide project={project} kind={slideKind!} onExpand={setActiveMedia} />
-                </div>
-              </div>
-            </section>
-          )}
+            <button
+              type="button"
+              onClick={nextSlide}
+              className="whitespace-nowrap rounded-token border border-white/22 px-3 py-1.5 text-white transition-colors duration-200 hover:border-white/45 hover:text-white/70 active:text-white/40"
+            >
+              {isLastSlide ? "Choose another" : "Next"}
+            </button>
+          </div>
         </div>
-
-        {project ? (
-          <footer className="flex w-full shrink-0 items-center justify-between gap-5 border-t border-white/12 px-6 pt-4 md:px-10 md:pt-5 lg:px-16">
-            <p className="text-body-h3 text-white/58">
-              {project.title} / {slideIndex + 1} of {slideKinds.length}
-            </p>
-            <div className="flex items-center gap-5 text-body-h3">
-              {isLastSlide ? (
-                <Link
-                  href={project.route}
-                  className="transition-colors duration-200 hover:text-white/60 active:text-white/40"
-                >
-                  View full case study
-                </Link>
-              ) : null}
-              <button
-                type="button"
-                onClick={previousSlide}
-                className="transition-colors duration-200 hover:text-white/60 active:text-white/40 disabled:cursor-not-allowed disabled:text-white/25"
-              >
-                {isFirstSlide ? "Choose" : "Previous"}
-              </button>
-              <button
-                type="button"
-                onClick={nextSlide}
-                className="rounded-token border border-white/22 px-3 py-1.5 text-white transition-colors duration-200 hover:border-white/45 hover:text-white/70 active:text-white/40"
-              >
-                {isLastSlide ? "Choose another" : "Next"}
-              </button>
-            </div>
-          </footer>
-        ) : null}
-      </div>
+      ) : null}
 
       {activeMedia ? (
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`${activeMedia.label} larger view`}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/88 p-6 md:p-10 lg:p-16"
+          className="animate-lightbox-scrim fixed inset-0 z-50 flex items-center justify-center bg-black/88 p-6 md:p-10 lg:p-16"
           onClick={() => setActiveMedia(null)}
         >
           <div
-            className="flex h-full w-full max-w-[1600px] flex-col gap-4"
+            className="animate-lightbox-media flex h-full w-full max-w-[1600px] flex-col gap-4"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-5">
