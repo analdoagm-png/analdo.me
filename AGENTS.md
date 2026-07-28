@@ -20,8 +20,9 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 ## Structure
 
 - `src/app/page.tsx` — homepage hero, chip-tagged subtext, contact links, and one unified `CaseStudyCard` grid for all 5 projects.
+- `src/app/case-studies-deck/page.tsx` — presentation route with an initial case-study chooser and interactive GoRight and Arrowhead Transit slide sequences.
 - `src/app/case-studies/*/page.tsx` — five case study pages: Forty5Park, Uber Suite, Github's Security Findings, GoRight, Arrowhead Transit.
-- `src/components/` — shared, flat component files. Avoid nested component folders unless the project structure changes substantially.
+- `src/components/` — shared, flat component files. `case-studies-deck.tsx` is an intentional client leaf because keyboard and button controls change the active slide. Avoid nested component folders unless the project structure changes substantially.
 - `src/app/globals.css` — Tailwind v4 `@theme inline` design tokens plus global focus, motion, and font-rendering rules.
 - `DESIGN.md` — design-system documentation. Update it whenever tokens, core component styles, interaction rules, accessibility conventions, or responsive behavior change.
 - `.storybook/` — Storybook configuration. Stories live beside shared components as `src/components/*.stories.tsx`.

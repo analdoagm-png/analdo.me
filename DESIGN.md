@@ -146,6 +146,20 @@ Current structure:
 
 Card title hierarchy should be stronger than body copy. Avoid making body text as large or visually loud as the title.
 
+### CaseStudiesDeck
+
+File: `src/components/case-studies-deck.tsx`
+
+The presentation route is a focused dark, full-viewport experience at `/case-studies-deck`. It opens with two image-led case-study choices before entering either deck. The control is a deliberately isolated client component because the active slide changes with buttons and keyboard keys.
+
+- Keep the base canvas `dark-primary` with only white-opacity hierarchy; do not introduce a project-specific accent color.
+- Use the same 24px, 40px, and 64px responsive page padding as the rest of the portfolio.
+- Slides use real case-study imagery, large editorial type, and sparse borders rather than dashboards or dense card layouts.
+- Controls support buttons plus Left/Right Arrow, Page Up/Page Down, Home, and End keys. The first and final slide return to the chooser through their controls.
+- Process and platform visuals expand into a full-viewport lightbox. The image button must retain descriptive alternative text, the visible caption names the view, and Escape, the close button, or the scrim close the lightbox.
+- Additional platform-view slides follow the main platform slide. They show only enough views to orient the audience; larger examination belongs in the lightbox.
+- Maintain the global focus ring and reduced-motion behavior. Navigation is functional without hover and does not depend on animation.
+
 ### CaseStudyCallout
 
 File: `src/components/case-study-callout.tsx`
