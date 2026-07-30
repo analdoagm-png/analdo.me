@@ -28,15 +28,17 @@ export function CaseStudyHeader() {
         Skip to content
       </a>
       <div className="mx-auto flex w-full max-w-[1280px] items-center justify-between gap-4 px-6 py-4 md:px-10 lg:px-16">
-        <Link
-          href="/"
-          className="group flex items-center gap-3 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
-        >
-          <span className="inline-flex transition-transform duration-200 group-hover:-translate-x-0.5 group-active:-translate-x-1">
-            <ArrowBackIcon />
-          </span>
-          <span className="text-body-h3">Back to portfolio</span>
-        </Link>
+        <nav aria-label="Case study">
+          <Link
+            href="/"
+            className="group flex items-center gap-3 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+          >
+            <span className="inline-flex transition-transform duration-200 group-hover:-translate-x-0.5 group-active:-translate-x-1">
+              <ArrowBackIcon />
+            </span>
+            <span className="text-body-h3">Back to portfolio</span>
+          </Link>
+        </nav>
         <p className="hidden text-body-h2 text-right md:block">
           <span className="text-white">Analdo Gomez</span>
           <span className="text-white/70"> / Senior Product Designer</span>

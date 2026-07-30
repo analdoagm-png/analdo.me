@@ -1,14 +1,18 @@
+import { CaseStudyYear } from "@/components/case-study-year";
+
 export function CaseStudyProjectHeader({
   title,
   subtitle,
   role,
   tools,
+  year,
   intro,
 }: {
   title: string;
   subtitle: string;
   role: string;
   tools: string;
+  year: number;
   intro: string;
 }) {
   return (
@@ -31,6 +35,7 @@ export function CaseStudyProjectHeader({
           <p className="text-body-h3 text-white/70">TOOLS</p>
           <p className="text-body-h2 text-white">{tools}</p>
         </div>
+        <CaseStudyYear year={year} />
       </div>
 
       <p className="w-full text-pretty text-body-h2 text-white md:text-body-h1 lg:max-w-[70ch]">

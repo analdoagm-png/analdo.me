@@ -1,17 +1,21 @@
-import type { Metadata } from "next";
+import { caseStudyMetadata } from "@/lib/case-studies";
 import { CaseStudyHeader } from "@/components/case-study-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CaseStudyNext } from "@/components/case-study-next";
+import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
+import { CaseStudyYear } from "@/components/case-study-year";
 import {
   CaseStudyIntroBlock,
   CaseStudySectionBlock,
 } from "@/components/case-study-text-block";
 import { ProjectImage } from "@/components/project-image";
 
-export const metadata: Metadata = {
-  title: "Uber Suite — Analdo Gomez",
+export const metadata = caseStudyMetadata({
+  href: "/case-studies/uber-suite",
+  title: "Uber Suite Internal Tooling Showcase",
   description:
     "An all-in-one internal toolset for Uber, streamlining communication, boosting employee engagement, and enabling fast, AI-driven knowledge discovery across the organization.",
-};
+});
 
 export default function UberSuiteCaseStudy() {
   return (
@@ -23,6 +27,8 @@ export default function UberSuiteCaseStudy() {
           <h1 className="w-full animate-fade-up text-balance text-heading-h3 text-white md:text-heading-h1">
             Uber Suite
           </h1>
+
+          <CaseStudyYear year={2018} />
 
           <CaseStudyIntroBlock
             label="An all-in-one internal toolset for Uber, streamlining communication, boosting employee engagement, and enabling fast, AI-driven knowledge discovery across the organization."
@@ -75,6 +81,8 @@ export default function UberSuiteCaseStudy() {
         </section>
       </main>
 
+      <CaseStudyJsonLd currentHref="/case-studies/uber-suite" />
+      <CaseStudyNext currentHref="/case-studies/uber-suite" />
       <SiteFooter />
     </>
   );

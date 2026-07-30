@@ -1,17 +1,21 @@
-import type { Metadata } from "next";
+import { caseStudyMetadata } from "@/lib/case-studies";
 import { CaseStudyHeader } from "@/components/case-study-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CaseStudyNext } from "@/components/case-study-next";
+import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
+import { CaseStudyYear } from "@/components/case-study-year";
 import {
   CaseStudyIntroBlock,
   CaseStudySectionBlock,
 } from "@/components/case-study-text-block";
 import { ProjectImage } from "@/components/project-image";
 
-export const metadata: Metadata = {
-  title: "Forty5Park — Analdo Gomez",
+export const metadata = caseStudyMetadata({
+  href: "/case-studies/forty5park",
+  title: "Forty5Park Real Estate AI Platform",
   description:
     "AI-powered platform for real estate companies to manage acquisitions, forecast property valuations up to a year ahead, and benchmark against sector peers.",
-};
+});
 
 export default function Forty5ParkCaseStudy() {
   return (
@@ -23,6 +27,8 @@ export default function Forty5ParkCaseStudy() {
           <h1 className="max-w-[884px] animate-fade-up text-balance text-heading-h3 text-white md:text-heading-h1">
             Forty5Park
           </h1>
+
+          <CaseStudyYear year={2026} />
 
           <CaseStudyIntroBlock
             label="AI-powered platform for real estate companies to manage acquisitions, forecast property valuations up to a year ahead, and benchmark against sector peers."
@@ -72,6 +78,8 @@ export default function Forty5ParkCaseStudy() {
         </section>
       </main>
 
+      <CaseStudyJsonLd currentHref="/case-studies/forty5park" />
+      <CaseStudyNext currentHref="/case-studies/forty5park" />
       <SiteFooter />
     </>
   );

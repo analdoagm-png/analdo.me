@@ -98,6 +98,32 @@ Standard visual QA widths:
 - Tablet: `768px`
 - Desktop: `1440px`
 
+### Header
+
+`SiteHeader` renders the name/role lockup as a link to `/`. Because the lockup is two-tone (`text-white` name, `text-white/70` role), a parent text-colour change would be overridden by the child spans, so this one link dims with `transition-opacity` + `hover:opacity-60` / `active:opacity-40` instead of the standard colour dim. Keep the colour-based rule for all single-tone text links.
+
+`CaseStudyHeader` wraps its "Back to portfolio" link in `<nav aria-label="Case study">`. `SiteHeader` intentionally has no `<nav>`: a single home link is not a navigation region, and `<header>` already provides the `banner` landmark.
+
+### CaseStudyYear
+
+File: `src/components/case-study-year.tsx`
+
+A `YEAR` label at `text-body-h3 text-white/70` above the year at `text-body-h2 text-white`, reusing the `ROLE`/`TOOLS` grammar. Renders a real `<time dateTime>` element so the date is machine readable.
+
+`CaseStudyProjectHeader` places it as the third column of its meta row (ROLE / TOOLS / YEAR). The three showcase pages, which have no meta row, place it directly under their `h1`. Every case study shows a year — keep it that way when adding new work.
+
+### CaseStudyNext
+
+File: `src/components/case-study-next.tsx`
+
+The onward link closing every case study. A full-width `border-t border-stroke-dark` band holding a `text-body-h3 text-white/70` "Next case study" eyebrow above the project name at `text-heading-h4`. The arrow reuses the `CaseStudyCard` idiom — hidden at rest, sliding in from `-translate-x-1` on hover — and the whole block dims with `hover:opacity-70` / `active:opacity-50` because it mixes two text tones.
+
+It renders between `</main>` and `SiteFooter`, outside `main`, as its own `nav` landmark.
+
+### Share Cards
+
+The site-wide Open Graph card is generated at build time by `src/app/opengraph-image.tsx` (1200×630) and uses the deck's own restraint: `#121212` canvas, white headline, `#ffffffb3` kicker, `#ffffff66` domain. Case studies override it with their real project cover image, since actual product imagery outperforms a generated type card for specific work.
+
 ### Footer
 
 The shared `SiteFooter` centers its copyright and link group on mobile. From `md` upward it returns to a horizontal, left/right-aligned layout. Keep these elements as plain text links with the global focus treatment. Its Storybook references include a fluid story and pinned 390px, 768px, and 1440px states so this alignment change remains visible in component review.

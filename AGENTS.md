@@ -23,6 +23,10 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 - `src/app/case-studies-deck/page.tsx` — presentation route with an initial case-study chooser and interactive GoRight and Arrowhead Transit slide sequences.
 - `src/app/case-studies/*/page.tsx` — five case study pages: Forty5Park, Uber Suite, Github's Security Findings, GoRight, Arrowhead Transit.
 - `src/components/` — shared, flat component files. `case-studies-deck.tsx` is an intentional client leaf because keyboard and button controls change the active slide. Avoid nested component folders unless the project structure changes substantially.
+- `src/lib/site.ts` — canonical site URL, site name, shared description, author entity, and the `expertise` list used by `Person` schema.
+- `src/lib/case-studies.ts` — the single source of truth for the five case studies plus the `caseStudyMetadata()` helper. The homepage grid and `app/sitemap.ts` both read this array, so a project cannot appear on the homepage while missing from the sitemap.
+- `src/app/robots.ts` and `src/app/sitemap.ts` — Next.js metadata routes that generate `/robots.txt` and `/sitemap.xml`.
+- `src/app/opengraph-image.tsx` — generated site-wide share card via `next/og` `ImageResponse`.
 - `src/app/globals.css` — Tailwind v4 `@theme inline` design tokens plus global focus, motion, and font-rendering rules.
 - `DESIGN.md` — design-system documentation. Update it whenever tokens, core component styles, interaction rules, accessibility conventions, or responsive behavior change.
 - `.storybook/` — Storybook configuration. Stories live beside shared components as `src/components/*.stories.tsx`.
@@ -77,6 +81,27 @@ The hero subtext currently reads as a text group followed by a chip group. They 
 The comma is its own flex item in the chip group so `gap-2` gives equal space on both sides. Connector words such as `and` are also standalone flex items. If punctuation needs to hug a chip in a future design, wrap the chip and punctuation in one `inline-flex` item; do not leave hugging punctuation bare.
 
 Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label as the accessible name and do not add a redundant accessible name to the SVG.
+
+## SEO And Metadata
+
+- `metadataBase` is set once in `src/app/layout.tsx` from `siteUrl`. Every relative Open Graph image path resolves against it, so do not hardcode absolute URLs in page metadata.
+- The root layout carries the site-wide `openGraph` and `twitter` defaults plus a `Person` + `WebSite` JSON-LD `@graph`. `Person` is the primary entity and `WebSite` references it as `publisher`, so engines resolve one entity rather than two.
+- JSON-LD is injected with `dangerouslySetInnerHTML` and must keep the `.replace(/</g, "\\u003c")` escape from the Next.js JSON-LD guide.
+- Case study pages must build metadata through `caseStudyMetadata()` rather than hand-writing an `openGraph` block. Next.js replaces `openGraph` wholesale instead of deep-merging with the layout, which is why the helper repeats `siteName` and `locale`. The helper throws at build time for an unregistered `href`.
+- The generated `opengraph-image.tsx` renders through satori, which supports flexbox only. Every container with more than one child needs an explicit `display: "flex"`.
+- Case-study share cards intentionally use each project's real cover image; only the site-wide card is generated type.
+- Titles use the root layout's `title.template` (`titleTemplate` in `src/lib/site.ts`). Child routes therefore pass only the descriptive part and must **not** repeat "Analdo Gomez" — doing so renders the name twice. Keep each resolved title inside 60 characters.
+- The template applies to `title` but not to `openGraph.title`, so `caseStudyMetadata()` resolves it manually with `titleTemplate.replace("%s", title)`. Do not hardcode the suffix.
+- Canonical URLs are declared **per route**, never in the root layout. Metadata is shallow-merged, so a layout-level canonical would be silently inherited by every route that forgets to override it, pointing them all at `/`.
+- `/case-studies-deck` is presentation-only: excluded from the sitemap, marked `robots: { index: false, follow: true }`, and still canonicalised to itself.
+- `CaseStudyNext` renders the onward link at the foot of each case study, wrapping around `caseStudies` order so no page dead-ends. It sits outside `<main>` as its own `nav` landmark.
+- Homepage card titles are `h3`, so `page.tsx` carries an `sr-only` `h2` ("Selected work") to keep the outline from jumping `h1` → `h3`. If a visible section heading is ever added, remove the `sr-only` one rather than having both.
+- Each case study carries its ship year in `caseStudies` (`year`). It drives the visible `CaseStudyYear` block, `article:published_time`, and `datePublished` in structured data. Year-only precision is deliberate — do not invent a month or day.
+- `CaseStudyJsonLd` emits per-case-study `CreativeWork` schema whose `author` and `isPartOf` reference the `@id`s from the root layout's graph, so one Person and one WebSite resolve across the page. `CreativeWork` over `Article` on purpose: these are portfolio pieces, and Article rich results would not apply.
+- Outbound identity links live in `profiles` (`src/lib/site.ts`) and feed `Person.sameAs`. Add a real visible link alongside any new entry — an actual link is a stronger entity signal than `sameAs` alone.
+- `author.email`, `author.linkedIn`, and `author.github` are the single source for contact links. Do not re-hardcode these URLs in components.
+- Sitemap `lastModified` intentionally uses build time, not `year`: `lastmod` describes when the page changed, not when the project shipped.
+- Still outstanding from the SEO audit: homepage content depth, an About page with credentials, and all AEO work (question-phrased headings, FAQ content and schema). Each needs facts only the site owner has.
 
 ## Accessibility Conventions
 

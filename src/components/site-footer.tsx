@@ -1,3 +1,5 @@
+import { author } from "@/lib/site";
+
 export function SiteFooter() {
   return (
     <footer className="w-full border-t border-stroke-dark">
@@ -7,18 +9,25 @@ export function SiteFooter() {
         </p>
         <div className="flex shrink-0 items-center justify-center gap-4">
           <a
-            href="mailto:analdoagm@gmail.com?subject="
+            href={`mailto:${author.email}`}
             target="_blank"
             className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
           >
             / Contact me
           </a>
           <a
-            href="https://www.linkedin.com/in/analdo-gomez-17768a3b"
+            href={author.linkedIn}
             target="_blank"
             className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
           >
             / LinkedIn
+          </a>
+          <a
+            href={author.github}
+            target="_blank"
+            className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+          >
+            / GitHub
           </a>
         </div>
       </div>

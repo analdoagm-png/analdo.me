@@ -1,17 +1,21 @@
-import type { Metadata } from "next";
+import { caseStudyMetadata } from "@/lib/case-studies";
 import { CaseStudyHeader } from "@/components/case-study-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CaseStudyNext } from "@/components/case-study-next";
+import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
+import { CaseStudyYear } from "@/components/case-study-year";
 import {
   CaseStudyIntroBlock,
   CaseStudySectionBlock,
 } from "@/components/case-study-text-block";
 import { ProjectImage } from "@/components/project-image";
 
-export const metadata: Metadata = {
-  title: "Github's Security Findings — Analdo Gomez",
+export const metadata = caseStudyMetadata({
+  href: "/case-studies/github-security-findings",
+  title: "Github's Security Findings UX Showcase",
   description:
     "GH's Security Findings helps CTOs and managers ensure code security and reliability by tracking alerts, notifying the right stakeholders, and guiding issues to resolution through a clear, streamlined workflow.",
-};
+});
 
 export default function GithubSecurityFindingsCaseStudy() {
   return (
@@ -23,6 +27,8 @@ export default function GithubSecurityFindingsCaseStudy() {
           <h1 className="w-full animate-fade-up text-balance text-heading-h3 text-white md:text-heading-h1">
             Github&rsquo;s Security Findings
           </h1>
+
+          <CaseStudyYear year={2025} />
 
           <CaseStudyIntroBlock
             label="GH’s Security Findings helps CTOs and managers ensure code security and reliability by tracking alerts, notifying the right stakeholders, and guiding issues to resolution through a clear, streamlined workflow."
@@ -81,6 +87,8 @@ export default function GithubSecurityFindingsCaseStudy() {
         </section>
       </main>
 
+      <CaseStudyJsonLd currentHref="/case-studies/github-security-findings" />
+      <CaseStudyNext currentHref="/case-studies/github-security-findings" />
       <SiteFooter />
     </>
   );

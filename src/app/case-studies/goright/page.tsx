@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
+import { caseStudyMetadata } from "@/lib/case-studies";
 import { CaseStudyHeader } from "@/components/case-study-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CaseStudyNext } from "@/components/case-study-next";
+import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
 import { CaseStudyProjectHeader } from "@/components/case-study-project-header";
 import { CaseStudySectionHeading } from "@/components/case-study-section-heading";
 import { CaseStudyPointsGrid } from "@/components/case-study-points-grid";
@@ -11,11 +13,12 @@ import { CaseStudyFigure } from "@/components/case-study-figure";
 import { CaseStudyImagePair } from "@/components/case-study-image-pair";
 import { ProjectImage } from "@/components/project-image";
 
-export const metadata: Metadata = {
-  title: "GoRight — Analdo Gomez",
+export const metadata = caseStudyMetadata({
+  href: "/case-studies/goright",
+  title: "GoRight Dispatch Platform Case Study",
   description:
     "GoRight's on-road technicians were calling their supervisors just to confirm where to go next — I rebuilt Merlin as one consistent system, live on both ends.",
-};
+});
 
 function Divider() {
   return <div className="h-px w-full bg-gray-dark" />;
@@ -33,6 +36,7 @@ export default function GoRightCaseStudy() {
             subtitle="Merlin Platform"
             role="Lead Product Designer"
             tools="Figma, Whimsical, Notion, Airtable"
+            year={2022}
             intro="GoRight's on-road technicians were calling their supervisors just to confirm where to go next — the mobile app had no real-time updates, and its patterns didn't match the desktop tool managers used to track them. I rebuilt Merlin as one consistent system, live on both ends."
           />
 
@@ -298,6 +302,8 @@ export default function GoRightCaseStudy() {
         </section>
       </main>
 
+      <CaseStudyJsonLd currentHref="/case-studies/goright" />
+      <CaseStudyNext currentHref="/case-studies/goright" />
       <SiteFooter />
     </>
   );

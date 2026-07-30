@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
+import { caseStudyMetadata } from "@/lib/case-studies";
 import { CaseStudyHeader } from "@/components/case-study-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CaseStudyNext } from "@/components/case-study-next";
+import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
 import { CaseStudyProjectHeader } from "@/components/case-study-project-header";
 import { CaseStudySectionHeading } from "@/components/case-study-section-heading";
 import { CaseStudyPointsGrid } from "@/components/case-study-points-grid";
@@ -10,11 +12,12 @@ import { CaseStudyDecisionBlock } from "@/components/case-study-decision-block";
 import { CaseStudyFigure } from "@/components/case-study-figure";
 import { ProjectImage } from "@/components/project-image";
 
-export const metadata: Metadata = {
-  title: "Arrowhead Transit — Analdo Gomez",
+export const metadata = caseStudyMetadata({
+  href: "/case-studies/arrowhead-transit",
+  title: "Arrowhead Transit Dispatch Case Study",
   description:
     "Arrowhead Transit books more than 100 healthcare transport rides a day — I replaced a single-file Access database with a live dispatch platform dispatchers, drivers, and billing could all see at once.",
-};
+});
 
 function Divider() {
   return <div className="h-px w-full bg-gray-dark" />;
@@ -32,6 +35,7 @@ export default function ArrowheadTransitCaseStudy() {
             subtitle="Intranet"
             role="Lead Product Designer"
             tools="Figma, Whimsical, Notion, Airtable"
+            year={2019}
             intro="Arrowhead Transit books more than 100 healthcare transport rides a day — every one of them scheduled through a single Access database file, copied by hand between desks. I replaced it with a live dispatch platform dispatchers, drivers, and billing could all see at once."
           />
 
@@ -269,6 +273,8 @@ export default function ArrowheadTransitCaseStudy() {
         </section>
       </main>
 
+      <CaseStudyJsonLd currentHref="/case-studies/arrowhead-transit" />
+      <CaseStudyNext currentHref="/case-studies/arrowhead-transit" />
       <SiteFooter />
     </>
   );
