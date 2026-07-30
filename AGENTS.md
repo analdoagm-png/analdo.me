@@ -20,6 +20,7 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 ## Structure
 
 - `src/app/page.tsx` — homepage hero, chip-tagged subtext, contact links, and one unified `CaseStudyCard` grid for all 5 projects.
+- `src/app/about/page.tsx` — resume-style About page: hero, credentials strip, experience list, and skills chips built from the site owner's actual résumé content. Linked from `SiteHeader`'s "Resume" link, indexed, and included in the sitemap.
 - `src/app/case-studies-deck/page.tsx` — presentation route with an initial case-study chooser and interactive GoRight and Arrowhead Transit slide sequences.
 - `src/app/case-studies/*/page.tsx` — five case study pages: Forty5Park, Uber Suite, Github's Security Findings, GoRight, Arrowhead Transit.
 - `src/components/` — shared, flat component files. `case-studies-deck.tsx` is an intentional client leaf because keyboard and button controls change the active slide. Avoid nested component folders unless the project structure changes substantially.
@@ -94,6 +95,7 @@ Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label 
 - The template applies to `title` but not to `openGraph.title`, so `caseStudyMetadata()` resolves it manually with `titleTemplate.replace("%s", title)`. Do not hardcode the suffix.
 - Canonical URLs are declared **per route**, never in the root layout. Metadata is shallow-merged, so a layout-level canonical would be silently inherited by every route that forgets to override it, pointing them all at `/`.
 - `/case-studies-deck` is presentation-only: excluded from the sitemap, marked `robots: { index: false, follow: true }`, and still canonicalised to itself.
+- `/about` started as an unlinked, noindex WIP page (same treatment as `/case-studies-deck`) while its content was drafted. Once `SiteHeader` linked to it, both the `robots` override and the sitemap exclusion were removed — it is now indexed and listed in `sitemap.ts`. If a future page follows the same draft-first pattern, remember to flip both when it goes live.
 - `CaseStudyNext` renders the onward link at the foot of each case study, wrapping around `caseStudies` order so no page dead-ends. It sits outside `<main>` as its own `nav` landmark.
 - Homepage card titles are `h3`, so `page.tsx` carries an `sr-only` `h2` ("Selected work") to keep the outline from jumping `h1` → `h3`. If a visible section heading is ever added, remove the `sr-only` one rather than having both.
 - Each case study carries its ship year in `caseStudies` (`year`). It drives the visible `CaseStudyYear` block, `article:published_time`, and `datePublished` in structured data. Year-only precision is deliberate — do not invent a month or day.
@@ -101,7 +103,7 @@ Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label 
 - Outbound identity links live in `profiles` (`src/lib/site.ts`) and feed `Person.sameAs`. Add a real visible link alongside any new entry — an actual link is a stronger entity signal than `sameAs` alone.
 - `author.email`, `author.linkedIn`, and `author.github` are the single source for contact links. Do not re-hardcode these URLs in components.
 - Sitemap `lastModified` intentionally uses build time, not `year`: `lastmod` describes when the page changed, not when the project shipped.
-- Still outstanding from the SEO audit: homepage content depth, an About page with credentials, and all AEO work (question-phrased headings, FAQ content and schema). Each needs facts only the site owner has.
+- Still outstanding from the SEO audit: homepage content depth and all AEO work (question-phrased headings, FAQ content and schema). Each needs facts only the site owner has.
 
 ## Accessibility Conventions
 

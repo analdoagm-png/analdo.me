@@ -9,19 +9,35 @@ export function SiteHeader() {
       >
         Skip to content
       </a>
-      <div className="mx-auto w-full max-w-[1280px] px-6 py-4 md:px-10 lg:px-16">
+      <nav
+        aria-label="Primary"
+        className="mx-auto flex w-full max-w-[1280px] items-center justify-between px-6 py-4 md:px-10 lg:px-16"
+      >
         {/*
           The name is two-tone, so its spans would override a parent text-colour
           change. It dims with opacity instead to keep the tonal relationship.
+          Below `md` the role drops to its own line and the separator hides with
+          it — at that width there isn't room to keep the lockup on one line next
+          to the Resume link without wrapping mid-word. Flex items are always
+          blockified, which trims leading/trailing space inside a text node, so
+          the gap around the separator comes from `gap` rather than literal
+          spaces in the string.
         */}
         <Link
           href="/"
-          className="inline-block text-body-h2 transition-opacity duration-200 hover:opacity-60 active:opacity-40"
+          className="flex flex-col text-body-h2 transition-opacity duration-200 hover:opacity-60 active:opacity-40 md:flex-row md:items-baseline md:gap-1.5"
         >
           <span className="text-white">Analdo Gomez</span>
-          <span className="text-white/70"> / Senior Product Designer</span>
+          <span className="hidden text-white/70 md:inline">/</span>
+          <span className="text-white/70">Senior Product Designer</span>
         </Link>
-      </div>
+        <Link
+          href="/about"
+          className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+        >
+          Resume
+        </Link>
+      </nav>
     </header>
   );
 }

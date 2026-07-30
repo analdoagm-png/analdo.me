@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { getNextCaseStudy } from "@/lib/case-studies";
 
@@ -34,18 +35,32 @@ export function CaseStudyNext({ currentHref }: { currentHref: string }) {
       <div className="mx-auto w-full max-w-[1280px] px-6 py-10 md:px-10 md:py-12 lg:px-16">
         <Link
           href={next.href}
-          className="group flex flex-col items-start gap-2 transition-opacity duration-200 hover:opacity-70 active:opacity-50"
+          className="group flex items-center justify-center gap-5 text-center transition-opacity duration-200 hover:opacity-70 active:opacity-50 md:justify-start md:text-left"
         >
-          <span className="text-body-h3 text-white/70">Next case study</span>
-          <span className="flex items-center gap-2.5">
-            <span className="text-balance text-heading-h4 text-white">
-              {next.title}
-            </span>
-            <span
-              className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+          <span className="relative size-14 shrink-0 overflow-hidden rounded-token">
+            <Image
+              src={next.image}
+              alt=""
               aria-hidden="true"
-            >
-              <ArrowForwardIcon />
+              fill
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              sizes="56px"
+            />
+          </span>
+          <span className="flex flex-col items-center gap-2 md:items-start">
+            <span className="text-body-h3 text-white/70">
+              Next case study
+            </span>
+            <span className="flex items-center gap-2.5">
+              <span className="text-balance text-heading-h4 text-white">
+                {next.title}
+              </span>
+              <span
+                className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+                aria-hidden="true"
+              >
+                <ArrowForwardIcon />
+              </span>
             </span>
           </span>
         </Link>

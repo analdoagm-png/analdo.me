@@ -100,9 +100,11 @@ Standard visual QA widths:
 
 ### Header
 
-`SiteHeader` renders the name/role lockup as a link to `/`. Because the lockup is two-tone (`text-white` name, `text-white/70` role), a parent text-colour change would be overridden by the child spans, so this one link dims with `transition-opacity` + `hover:opacity-60` / `active:opacity-40` instead of the standard colour dim. Keep the colour-based rule for all single-tone text links.
+`SiteHeader` renders the name/role lockup as a link to `/`, plus a "Resume" link to `/about`, wrapped in `<nav aria-label="Primary">`. Because the lockup is two-tone (`text-white` name, `text-white/70` role), a parent text-colour change would be overridden by the child spans, so this one link dims with `transition-opacity` + `hover:opacity-60` / `active:opacity-40` instead of the standard colour dim. Keep the colour-based rule for all single-tone text links, including "Resume".
 
-`CaseStudyHeader` wraps its "Back to portfolio" link in `<nav aria-label="Case study">`. `SiteHeader` intentionally has no `<nav>`: a single home link is not a navigation region, and `<header>` already provides the `banner` landmark.
+Below `md` the lockup stacks the name and role onto two lines and drops the " / " separator (`flex flex-col`, separator `hidden`); at `md` and up it returns to one line (`md:flex-row md:items-baseline md:gap-1.5`, separator `md:inline`). This exists because adding the Resume link into the same row narrows the lockup's available width just enough that the single-line text wraps mid-word on phones — stacking it deliberately reads better than an accidental wrap. The gap between name, separator, and role comes from `gap` rather than literal spaces in the string: flex items are always blockified, which trims leading/trailing whitespace inside a text node.
+
+`CaseStudyHeader` wraps its "Back to portfolio" link in `<nav aria-label="Case study">`.
 
 ### CaseStudyYear
 
