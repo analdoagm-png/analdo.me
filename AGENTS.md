@@ -76,7 +76,7 @@ Current high-level design choices:
 
 The hero subtext currently reads as a text group followed by a chip group. They stack on mobile and become one wrapping row at `md`:
 
-`Based in Colombia, working globally with` `Figma` `,` `Claude` `and` `Codex`
+`Based in Colombia, working globally with` `Figma` `,` `Claude Code` `and` `Codex`
 
 The comma is its own flex item in the chip group so `gap-2` gives equal space on both sides. Connector words such as `and` are also standalone flex items. If punctuation needs to hug a chip in a future design, wrap the chip and punctuation in one `inline-flex` item; do not leave hugging punctuation bare.
 

@@ -23,7 +23,7 @@ export const ToolChips: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
       <Chip label="Figma" icon={<ToolIcon name="figma" />} />
-      <Chip label="Claude" icon={<ToolIcon name="claude" />} />
+      <Chip label="Claude Code" icon={<ToolIcon name="claude" />} />
       <Chip label="Codex" icon={<ToolIcon name="codex" />} />
     </div>
   ),

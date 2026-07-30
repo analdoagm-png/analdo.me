@@ -32,7 +32,7 @@ export default function Home() {
               <div className="flex flex-wrap items-center gap-2">
                 <Chip label="Figma" icon={<ToolIcon name="figma" />} />
                 <span className="text-body-h1 text-white/70">,</span>
-                <Chip label="Claude" icon={<ToolIcon name="claude" />} />
+                <Chip label="Claude Code" icon={<ToolIcon name="claude" />} />
                 <span className="text-body-h1 text-white/70">and</span>
                 <Chip label="Codex" icon={<ToolIcon name="codex" />} />
               </div>
