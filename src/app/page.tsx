@@ -22,8 +22,9 @@ export default function Home() {
         <section className="mx-auto w-full max-w-[1280px] px-6 pt-12 pb-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
           <div className="flex flex-col items-start gap-6">
             <h1 className="w-full animate-fade-up text-balance text-heading-h4 text-white md:text-heading-h2 lg:max-w-[884px]">
-              Over a decade of solving complex B2B problems with clear
-              thinking, fewer steps, and better outcomes.
+              Over a decade solving complex B2B problems with design
+              systems built to ship straight to code, and clearer paths to
+              better outcomes.
             </h1>
             <div className="flex flex-col items-start gap-2 animate-fade-up [animation-delay:100ms] md:flex-row md:flex-wrap md:items-center">
               <p className="text-body-h1 text-white/70">
