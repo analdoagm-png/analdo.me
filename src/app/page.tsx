@@ -1,7 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyCard } from "@/components/case-study-card";
-import { Chip } from "@/components/chip";
 import { ToolIcon } from "@/components/tool-icon";
 import type { Metadata } from "next";
 import { caseStudies } from "@/lib/case-studies";
@@ -31,11 +30,35 @@ export default function Home() {
                 Based in Colombia, working globally with
               </p>
               <div className="flex flex-wrap items-center gap-2">
-                <Chip label="Figma" icon={<ToolIcon name="figma" />} />
+                <span className="inline-flex items-center gap-1.5 text-body-h1 text-white/70">
+                  <span
+                    aria-hidden="true"
+                    className="flex size-3.5 shrink-0 items-center justify-center"
+                  >
+                    <ToolIcon name="figma" />
+                  </span>
+                  Figma
+                </span>
                 <span className="text-body-h1 text-white/70">,</span>
-                <Chip label="Claude Code" icon={<ToolIcon name="claude" />} />
+                <span className="inline-flex items-center gap-1.5 text-body-h1 text-white/70">
+                  <span
+                    aria-hidden="true"
+                    className="flex size-3.5 shrink-0 items-center justify-center"
+                  >
+                    <ToolIcon name="claude" />
+                  </span>
+                  Claude Code
+                </span>
                 <span className="text-body-h1 text-white/70">and</span>
-                <Chip label="Codex" icon={<ToolIcon name="codex" />} />
+                <span className="inline-flex items-center gap-1.5 text-body-h1 text-white/70">
+                  <span
+                    aria-hidden="true"
+                    className="flex size-3.5 shrink-0 items-center justify-center"
+                  >
+                    <ToolIcon name="codex" />
+                  </span>
+                  Codex
+                </span>
               </div>
             </div>
             <div className="flex flex-wrap items-start gap-6 animate-fade-up [animation-delay:200ms]">
