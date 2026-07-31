@@ -6,9 +6,13 @@ export const siteName = "Analdo Gomez";
  * Used for the meta description, Open Graph, and `Person` schema alike, so it
  * stays a factual statement rather than a search-only call to action. Length is
  * deliberately in the 150–160 character range.
+ *
+ * Kept in sync with the About page's bio by hand — About is the more detailed,
+ * authoritative source (specific years, named employers), so when the two
+ * diverge, update this one to match About rather than the other way round.
  */
 export const siteDescription =
-  "Over a decade of solving complex B2B problems with clear thinking, fewer steps, and better outcomes — dispatch, real estate, enterprise, security platforms.";
+  "Senior Product Designer with 14+ years building B2B software for fintech, retirement, and SaaS — case studies span dispatch, real estate, and security platforms.";
 
 /** Title for `/`, kept in the 50–60 character range. */
 export const siteTitle =
@@ -34,12 +38,16 @@ export const profiles = [author.linkedIn, author.github];
 
 /**
  * Specialisations declared to search and AI engines through `Person` schema.
- * Each entry is evidenced by a case study on the site.
+ * Each entry is evidenced either by a case study or by the About page's
+ * experience/skills sections — kept in sync with both rather than describing
+ * only the case-study range.
  */
 export const expertise = [
   "B2B product design",
-  "Enterprise UX",
-  "Dispatch and logistics software",
   "Design systems",
+  "Fintech and retirement platforms",
+  "SaaS platforms",
+  "Dispatch and logistics software",
   "Security tooling UX",
+  "Accessibility",
 ];

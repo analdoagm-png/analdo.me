@@ -6,13 +6,37 @@ import { CaseStudyPointsGrid } from "@/components/case-study-points-grid";
 import { CaseStudySectionHeading } from "@/components/case-study-section-heading";
 import { Chip } from "@/components/chip";
 import { ToolIcon } from "@/components/tool-icon";
+import { siteName, titleTemplate } from "@/lib/site";
 
+const aboutDescription =
+  "Analdo Gomez is a Senior Product Designer with 14+ years building B2B software for fintech, retirement, and SaaS — specializing in design systems.";
+
+/**
+ * `openGraph`/`twitter` are set explicitly here, unlike most routes: Next
+ * doesn't deep-merge `openGraph`, so a route that omits it inherits the root
+ * layout's object verbatim — title, description, and url included. Without
+ * this override, sharing `/about` showed the homepage's card. The generated
+ * `opengraph-image` file convention still applies automatically; only the
+ * text fields need restating.
+ */
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "Analdo Gomez is a Senior Product Designer with 14+ years building B2B software for fintech, retirement, and SaaS — specializing in design systems.",
+  description: aboutDescription,
   alternates: {
     canonical: "/about",
+  },
+  openGraph: {
+    type: "profile",
+    siteName,
+    title: titleTemplate.replace("%s", "About"),
+    description: aboutDescription,
+    url: "/about",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: titleTemplate.replace("%s", "About"),
+    description: aboutDescription,
   },
 };
 
@@ -51,6 +75,13 @@ export default function AboutPage() {
             </p>
           </div>
 
+          {/*
+            CaseStudyPointsGrid renders h3 item titles, which on case-study
+            pages always follow a visible h2 section heading. About has no
+            section heading above the stats, so this sr-only h2 keeps the
+            outline valid instead of jumping h1 -> h3.
+          */}
+          <h2 className="sr-only">Highlights</h2>
           <CaseStudyPointsGrid
             items={[
               {
