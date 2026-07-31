@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-dm-sans);
+  --font-sans: var(--font-inconsolata);
 
   /* Core color tokens */
   --color-dark-primary: #121212;
@@ -49,15 +49,17 @@
   --text-body-h3--line-height: 1.5;
   --text-body-h3--font-weight: 500;
 
+  /* Only chips keep a radius — every other surface (cards, images,
+     callouts, buttons) is sharp-cornered by design. */
   --radius-token: 4px;
-  --radius-token-lg: 8px;
-  --radius-token-xl: 12px;
+  --radius-token-lg: 0px;
+  --radius-token-xl: 0px;
 }
 
 body {
   background: var(--color-dark-primary);
   color: white;
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-monospace, Menlo, Consolas, monospace;
   font-feature-settings:
     "kern" 1,
     "liga" 1,

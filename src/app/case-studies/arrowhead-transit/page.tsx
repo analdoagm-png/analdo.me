@@ -44,7 +44,6 @@ export default function ArrowheadTransitCaseStudy() {
             caption="Exhibit A — the entire operation, in one Access file. No login. No history. No way to work outside the office."
             aspect="2880/1800"
             gapClassName="gap-4 lg:gap-16"
-            roundedClassName="rounded-lg lg:rounded-xl"
             priority
           />
 
@@ -126,7 +125,6 @@ export default function ArrowheadTransitCaseStudy() {
               figureSrc="/images/arrowhead-transit/decision-2-figure.png"
               figureCaption="Queue management UI overview"
               figureAspect="2880/1800"
-              figureRoundedClassName="rounded-lg lg:rounded-xl"
               figureCaptionHiddenAtDesktop
               mdGapClassName="md:gap-6"
               reverseOnDesktop
@@ -164,19 +162,16 @@ export default function ArrowheadTransitCaseStudy() {
               src="/images/arrowhead-transit/process-1.png"
               alt="Design audit table comparing requirements against design impact for the dispatch workflow."
               aspect="2048/669"
-              roundedClassName="rounded-xl"
             />
             <ProjectImage
               src="/images/arrowhead-transit/process-2.png"
               alt="Sitemap table defining view and edit permissions by role."
               aspect="2048/467"
-              roundedClassName="rounded-xl"
             />
             <ProjectImage
               src="/images/arrowhead-transit/process-3.png"
               alt="Golden-path flowchart mapping a ride from booking through dispatch to completion."
               aspectClassName="aspect-[2048/1025] lg:aspect-[2048/1079]"
-              roundedClassName="rounded-xl lg:rounded-none"
             />
           </div>
 
@@ -198,25 +193,21 @@ export default function ArrowheadTransitCaseStudy() {
               src="/images/arrowhead-transit/platform-1.png"
               alt="Arrowhead Transit dashboard showing this week's trips and available drivers."
               aspectClassName="aspect-[8/5] lg:aspect-[2048/1623]"
-              roundedClassName="rounded-lg lg:rounded-none"
             />
             <ProjectImage
               src="/images/arrowhead-transit/platform-2.png"
               alt="Arrowhead Transit incoming referrals queue showing new ride requests."
               aspectClassName="aspect-[8/5] lg:aspect-[2048/945]"
-              roundedClassName="rounded-lg lg:rounded-none"
             />
             <ProjectImage
               src="/images/arrowhead-transit/platform-3.png"
               alt="Arrowhead Transit trip detail view with a live route map."
               aspectClassName="aspect-[8/5] lg:aspect-[2048/1165]"
-              roundedClassName="rounded-lg lg:rounded-none"
             />
             <ProjectImage
               src="/images/arrowhead-transit/platform-4.png"
               alt="Arrowhead Transit driver tracking view showing an active route on a map."
               aspectClassName="aspect-[8/5] lg:aspect-[2048/1357]"
-              roundedClassName="rounded-lg lg:rounded-none"
             />
           </div>
 
@@ -250,7 +241,7 @@ export default function ArrowheadTransitCaseStudy() {
             />
           </div>
 
-          <div className="flex w-full animate-fade-up flex-col items-start gap-4 rounded-xl border border-gray-dark p-8">
+          <div className="flex w-full animate-fade-up flex-col items-start gap-4 rounded-none border border-gray-dark p-8">
             <p className="w-full text-balance text-heading-h5 text-white">
               The database is gone.
             </p>

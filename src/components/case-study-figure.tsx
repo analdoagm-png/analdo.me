@@ -8,7 +8,7 @@ export function CaseStudyFigure({
   aspectClassName,
   captionClassName = "text-white/70",
   gapClassName = "gap-2",
-  roundedClassName = "rounded-xl",
+  roundedClassName = "rounded-none",
   priority = false,
 }: {
   src: string;

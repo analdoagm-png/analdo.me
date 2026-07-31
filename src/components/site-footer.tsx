@@ -3,7 +3,7 @@ import { author } from "@/lib/site";
 export function SiteFooter() {
   return (
     <footer className="w-full border-t border-stroke-dark">
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-4 px-6 py-6 text-center md:flex-row md:items-center md:px-10 md:text-left lg:items-start lg:px-16 lg:py-16 lg:h-40">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col items-center gap-4 px-6 py-6 text-center md:flex-row md:items-center md:px-10 md:text-left lg:px-16">
         <p className="w-full text-body-h2 text-white/70 md:w-auto md:flex-1">
           © Analdo Gomez / 2026
         </p>

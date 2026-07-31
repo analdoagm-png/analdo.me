@@ -15,7 +15,7 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 - Next.js 16 App Router, TypeScript, Tailwind CSS v4.
 - All pages are Server Components. Do not add client-side state, forms, data fetching, or scroll observers without a real architecture reason.
 - Use `next/image` for project images from `public/images/`.
-- Use `next/font` from the root layout for fonts. This project uses DM Sans as a variable Google font with `display: "swap"` and explicit fallbacks.
+- Use `next/font` from the root layout for fonts. This project uses Inconsolata (monospace) as a variable Google font with `display: "swap"` and explicit fallbacks, applied sitewide — headings and body both.
 
 ## Structure
 
@@ -58,7 +58,8 @@ Use `DESIGN.md` as the source of truth for:
 Current high-level design choices:
 
 - Dark base: `dark-primary` background, `stroke-dark` borders, `gray-dark` low-emphasis strokes.
-- DM Sans variable font, optimized through `next/font`.
+- Inconsolata variable font, optimized through `next/font`, sitewide for headings and body.
+- Sharp corners everywhere except chips: chips keep a 4px `rounded-token` radius; every card, image, and callout is `rounded-none`. See `DESIGN.md`'s Radius Tokens section for the full rule.
 - Fluid display type for large headings; readable minimum text size is 14px.
 - Body copy should not use very light weights. Use 400 for body text and 500 for small labels.
 - Home project cards use stronger titles (`text-heading-h4`), calmer descriptions (`text-body-h2 text-white/68`), and light chips (`border-white/15 bg-white/[0.04] text-white/72`).

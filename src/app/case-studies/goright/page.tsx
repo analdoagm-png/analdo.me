@@ -277,7 +277,7 @@ export default function GoRightCaseStudy() {
             ]}
           />
 
-          <div className="flex w-full animate-fade-up flex-col items-start gap-4 rounded-xl border border-gray-dark p-8">
+          <div className="flex w-full animate-fade-up flex-col items-start gap-4 rounded-none border border-gray-dark p-8">
             <p className="w-full text-balance text-heading-h5 text-white">
               Technicians stopped calling it in.
             </p>

@@ -44,7 +44,7 @@ export function CaseStudyCard({
       style={style}
       className="group flex w-full flex-col gap-6 rounded-token-xl border border-stroke-dark bg-dark-primary p-2 animate-fade-up transition-[transform,border-color,box-shadow] duration-200 ease-out hover:border-gray-dark hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)] active:scale-[0.99]"
     >
-      <div className="relative h-[220px] w-full overflow-hidden rounded-token md:h-[240px] lg:h-[280px]">
+      <div className="relative h-[220px] w-full overflow-hidden rounded-none md:h-[240px] lg:h-[280px]">
         <Image
           src={image}
           alt={`${title} project thumbnail`}

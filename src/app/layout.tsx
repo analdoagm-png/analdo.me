@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Inconsolata } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import {
   author,
@@ -13,10 +13,10 @@ import {
 } from "@/lib/site";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const inconsolata = Inconsolata({
   display: "swap",
-  fallback: ["Arial", "Helvetica", "sans-serif"],
-  variable: "--font-dm-sans",
+  fallback: ["ui-monospace", "Menlo", "Consolas", "monospace"],
+  variable: "--font-inconsolata",
   subsets: ["latin"],
 });
 
@@ -87,7 +87,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${inconsolata.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-dark-primary">
         <script
           type="application/ld+json"

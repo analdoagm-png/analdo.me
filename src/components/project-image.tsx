@@ -5,7 +5,7 @@ export function ProjectImage({
   alt,
   aspect = "2880/1800",
   aspectClassName,
-  roundedClassName = "rounded-lg",
+  roundedClassName = "rounded-none",
   priority = false,
 }: {
   src: string;

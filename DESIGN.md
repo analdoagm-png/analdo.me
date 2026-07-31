@@ -39,20 +39,38 @@ Common opacity usage:
 
 ## Radius Tokens
 
+Deliberate system: chips are the only rounded surface on the site. Every other
+framed element — project cards, images, callouts, results boxes — is sharp
+(`rounded-none`), a considered pairing with the monospace type system rather
+than a leftover default.
+
 | Token | Value | Usage |
 | --- | --- | --- |
-| `--radius-token` | `4px` | Small media corners and compact controls |
-| `--radius-token-lg` | `8px` | Mid-size UI surfaces |
-| `--radius-token-xl` | `12px` | Project cards and larger framed blocks |
+| `--radius-token` | `4px` | Chips only |
+| `--radius-token-lg` | `0px` | Unused — kept at 0 for any future mid-size surface |
+| `--radius-token-xl` | `0px` | Project cards and other large framed blocks |
+
+`Chip` is the only component that uses `rounded-token`. Everything else that
+previously used `rounded-lg`/`rounded-xl`/`rounded-token-xl` now uses
+`rounded-none` explicitly (or inherits 0 automatically via the token, for
+anything still built on `rounded-token-xl`). Skip-links (`.skip-link`) keep
+their own `rounded-token` (4px) as a small, chip-adjacent control — not part
+of the card/image system this rule governs.
 
 ## Typography
 
-Font family: DM Sans via `next/font/google`, configured in `src/app/layout.tsx` with:
+Font family: Inconsolata (monospace) via `next/font/google`, configured in
+`src/app/layout.tsx` with:
 
 - `subsets: ["latin"]`
 - `display: "swap"`
-- `fallback: ["Arial", "Helvetica", "sans-serif"]`
-- CSS variable: `--font-dm-sans`
+- `fallback: ["ui-monospace", "Menlo", "Consolas", "monospace"]`
+- CSS variable: `--font-inconsolata`
+
+The whole site — headings, body copy, chips, meta labels — renders in
+Inconsolata. There is no separate display/body pairing; the monospace choice
+is deliberately singular, reinforcing the sharp-corner system above as one
+cohesive "technical" identity rather than two independent decisions.
 
 Global rendering:
 
@@ -132,6 +150,8 @@ The site-wide Open Graph card is generated at build time by `src/app/opengraph-i
 
 The shared `SiteFooter` centers its copyright and link group on mobile. From `md` upward it returns to a horizontal, left/right-aligned layout. Keep these elements as plain text links with the global focus treatment. Its Storybook references include a fluid story and pinned 390px, 768px, and 1440px states so this alignment change remains visible in component review.
 
+Vertical padding is `py-6` (24px top/bottom) at every breakpoint — deliberately not scaled up at `lg`, so the footer's height stays identical between tablet and desktop. Only horizontal padding follows the standard `px-6`/`md:px-10`/`lg:px-16` scale.
+
 ### Storybook
 
 Storybook is the isolated component reference for the portfolio. Its stories live beside shared components in `src/components/` and load the same global tokens and Tailwind styles as the app. Keep the canvas dark (`#121212`) so component contrast and hierarchy are assessed in their intended context.
@@ -149,7 +169,7 @@ File: `src/components/chip.tsx`
 Current style:
 
 ```tsx
-rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-body-h3 whitespace-nowrap text-white/72
+rounded-token border border-white/15 bg-white/[0.04] px-3 py-1.5 text-body-h3 whitespace-nowrap text-white/72
 ```
 
 Use chips for concise metadata only. Keep them light; they should support the hierarchy rather than compete with titles.
@@ -211,7 +231,7 @@ File: `src/components/case-study-callout.tsx`
 Current style:
 
 ```tsx
-flex w-full animate-fade-up items-start justify-start rounded-xl border border-gray-dark p-8
+flex w-full animate-fade-up items-start justify-start rounded-none border border-gray-dark p-8
 ```
 
 Inner paragraph:

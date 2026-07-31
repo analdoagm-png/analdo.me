@@ -19,7 +19,7 @@ export function CaseStudyImagePair({
       ].map(({ src, alt }, index) => (
         <div
           key={src}
-          className="relative h-[240px] w-full animate-fade-up overflow-hidden rounded-lg bg-stroke-dark md:h-[400px] md:flex-1 md:min-w-0 lg:h-[683.688px]"
+          className="relative h-[240px] w-full animate-fade-up overflow-hidden rounded-none bg-stroke-dark md:h-[400px] md:flex-1 md:min-w-0 lg:h-[683.688px]"
           style={{ animationDelay: `${index * 80}ms` }}
         >
           <Image
