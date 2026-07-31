@@ -174,9 +174,9 @@ rounded-token border border-white/15 bg-white/[0.04] px-3 py-1.5 text-body-h3 wh
 
 Use chips for concise metadata only. Keep them light; they should support the hierarchy rather than compete with titles.
 
-The shared component supports an optional 14px decorative icon. Use this only when a chip identifies a product or tool and the visible text label supplies its accessible name. The homepage's Figma, Claude Code, and Codex chips use their corresponding brand marks; project metadata chips stay text-only.
+The shared component supports an optional 14px decorative icon. Use this only when a chip identifies a product or tool and the visible text label supplies its accessible name. About's skills chips (Figma, Claude Code, Codex, GitHub, Storybook) use their corresponding brand marks; project metadata chips stay text-only.
 
-In the homepage tool sentence, the introductory copy and the chip group stack on mobile, then sit inline from `md` upward. The chip group keeps the comma and connector word as separate flex items with `gap-2`.
+The homepage's tool sentence intentionally does not use `Chip` — see Homepage Hero Copy below for that pattern.
 
 ### CaseStudyCard
 
@@ -309,11 +309,13 @@ Every page must include:
 
 ## Homepage Hero Copy
 
-Current chip sentence:
+Current tool sentence — plain text, not `Chip`:
 
-`Based in Colombia, working globally with` `Figma` `,` `Claude Code` `and` `Codex`
+`Based in Colombia, working globally with` `[icon] Figma` `,` `[icon] Claude Code` `and` `[icon] Codex`
 
-The comma is a separate flex item so it has equal spacing on both sides. Keep that spacing behavior unless the design asks punctuation to hug the chip.
+Each tool name is a decorative `ToolIcon` plus its label in one `inline-flex` item at `text-body-h1 text-white/70` — no border, no background, matching the surrounding sentence rather than standing apart as a tag. The comma is a separate flex item so it has equal spacing on both sides. Keep that spacing behavior unless the design asks punctuation to hug a tool name.
+
+The intro paragraph carries `text-balance` so mobile's line break lands evenly instead of stranding a short trailing word like "with" alone on its own line.
 
 ## Documentation Upkeep
 

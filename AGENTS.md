@@ -19,7 +19,7 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 
 ## Structure
 
-- `src/app/page.tsx` — homepage hero, chip-tagged subtext, contact links, and one unified `CaseStudyCard` grid for all 5 projects.
+- `src/app/page.tsx` — homepage hero, icon-labeled tool subtext, contact links, and one unified `CaseStudyCard` grid for all 5 projects.
 - `src/app/about/page.tsx` — resume-style About page: hero, credentials strip, experience list, and skills chips built from the site owner's actual résumé content. Linked from `SiteHeader`'s "Resume" link, indexed, and included in the sitemap.
 - `src/app/case-studies-deck/page.tsx` — presentation route with an initial case-study chooser and interactive GoRight and Arrowhead Transit slide sequences.
 - `src/app/case-studies/*/page.tsx` — five case study pages: Forty5Park, Uber Suite, Github's Security Findings, GoRight, Arrowhead Transit.
@@ -76,11 +76,13 @@ Current high-level design choices:
 
 ## Homepage Copy Pattern
 
-The hero subtext currently reads as a text group followed by a chip group. They stack on mobile and become one wrapping row at `md`:
+The hero subtext reads as a text group followed by a plain icon-labeled tool list — no chip borders or background, just text at the same size and color as the surrounding sentence (`text-body-h1 text-white/70`). They stack on mobile and become one wrapping row at `md`:
 
-`Based in Colombia, working globally with` `Figma` `,` `Claude Code` `and` `Codex`
+`Based in Colombia, working globally with` `[icon] Figma` `,` `[icon] Claude Code` `and` `[icon] Codex`
 
-The comma is its own flex item in the chip group so `gap-2` gives equal space on both sides. Connector words such as `and` are also standalone flex items. If punctuation needs to hug a chip in a future design, wrap the chip and punctuation in one `inline-flex` item; do not leave hugging punctuation bare.
+Each tool name pairs a decorative `ToolIcon` with its label inside one `inline-flex` item, so the icon never separates from its name when the line wraps. The comma is its own flex item so `gap-2` gives equal space on both sides. Connector words such as `and` are also standalone flex items. Keep the visible label as the accessible name — the icon wrapper stays `aria-hidden` and does not get a redundant accessible name of its own.
+
+The intro paragraph ("Based in Colombia, working globally with") carries `text-balance` so its mobile line break doesn't strand a short word like "with" alone on its own line — the browser balances it into two even lines instead.
 
 Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label as the accessible name and do not add a redundant accessible name to the SVG.
 
