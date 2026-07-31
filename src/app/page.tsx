@@ -26,7 +26,7 @@ export default function Home() {
               better outcomes.
             </h1>
             <div className="flex flex-col items-start gap-2 animate-fade-up [animation-delay:100ms] md:flex-row md:flex-wrap md:items-center">
-              <p className="text-body-h1 text-white/70">
+              <p className="text-balance text-body-h1 text-white/70">
                 Based in Colombia, working globally with
               </p>
               <div className="flex flex-wrap items-center gap-2">
