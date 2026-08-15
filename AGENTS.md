@@ -114,7 +114,7 @@ Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label 
 ## Accessibility Conventions
 
 - Every page's `<main>` must have `id="main-content"`.
-- `SiteHeader` and `CaseStudyHeader` render a `.skip-link` as their first child.
+- `SiteHeader` renders a `.skip-link` as its first child. It's the one shared header for every route — the old `CaseStudyHeader` was removed once `SiteHeader` gained a "Home" link and took over its job.
 - Global focus is handled in `globals.css` for `a:focus-visible` and `button:focus-visible`. Do not add per-element focus overrides unless a specific component needs a different visible treatment.
 - Global reduced-motion handling in `globals.css` neutralizes transitions and animations under `prefers-reduced-motion: reduce`.
 - `ProjectImage` requires real `alt` text. `CaseStudyFigure` may fall back to its caption when the visible caption already describes the image.
@@ -125,15 +125,17 @@ Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label 
 - Text links dim on hover to `text-white/60` and active press to `text-white/40` with `transition-colors duration-200`.
 - Case-study card images zoom to `scale-105` on hover with `duration-500 ease-out`.
 - `CaseStudyCard` border shifts from `stroke-dark` to `gray-dark`, adds `hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]`, and presses with `active:scale-[0.99]`.
-- Card arrows slide in on hover using the same visual language as the back arrow in `CaseStudyHeader`.
+- Card arrows slide in on hover — hidden at rest, sliding in from `-translate-x-1` — an idiom `CaseStudyNext` reuses for its own onward-link arrow.
 - `.animate-fade-up` is a zero-JS page-load animation: 12px translateY + opacity, 700ms `cubic-bezier(0.16, 1, 0.3, 1)`, `both` fill mode.
 - Use small server-rendered stagger delays for side-by-side mapped items only. Sequential content blocks do not need individual staggering.
 
 ## Case Study Patterns
 
-Simple case studies use `CaseStudyHeader`, content sections, and `ProjectImage`.
+Every page — homepage, `/about`, and all five case studies — uses the same shared `SiteHeader` (see DESIGN.md's Header section). There is no separate case-study-only header component anymore; `CaseStudyHeader` was removed once `SiteHeader` gained a "Home" link and could cover both jobs.
 
-Editorial case studies such as GoRight and Arrowhead use:
+Simple/showcase case studies (Forty5Park, Uber Suite, Github's Security Findings) use `SiteHeader`, content sections, and `ProjectImage`.
+
+Editorial case studies such as GoRight and Arrowhead additionally use:
 
 - `CaseStudyProjectHeader`
 - `CaseStudySectionHeading`

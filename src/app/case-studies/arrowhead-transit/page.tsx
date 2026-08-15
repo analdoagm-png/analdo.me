@@ -1,5 +1,5 @@
 import { caseStudyMetadata } from "@/lib/case-studies";
-import { CaseStudyHeader } from "@/components/case-study-header";
+import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyNext } from "@/components/case-study-next";
 import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
@@ -26,7 +26,7 @@ function Divider() {
 export default function ArrowheadTransitCaseStudy() {
   return (
     <>
-      <CaseStudyHeader />
+      <SiteHeader />
 
       <main id="main-content" className="flex-1">
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-6 p-6 md:gap-16 md:px-10 md:py-16 lg:p-16">

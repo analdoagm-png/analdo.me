@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CaseStudyHeader } from "@/components/case-study-header";
+import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyPointsGrid } from "@/components/case-study-points-grid";
 import { CaseStudySectionHeading } from "@/components/case-study-section-heading";
@@ -46,22 +46,19 @@ const inlineLinkStyles =
 export default function AboutPage() {
   return (
     <>
-      <CaseStudyHeader />
+      <SiteHeader />
 
       <main id="main-content" className="flex-1">
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-12 pb-16 md:gap-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
           <div className="flex flex-col items-start gap-6">
             {/*
-              `CaseStudyHeader` hides the name lockup below `md`, so this swaps
-              the eyebrow for it on mobile rather than losing it — the role is
-              dropped here since the h1 below already covers it. `md` and up
-              keep the plain "About" eyebrow since the header already shows the
-              full lockup there.
+              SiteHeader now shows the name/role lockup at every breakpoint
+              (not just md+, like the old CaseStudyHeader did), so this stays
+              a plain "About" eyebrow throughout rather than swapping to the
+              name on mobile — showing it twice on the same screen would be
+              redundant now that the header already covers it everywhere.
             */}
-            <p className="animate-fade-up text-overline text-white md:hidden">
-              Analdo Gomez
-            </p>
-            <p className="hidden animate-fade-up text-overline text-white/70 md:block">
+            <p className="animate-fade-up text-overline text-white/70">
               About
             </p>
             <h1 className="w-full animate-fade-up text-balance text-heading-h4 text-white md:text-heading-h2 lg:max-w-[884px]">

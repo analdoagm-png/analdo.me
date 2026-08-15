@@ -1,5 +1,5 @@
 import { caseStudyMetadata } from "@/lib/case-studies";
-import { CaseStudyHeader } from "@/components/case-study-header";
+import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyNext } from "@/components/case-study-next";
 import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
@@ -20,7 +20,7 @@ export const metadata = caseStudyMetadata({
 export default function GithubSecurityFindingsCaseStudy() {
   return (
     <>
-      <CaseStudyHeader />
+      <SiteHeader />
 
       <main id="main-content" className="flex-1">
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-16 pb-16 md:gap-16 md:px-16">

@@ -93,8 +93,8 @@ voice. Instead:
   `CaseStudyProjectHeader`, so both must share a family or that one piece of
   copy would visibly swap typefaces at the breakpoint.
 - Everything else defaults to Noto Sans (the `body` element's font-family),
-  which is correct for prose and for interactive text links (`Resume`,
-  `Back to portfolio`, `Contact me`/`LinkedIn`/`GitHub`, deck buttons) — the
+  which is correct for prose and for interactive text links (`SiteHeader`'s
+  "Home"/"Resume", `Contact me`/`LinkedIn`/`GitHub`, deck buttons) — the
   working rule is **links stay body voice, static labels get mono**.
   Genuinely mono contexts opt in explicitly with the `font-mono` utility at
   the call site: `Chip`, `CaseStudyYear`'s `YEAR` caption,
@@ -155,11 +155,13 @@ Standard visual QA widths:
 
 ### Header
 
-`SiteHeader` renders the name/role lockup as a link to `/`, plus a "Resume" link to `/about`, wrapped in `<nav aria-label="Primary">`. Because the lockup is two-tone (`text-white` name, `text-white/70` role), a parent text-colour change would be overridden by the child spans, so this one link dims with `transition-opacity` + `hover:opacity-60` / `active:opacity-40` instead of the standard colour dim. Keep the colour-based rule for all single-tone text links, including "Resume".
+`SiteHeader` is the single shared header for every route (homepage, `/about`, and all five case studies — it replaced the old `CaseStudyHeader`, which only the case-study pages used and which showed a "Back to portfolio" link instead of a real nav). It renders the name/role lockup as a link to `/`, plus "Home" (also `/`) and "Resume" (`/about`) nav links, wrapped in `<nav aria-label="Primary">`. Because the lockup is two-tone (`text-white` name, `text-white/70` role), a parent text-colour change would be overridden by the child spans, so this one link dims with `transition-opacity` + `hover:opacity-60` / `active:opacity-40` instead of the standard colour dim. Keep the colour-based rule for all single-tone text links, including "Home" and "Resume".
 
-Below `md` the lockup stacks the name and role onto two lines and drops the " / " separator (`flex flex-col`, separator `hidden`); at `md` and up it returns to one line (`md:flex-row md:items-baseline md:gap-1.5`, separator `md:inline`). This exists because adding the Resume link into the same row narrows the lockup's available width just enough that the single-line text wraps mid-word on phones — stacking it deliberately reads better than an accidental wrap. The gap between name, separator, and role comes from `gap` rather than literal spaces in the string: flex items are always blockified, which trims leading/trailing whitespace inside a text node.
+Below `md` the lockup stacks the name and role onto two lines and drops the " / " separator (`flex flex-col`, separator `hidden`); at `md` and up it returns to one line (`md:flex-row md:items-baseline md:gap-1.5`, separator `md:inline`). This exists because the nav links narrow the lockup's available width just enough that the single-line text wraps mid-word on phones — stacking it deliberately reads better than an accidental wrap. The gap between name, separator, and role comes from `gap` rather than literal spaces in the string: flex items are always blockified, which trims leading/trailing whitespace inside a text node. The nav links themselves sit in their own `shrink-0` wrapper so the squeeze always lands on the lockup, never on "Home"/"Resume" — the role text also carries `text-balance` as a safety net, since below roughly 340px width even the stacked lockup can wrap the role itself onto a second line, making the block three lines tall. That's a known limit at very narrow widths (below the site's own 390px minimum QA target, e.g. an original iPhone SE at 320px) — flagged here rather than solved with a bigger structural change, since it falls outside what the project tests against.
 
-`CaseStudyHeader` wraps its "Back to portfolio" link in `<nav aria-label="Case study">`.
+`Home` deliberately duplicates the lockup's destination (`/`) rather than replacing it — the lockup reads as branding, "Home" as an explicit nav item, a common and intentional pairing rather than redundancy. On the homepage itself, clicking "Home" is a harmless no-op to the same page.
+
+Since `SiteHeader` now shows the name/role lockup at every breakpoint (unlike the old `CaseStudyHeader`, which hid it below `md`), `/about` no longer swaps its eyebrow to the name on mobile — see its own component comment for why that compensating pattern was removed.
 
 ### CaseStudyYear
 

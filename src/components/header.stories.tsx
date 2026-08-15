@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { CaseStudyHeader } from "./case-study-header";
 import { SiteHeader } from "./site-header";
 
 function HeaderStoryLayout({ children }: { children: ReactNode }) {
@@ -12,18 +11,10 @@ function HeaderStoryLayout({ children }: { children: ReactNode }) {
   );
 }
 
-function HomepageHeaderStory() {
+function SiteHeaderStory() {
   return (
     <HeaderStoryLayout>
       <SiteHeader />
-    </HeaderStoryLayout>
-  );
-}
-
-function CaseStudyHeaderStory() {
-  return (
-    <HeaderStoryLayout>
-      <CaseStudyHeader />
     </HeaderStoryLayout>
   );
 }
@@ -36,7 +27,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The homepage header identifies the portfolio. The case-study header adds a return link and shows the identity line from the tablet breakpoint upward.",
+          "The one shared header used on every route: name/role lockup on the left, Home and Resume links on the right.",
       },
     },
   },
@@ -46,57 +37,26 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Homepage: Story = {
-  render: () => <HomepageHeaderStory />,
+export const Default: Story = {
+  render: () => <SiteHeaderStory />,
 };
 
-export const HomepageMobile: Story = {
-  name: "Homepage / Mobile",
-  render: () => <HomepageHeaderStory />,
+export const Mobile: Story = {
+  render: () => <SiteHeaderStory />,
   globals: {
     viewport: { value: "mobile", isRotated: false },
   },
 };
 
-export const HomepageTablet: Story = {
-  name: "Homepage / Tablet",
-  render: () => <HomepageHeaderStory />,
+export const Tablet: Story = {
+  render: () => <SiteHeaderStory />,
   globals: {
     viewport: { value: "tablet", isRotated: false },
   },
 };
 
-export const HomepageDesktop: Story = {
-  name: "Homepage / Desktop",
-  render: () => <HomepageHeaderStory />,
-  globals: {
-    viewport: { value: "desktop", isRotated: false },
-  },
-};
-
-export const CaseStudy: Story = {
-  render: () => <CaseStudyHeaderStory />,
-};
-
-export const CaseStudyMobile: Story = {
-  name: "Case Study / Mobile",
-  render: () => <CaseStudyHeaderStory />,
-  globals: {
-    viewport: { value: "mobile", isRotated: false },
-  },
-};
-
-export const CaseStudyTablet: Story = {
-  name: "Case Study / Tablet",
-  render: () => <CaseStudyHeaderStory />,
-  globals: {
-    viewport: { value: "tablet", isRotated: false },
-  },
-};
-
-export const CaseStudyDesktop: Story = {
-  name: "Case Study / Desktop",
-  render: () => <CaseStudyHeaderStory />,
+export const Desktop: Story = {
+  render: () => <SiteHeaderStory />,
   globals: {
     viewport: { value: "desktop", isRotated: false },
   },
