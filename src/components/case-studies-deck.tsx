@@ -332,7 +332,7 @@ function ExpandableImage({
 function SlideEyebrow({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col items-start gap-2">
-      <p className="text-body-h3 font-medium text-white/58">{children}</p>
+      <p className="font-mono text-body-h3 font-medium text-white/58">{children}</p>
       <span aria-hidden="true" className="h-px w-8 bg-white/35" />
     </div>
   );
@@ -384,7 +384,7 @@ function ProjectSlide({
             <div key={problem.title} className="grid gap-3 py-5 md:grid-cols-[3.5rem_1fr] md:gap-6 md:py-7">
               <p className="text-heading-h5 text-white/42">0{index + 1}</p>
               <div className="flex max-w-xl flex-col gap-2">
-                <h3 className="text-heading-h4 text-white">{problem.title}</h3>
+                <h3 className="text-balance text-heading-h4 text-white">{problem.title}</h3>
                 <p className="text-pretty text-body-h2 text-white/68">{problem.detail}</p>
               </div>
             </div>
@@ -433,7 +433,7 @@ function ProjectSlide({
                 onExpand={() => onExpand({ src: decision.image, alt: decision.alt, label: decision.title })}
               />
               <figcaption className="flex max-w-xl flex-col gap-1.5">
-                <h3 className="text-heading-h5 text-white">{decision.title}</h3>
+                <h3 className="text-balance text-heading-h5 text-white">{decision.title}</h3>
                 <p className="text-pretty text-body-h2 text-white/65">{decision.detail}</p>
               </figcaption>
             </figure>
@@ -528,7 +528,7 @@ function ProjectSlide({
                 className="aspect-[16/10] w-full lg:h-[clamp(9rem,24vh,17rem)] lg:aspect-auto"
                 onExpand={() => onExpand(view)}
               />
-              <figcaption className="text-body-h3 font-medium text-white/70">{view.label}</figcaption>
+              <figcaption className="font-mono text-body-h3 font-medium text-white/70">{view.label}</figcaption>
             </figure>
           ))}
         </div>
@@ -745,7 +745,7 @@ export function CaseStudiesDeck() {
 
       {project ? (
         <div className="fixed bottom-6 right-6 z-40 flex flex-wrap items-center justify-end gap-x-4 gap-y-2 rounded-token-lg border border-white/15 bg-dark-primary/90 px-5 py-3 text-body-h3 backdrop-blur-sm md:bottom-10 md:right-10 lg:bottom-16 lg:right-16">
-          <p className="whitespace-nowrap text-white/58">
+          <p className="whitespace-nowrap font-mono text-white/58">
             {project.title} / {slideIndex + 1} of {slideKinds.length}
           </p>
           <div className="h-4 w-px bg-white/15" aria-hidden="true" />
@@ -796,7 +796,7 @@ export function CaseStudiesDeck() {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-5">
-              <p className="text-body-h3 text-white/70">{activeMedia.label}</p>
+              <p className="font-mono text-body-h3 text-white/70">{activeMedia.label}</p>
               <button
                 type="button"
                 autoFocus

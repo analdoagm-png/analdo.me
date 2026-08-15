@@ -40,7 +40,7 @@ export function CaseStudyFigure({
           priority={priority}
         />
       </div>
-      <p className={`w-full text-center text-body-h3 ${captionClassName}`}>
+      <p className={`w-full text-center font-mono text-body-h3 ${captionClassName}`}>
         {caption}
       </p>
     </div>

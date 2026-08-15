@@ -25,42 +25,46 @@ export default function Home() {
               systems built to ship straight to code, and clearer paths to
               better outcomes.
             </h1>
-            <div className="flex flex-col items-start gap-2 animate-fade-up [animation-delay:100ms] md:flex-row md:flex-wrap md:items-center">
-              <p className="text-balance text-body-h1 text-white/70">
-                Based in Colombia, working globally with
-              </p>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 text-body-h1 text-white/70">
-                  <span
-                    aria-hidden="true"
-                    className="flex size-3.5 shrink-0 items-center justify-center"
-                  >
-                    <ToolIcon name="figma" />
-                  </span>
-                  Figma
+            {/*
+              Plain inline text flow (not a flex row of block-level chunks)
+              so the browser's normal line-breaking can wrap at any word
+              boundary, including between the leading clause and the tool
+              list. The previous flex-col/md:flex-row structure wrapped the
+              leading sentence and the tool list as two separate stacked
+              chunks instead of one continuous line.
+            */}
+            <p className="w-full animate-fade-up text-balance text-body-h1 text-white/70 [animation-delay:100ms]">
+              Based in Colombia, working globally with{" "}
+              <span className="inline-flex items-center gap-1.5 align-middle">
+                <span
+                  aria-hidden="true"
+                  className="flex size-3.5 shrink-0 items-center justify-center"
+                >
+                  <ToolIcon name="figma" />
                 </span>
-                <span className="text-body-h1 text-white/70">,</span>
-                <span className="inline-flex items-center gap-1.5 text-body-h1 text-white/70">
-                  <span
-                    aria-hidden="true"
-                    className="flex size-3.5 shrink-0 items-center justify-center"
-                  >
-                    <ToolIcon name="claude" />
-                  </span>
-                  Claude Code
+                Figma
+              </span>
+              ,{" "}
+              <span className="inline-flex items-center gap-1.5 align-middle">
+                <span
+                  aria-hidden="true"
+                  className="flex size-3.5 shrink-0 items-center justify-center"
+                >
+                  <ToolIcon name="claude" />
                 </span>
-                <span className="text-body-h1 text-white/70">and</span>
-                <span className="inline-flex items-center gap-1.5 text-body-h1 text-white/70">
-                  <span
-                    aria-hidden="true"
-                    className="flex size-3.5 shrink-0 items-center justify-center"
-                  >
-                    <ToolIcon name="codex" />
-                  </span>
-                  Codex
+                Claude Code
+              </span>{" "}
+              and{" "}
+              <span className="inline-flex items-center gap-1.5 align-middle">
+                <span
+                  aria-hidden="true"
+                  className="flex size-3.5 shrink-0 items-center justify-center"
+                >
+                  <ToolIcon name="codex" />
                 </span>
-              </div>
-            </div>
+                Codex
+              </span>
+            </p>
             <div className="flex flex-wrap items-start gap-6 animate-fade-up [animation-delay:200ms]">
               <a
                 href={`mailto:${author.email}`}

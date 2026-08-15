@@ -255,7 +255,7 @@ export default function ArrowheadTransitCaseStudy() {
             </p>
           </div>
 
-          <p className="w-full animate-fade-up text-center text-body-h3 text-white/70 lg:text-body-h2">
+          <p className="w-full animate-fade-up text-center font-mono text-body-h3 text-white/70 lg:text-body-h2">
             ROLE — Lead Product Designer, product ideation through design
             &amp; development handoff.
             <br className="hidden lg:block" /> Handoff documented in

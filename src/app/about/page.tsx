@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 };
 
 const inlineLinkStyles =
-  "text-white underline decoration-white/30 underline-offset-2 transition-colors duration-200 hover:text-white/60 active:text-white/40";
+  "text-white underline decoration-white/30 underline-offset-2 [text-decoration-thickness:from-font] [text-underline-position:from-font] transition-colors duration-200 hover:text-white/60 active:text-white/40";
 
 export default function AboutPage() {
   return (
@@ -116,17 +116,17 @@ export default function AboutPage() {
             <div className="flex w-full animate-fade-up flex-col items-start gap-8">
               <div className="flex w-full flex-col items-start gap-2 border-b border-stroke-dark pb-8">
                 <div className="flex w-full flex-col items-start justify-between gap-1 md:flex-row md:items-baseline">
-                  <h3 className="text-heading-h5 text-white">
+                  <h3 className="text-balance text-heading-h5 text-white">
                     Senior Product Designer — Monks{" "}
                     <span className="text-white/50">
                       (formerly Zemoga)
                     </span>
                   </h3>
-                  <p className="shrink-0 text-body-h3 text-white/50">
+                  <p className="shrink-0 font-mono text-body-h3 text-white/50">
                     May 2021 – Jun 2026
                   </p>
                 </div>
-                <p className="text-body-h3 text-white/50">
+                <p className="font-mono text-body-h3 text-white/50">
                   Colombia · Remote, US clients
                 </p>
                 <p className="w-full text-pretty text-body-h2 text-white/70">
@@ -153,14 +153,14 @@ export default function AboutPage() {
 
               <div className="flex w-full flex-col items-start gap-2 border-b border-stroke-dark pb-8">
                 <div className="flex w-full flex-col items-start justify-between gap-1 md:flex-row md:items-baseline">
-                  <h3 className="text-heading-h5 text-white">
+                  <h3 className="text-balance text-heading-h5 text-white">
                     Senior Product Designer — FullStack Labs
                   </h3>
-                  <p className="shrink-0 text-body-h3 text-white/50">
+                  <p className="shrink-0 font-mono text-body-h3 text-white/50">
                     Oct 2017 – May 2021
                   </p>
                 </div>
-                <p className="text-body-h3 text-white/50">
+                <p className="font-mono text-body-h3 text-white/50">
                   Colombia / US · Remote
                 </p>
                 <p className="w-full text-pretty text-body-h2 text-white/70">
@@ -180,14 +180,14 @@ export default function AboutPage() {
 
               <div className="flex w-full flex-col items-start gap-2">
                 <div className="flex w-full flex-col items-start justify-between gap-1 md:flex-row md:items-baseline">
-                  <h3 className="text-heading-h5 text-white">
+                  <h3 className="text-balance text-heading-h5 text-white">
                     Technical Lead & UX/UI Designer — Ideaware
                   </h3>
-                  <p className="shrink-0 text-body-h3 text-white/50">
+                  <p className="shrink-0 font-mono text-body-h3 text-white/50">
                     Nov 2011 – Oct 2017
                   </p>
                 </div>
-                <p className="text-body-h3 text-white/50">
+                <p className="font-mono text-body-h3 text-white/50">
                   Colombia / US · Remote
                 </p>
                 <p className="w-full text-pretty text-body-h2 text-white/70">
@@ -208,7 +208,9 @@ export default function AboutPage() {
 
             <div className="flex w-full animate-fade-up flex-col items-start gap-6">
               <div className="flex flex-col items-start gap-3">
-                <p className="text-body-h3 text-white/70">DESIGN</p>
+                <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+                  Design
+                </p>
                 <div className="flex flex-wrap items-center gap-2">
                   <Chip label="Product design" />
                   <Chip label="UX/UI design" />
@@ -221,8 +223,8 @@ export default function AboutPage() {
               </div>
 
               <div className="flex flex-col items-start gap-3">
-                <p className="text-body-h3 text-white/70">
-                  FRONT-END &amp; TOOLS
+                <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+                  Front-end &amp; tools
                 </p>
                 <div className="flex flex-wrap items-center gap-2">
                   <Chip label="Figma" icon={<ToolIcon name="figma" />} />

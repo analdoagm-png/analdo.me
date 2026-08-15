@@ -41,8 +41,8 @@ Common opacity usage:
 
 Deliberate system: chips are the only rounded surface on the site. Every other
 framed element — project cards, images, callouts, results boxes — is sharp
-(`rounded-none`), a considered pairing with the monospace type system rather
-than a leftover default.
+(`rounded-none`), a considered pairing with the type system's mono-labeled
+metadata layer rather than a leftover default.
 
 | Token | Value | Usage |
 | --- | --- | --- |
@@ -59,18 +59,51 @@ of the card/image system this rule governs.
 
 ## Typography
 
-Font family: Inconsolata (monospace) via `next/font/google`, configured in
-`src/app/layout.tsx` with:
+Three-tier system, all via `next/font/google` in `src/app/layout.tsx`, each a
+variable font loaded with `subsets: ["latin"]`, `display: "swap"`, and
+explicit fallbacks (no `weight` array needed — arbitrary CSS font-weight
+values interpolate across each family's variable range, same as the previous
+single-font setup did):
 
-- `subsets: ["latin"]`
-- `display: "swap"`
-- `fallback: ["ui-monospace", "Menlo", "Consolas", "monospace"]`
-- CSS variable: `--font-inconsolata`
+| Role | Family | CSS variable | Fallback |
+| --- | --- | --- | --- |
+| Heading | Space Grotesk | `--font-space-grotesk` | `ui-sans-serif, system-ui, sans-serif` |
+| Body / links | Noto Sans | `--font-noto-sans` | `ui-sans-serif, system-ui, sans-serif` |
+| Labels / chips / captions / meta | JetBrains Mono | `--font-jetbrains-mono` | `ui-monospace, Menlo, Consolas, monospace` |
 
-The whole site — headings, body copy, chips, meta labels — renders in
-Inconsolata. There is no separate display/body pairing; the monospace choice
-is deliberately singular, reinforcing the sharp-corner system above as one
-cohesive "technical" identity rather than two independent decisions.
+This replaced an earlier single-family Inconsolata-everywhere setup. The
+three variables feed `@theme inline` in `globals.css` as `--font-heading`,
+`--font-sans` (Tailwind's body/default slot — Noto Sans is the site's base
+voice, applied to `body`), and `--font-mono` (Tailwind's built-in mono slot,
+available as the `font-mono` utility).
+
+**Font-family is never baked into a shared size token** — `text-body-h3`, for
+example, is used for both genuine prose (card descriptions) and short labels
+(`Chip`, `CaseStudyYear`'s `YEAR` caption, About's date/location lines).
+Baking a family into that one size class would force both uses into the same
+voice. Instead:
+
+- Every heading-scale utility (`text-heading-h1` through `h5`,
+  `text-project-subtitle`, and `text-overline`) gets `font-family:
+  var(--font-heading)` directly in its own plain CSS rule in `globals.css`
+  (unlayered, so it takes precedence over Tailwind's layered utilities for
+  the same class names without conflicting — the two rule sets target
+  different properties). `text-overline` is included deliberately: it's the
+  same element that upgrades to `text-project-subtitle` at `md` in
+  `CaseStudyProjectHeader`, so both must share a family or that one piece of
+  copy would visibly swap typefaces at the breakpoint.
+- Everything else defaults to Noto Sans (the `body` element's font-family),
+  which is correct for prose and for interactive text links (`Resume`,
+  `Back to portfolio`, `Contact me`/`LinkedIn`/`GitHub`, deck buttons) — the
+  working rule is **links stay body voice, static labels get mono**.
+  Genuinely mono contexts opt in explicitly with the `font-mono` utility at
+  the call site: `Chip`, `CaseStudyYear`'s `YEAR` caption,
+  `CaseStudyProjectHeader`'s `ROLE`/`TOOLS` captions,
+  `CaseStudyDecisionBlock`'s label, `CaseStudyNext`'s "Next case study"
+  eyebrow, `CaseStudyFigure`'s caption, About's job-date/location lines and
+  `DESIGN`/`FRONT-END & TOOLS` group labels, the two case-study closing
+  pull-quote attribution lines, and the deck's `SlideEyebrow`, platform-view
+  captions, HUD slide counter, and lightbox caption.
 
 Global rendering:
 
@@ -79,18 +112,22 @@ Global rendering:
 
 ### Type Tokens
 
-| Token | Size | Line Height | Weight | Notes |
-| --- | --- | --- | --- | --- |
-| `text-heading-h1` | `clamp(2.5rem, 2.1rem + 1.25vw, 3rem)` | `1.12` | `600` | Page-level display |
-| `text-heading-h2` | `clamp(2rem, 1.72rem + 0.9vw, 2.5rem)` | `1.18` | `600` | Large section statements |
-| `text-heading-h3` | `clamp(1.75rem, 1.6rem + 0.5vw, 2rem)` | `1.25` | `600` | Case-study page titles on mobile / section emphasis |
-| `text-project-subtitle` | `clamp(1.5rem, 1.2rem + 0.95vw, 2rem)` | `1.25` | `400` | Case-study subtitles |
-| `text-overline` | `clamp(1.125rem, 1rem + 0.45vw, 1.5rem)` | `1.35` | `500` | Eyebrows/section labels |
-| `text-heading-h4` | `1.5rem` | `1.3` | `600` | Card titles and compact headings |
-| `text-heading-h5` | `1.25rem` | `1.4` | `600` | Small headings |
-| `text-body-h1` | `1.125rem` | `1.65` | `400` | Large body copy |
-| `text-body-h2` | `1rem` | `1.6` | `400` | Default body copy |
-| `text-body-h3` | `0.875rem` | `1.5` | `500` | Labels, chips, captions |
+| Token | Size | Line Height | Weight | Font | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `text-heading-h1` | `clamp(2.5rem, 2.1rem + 1.25vw, 3rem)` | `1.12` | `600` | Heading | Page-level display |
+| `text-heading-h2` | `clamp(2rem, 1.72rem + 0.9vw, 2.5rem)` | `1.18` | `600` | Heading | Large section statements |
+| `text-heading-h3` | `clamp(1.75rem, 1.6rem + 0.5vw, 2rem)` | `1.25` | `600` | Heading | Case-study page titles on mobile / section emphasis |
+| `text-project-subtitle` | `clamp(1.5rem, 1.2rem + 0.95vw, 2rem)` | `1.25` | `400` | Heading | Case-study subtitles |
+| `text-overline` | `clamp(1.125rem, 1rem + 0.45vw, 1.5rem)` | `1.35` | `500` | Heading | Eyebrows/section labels |
+| `text-heading-h4` | `1.5rem` | `1.3` | `600` | Heading | Card titles and compact headings |
+| `text-heading-h5` | `1.25rem` | `1.4` | `600` | Heading | Small headings |
+| `text-body-h1` | `1.125rem` | `1.65` | `400` | Body (default) | Large body copy |
+| `text-body-h2` | `1rem` | `1.6` | `400` | Body (default) | Default body copy |
+| `text-body-h3` | `0.875rem` | `1.5` | `500` | Body by default, `font-mono` where used as a label | Labels, chips, captions, and some small prose — see above |
+
+"Font" above is the token's *default* — `text-body-h3` is the one size that
+genuinely serves both voices depending on where it's used, per the rule
+above.
 
 Rules:
 

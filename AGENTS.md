@@ -15,7 +15,7 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 - Next.js 16 App Router, TypeScript, Tailwind CSS v4.
 - All pages are Server Components. Do not add client-side state, forms, data fetching, or scroll observers without a real architecture reason.
 - Use `next/image` for project images from `public/images/`.
-- Use `next/font` from the root layout for fonts. This project uses Inconsolata (monospace) as a variable Google font with `display: "swap"` and explicit fallbacks, applied sitewide — headings and body both.
+- Use `next/font` from the root layout for fonts. This project uses a three-tier system, each loaded as a variable Google font with `display: "swap"` and explicit fallbacks, applied sitewide: Space Grotesk (`--font-space-grotesk`) for heading-scale text, Noto Sans (`--font-noto-sans`) as the body/default voice, and JetBrains Mono (`--font-jetbrains-mono`) for labels/chips/captions/meta text. See DESIGN.md's Typography section for exactly which tokens and components use which.
 
 ## Structure
 
@@ -58,7 +58,7 @@ Use `DESIGN.md` as the source of truth for:
 Current high-level design choices:
 
 - Dark base: `dark-primary` background, `stroke-dark` borders, `gray-dark` low-emphasis strokes.
-- Inconsolata variable font, optimized through `next/font`, sitewide for headings and body.
+- Three-tier variable font system via `next/font`: Space Grotesk (headings), Noto Sans (body/links), JetBrains Mono (labels/chips/captions/meta).
 - Sharp corners everywhere except chips: chips keep a 4px `rounded-token` radius; every card, image, and callout is `rounded-none`. See `DESIGN.md`'s Radius Tokens section for the full rule.
 - Fluid display type for large headings; readable minimum text size is 14px.
 - Body copy should not use very light weights. Use 400 for body text and 500 for small labels.

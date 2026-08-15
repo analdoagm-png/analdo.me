@@ -292,7 +292,7 @@ export default function GoRightCaseStudy() {
             </p>
           </div>
 
-          <p className="w-full animate-fade-up text-center text-body-h3 text-white/70 md:text-body-h2">
+          <p className="w-full animate-fade-up text-center font-mono text-body-h3 text-white/70 md:text-body-h2">
             ROLE — Lead Product Designer, from requirements gathering
             through this iteration of the Merlin platform.
             <br className="hidden lg:block" /> Ideation workshops and
