@@ -15,6 +15,8 @@ This document is the living design-system reference for `analdo.me`. Keep it upd
 - Global tokens and global styles: `src/app/globals.css`
 - Font setup: `src/app/layout.tsx`
 - Homepage cards: `src/components/case-study-card.tsx`
+- Homepage sidebar/identity block: `src/components/home-sidebar.tsx`
+- Homepage/mobile-bar social icons: `src/components/social-icon.tsx`
 - Chips: `src/components/chip.tsx`
 - Editorial callouts: `src/components/case-study-callout.tsx`
 - Case study images and figures: `src/components/project-image.tsx`, `src/components/case-study-figure.tsx`
@@ -41,8 +43,8 @@ Common opacity usage:
 
 Deliberate system: chips are the only rounded surface on the site. Every other
 framed element — project cards, images, callouts, results boxes — is sharp
-(`rounded-none`), a considered pairing with the monospace type system rather
-than a leftover default.
+(`rounded-none`), a considered pairing with the type system's mono-labeled
+metadata layer rather than a leftover default.
 
 | Token | Value | Usage |
 | --- | --- | --- |
@@ -59,18 +61,51 @@ of the card/image system this rule governs.
 
 ## Typography
 
-Font family: Inconsolata (monospace) via `next/font/google`, configured in
-`src/app/layout.tsx` with:
+Three-tier system, all via `next/font/google` in `src/app/layout.tsx`, each a
+variable font loaded with `subsets: ["latin"]`, `display: "swap"`, and
+explicit fallbacks (no `weight` array needed — arbitrary CSS font-weight
+values interpolate across each family's variable range, same as the previous
+single-font setup did):
 
-- `subsets: ["latin"]`
-- `display: "swap"`
-- `fallback: ["ui-monospace", "Menlo", "Consolas", "monospace"]`
-- CSS variable: `--font-inconsolata`
+| Role | Family | CSS variable | Fallback |
+| --- | --- | --- | --- |
+| Heading | Space Grotesk | `--font-space-grotesk` | `ui-sans-serif, system-ui, sans-serif` |
+| Body / links | Noto Sans | `--font-noto-sans` | `ui-sans-serif, system-ui, sans-serif` |
+| Labels / chips / captions / meta | JetBrains Mono | `--font-jetbrains-mono` | `ui-monospace, Menlo, Consolas, monospace` |
 
-The whole site — headings, body copy, chips, meta labels — renders in
-Inconsolata. There is no separate display/body pairing; the monospace choice
-is deliberately singular, reinforcing the sharp-corner system above as one
-cohesive "technical" identity rather than two independent decisions.
+This replaced an earlier single-family Inconsolata-everywhere setup. The
+three variables feed `@theme inline` in `globals.css` as `--font-heading`,
+`--font-sans` (Tailwind's body/default slot — Noto Sans is the site's base
+voice, applied to `body`), and `--font-mono` (Tailwind's built-in mono slot,
+available as the `font-mono` utility).
+
+**Font-family is never baked into a shared size token** — `text-body-h3`, for
+example, is used for both genuine prose (the homepage sidebar's `h1`
+statement, card descriptions) and short labels (`Chip`, `CaseStudyYear`'s
+`YEAR` caption, About's date/location lines). Baking a family into that one
+size class would force both uses into the same voice. Instead:
+
+- Every heading-scale utility (`text-heading-h1` through `h5`,
+  `text-project-subtitle`, and `text-overline`) gets `font-family:
+  var(--font-heading)` directly in its own plain CSS rule in `globals.css`
+  (unlayered, so it takes precedence over Tailwind's layered utilities for
+  the same class names without conflicting — the two rule sets target
+  different properties). `text-overline` is included deliberately: it's the
+  same element that upgrades to `text-project-subtitle` at `md` in
+  `CaseStudyProjectHeader`, so both must share a family or that one piece of
+  copy would visibly swap typefaces at the breakpoint.
+- Everything else defaults to Noto Sans (the `body` element's font-family),
+  which is correct for prose and for interactive text links (`Resume`,
+  `Back to portfolio`, `Contact me`/`LinkedIn`/`GitHub`, deck buttons) — the
+  working rule is **links stay body voice, static labels get mono**.
+  Genuinely mono contexts opt in explicitly with the `font-mono` utility at
+  the call site: `Chip`, `CaseStudyYear`'s `YEAR` caption,
+  `CaseStudyProjectHeader`'s `ROLE`/`TOOLS` captions,
+  `CaseStudyDecisionBlock`'s label, `CaseStudyNext`'s "Next case study"
+  eyebrow, `CaseStudyFigure`'s caption, About's job-date/location lines and
+  `DESIGN`/`FRONT-END & TOOLS` group labels, the two case-study closing
+  pull-quote attribution lines, and the deck's `SlideEyebrow`, platform-view
+  captions, HUD slide counter, and lightbox caption.
 
 Global rendering:
 
@@ -79,18 +114,22 @@ Global rendering:
 
 ### Type Tokens
 
-| Token | Size | Line Height | Weight | Notes |
-| --- | --- | --- | --- | --- |
-| `text-heading-h1` | `clamp(2.5rem, 2.1rem + 1.25vw, 3rem)` | `1.12` | `600` | Page-level display |
-| `text-heading-h2` | `clamp(2rem, 1.72rem + 0.9vw, 2.5rem)` | `1.18` | `600` | Large section statements |
-| `text-heading-h3` | `clamp(1.75rem, 1.6rem + 0.5vw, 2rem)` | `1.25` | `600` | Case-study page titles on mobile / section emphasis |
-| `text-project-subtitle` | `clamp(1.5rem, 1.2rem + 0.95vw, 2rem)` | `1.25` | `400` | Case-study subtitles |
-| `text-overline` | `clamp(1.125rem, 1rem + 0.45vw, 1.5rem)` | `1.35` | `500` | Eyebrows/section labels |
-| `text-heading-h4` | `1.5rem` | `1.3` | `600` | Card titles and compact headings |
-| `text-heading-h5` | `1.25rem` | `1.4` | `600` | Small headings |
-| `text-body-h1` | `1.125rem` | `1.65` | `400` | Large body copy |
-| `text-body-h2` | `1rem` | `1.6` | `400` | Default body copy |
-| `text-body-h3` | `0.875rem` | `1.5` | `500` | Labels, chips, captions |
+| Token | Size | Line Height | Weight | Font | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `text-heading-h1` | `clamp(2.5rem, 2.1rem + 1.25vw, 3rem)` | `1.12` | `600` | Heading | Page-level display |
+| `text-heading-h2` | `clamp(2rem, 1.72rem + 0.9vw, 2.5rem)` | `1.18` | `600` | Heading | Large section statements |
+| `text-heading-h3` | `clamp(1.75rem, 1.6rem + 0.5vw, 2rem)` | `1.25` | `600` | Heading | Case-study page titles on mobile / section emphasis |
+| `text-project-subtitle` | `clamp(1.5rem, 1.2rem + 0.95vw, 2rem)` | `1.25` | `400` | Heading | Case-study subtitles |
+| `text-overline` | `clamp(1.125rem, 1rem + 0.45vw, 1.5rem)` | `1.35` | `500` | Heading | Eyebrows/section labels |
+| `text-heading-h4` | `1.5rem` | `1.3` | `600` | Heading | Card titles and compact headings |
+| `text-heading-h5` | `1.25rem` | `1.4` | `600` | Heading | Small headings |
+| `text-body-h1` | `1.125rem` | `1.65` | `400` | Body (default) | Large body copy |
+| `text-body-h2` | `1rem` | `1.6` | `400` | Body (default) | Default body copy |
+| `text-body-h3` | `0.875rem` | `1.5` | `500` | Body by default, `font-mono` where used as a label | Labels, chips, captions, and some small prose — see above |
+
+"Font" above is the token's *default* — `text-body-h3` is the one size that
+genuinely serves both voices depending on where it's used, per the rule
+above.
 
 Rules:
 
@@ -118,11 +157,36 @@ Standard visual QA widths:
 
 ### Header
 
-`SiteHeader` renders the name/role lockup as a link to `/`, plus a "Resume" link to `/about`, wrapped in `<nav aria-label="Primary">`. Because the lockup is two-tone (`text-white` name, `text-white/70` role), a parent text-colour change would be overridden by the child spans, so this one link dims with `transition-opacity` + `hover:opacity-60` / `active:opacity-40` instead of the standard colour dim. Keep the colour-based rule for all single-tone text links, including "Resume".
+There is no shared `SiteHeader` anymore — it was homepage-only and was removed once the redesigned homepage stopped using it (see Homepage Sidebar below). `CaseStudyHeader` is used by `/about` and the three showcase case studies (Forty5Park, Uber Suite, Github's Security Findings). It wraps its "Back to portfolio" link in `<nav aria-label="Case study">`. The two editorial case studies (GoRight, Arrowhead Transit) use neither `SiteHeader` nor `CaseStudyHeader` — see Editorial Sidebar below.
 
-Below `md` the lockup stacks the name and role onto two lines and drops the " / " separator (`flex flex-col`, separator `hidden`); at `md` and up it returns to one line (`md:flex-row md:items-baseline md:gap-1.5`, separator `md:inline`). This exists because adding the Resume link into the same row narrows the lockup's available width just enough that the single-line text wraps mid-word on phones — stacking it deliberately reads better than an accidental wrap. The gap between name, separator, and role comes from `gap` rather than literal spaces in the string: flex items are always blockified, which trims leading/trailing whitespace inside a text node.
+### Homepage Sidebar
 
-`CaseStudyHeader` wraps its "Back to portfolio" link in `<nav aria-label="Case study">`.
+File: `src/components/home-sidebar.tsx`
+
+The redesigned homepage replaces the old header/hero/footer stack with a single identity column: name/role lockup (plain text, not a link — this component only renders on `/`), the page's `h1` (the "Over a decade solving..." statement, now compact `text-body-h3` copy rather than a large display heading), the "based in / working with" tool sentence at the same `text-body-h3` scale, a "Resume" link to `/about`, social icons (`SocialIcon`), and a `© 2026` line.
+
+The Resume link and social icons are `hidden md:inline-block`/`hidden md:flex` — below `md`, `page.tsx` renders its own top bar with the same Resume link and icons instead, so the two never duplicate each other in the DOM at the same breakpoint. That mobile bar is `border-b border-stroke-dark`, `justify-between`, Resume on the left and icons on the right.
+
+Layout: at the base tier the sidebar stacks full-width above the card grid (`flex-col`); this continues through `md` (tablet also stacks, just with more padding); only at `lg` does it become a fixed `264px` left column beside the grid (`lg:w-[264px] lg:shrink-0`, parent `lg:flex-row`). This three-way breakpoint split — not just a `md`/`lg` toggle — mirrors the Figma desktop/tablet/mobile frames, which is why it's called out separately from the site's usual two-step responsive patterns.
+
+At `lg` the sidebar is also `lg:sticky lg:top-16`, so it stays in view while the (typically taller) card grid scrolls past — the parent row carries `lg:items-start` so the sidebar isn't stretched to the grid's height, which sticky positioning requires to have room to work. This is `lg`-only on purpose: below `lg` the sidebar stacks above the grid rather than beside it, where sticking it would just freeze it over the cards as they scroll underneath. The card grid itself is capped at `lg:max-w-[840px]` so it doesn't stretch edge-to-edge on very wide viewports.
+
+Page padding on `/` is bespoke to this layout, not the site's standard `px-6 md:px-10 lg:px-16`: `px-6 py-8` at the base tier, `md:p-12` (48px all sides) at tablet, `lg:p-16` (64px all sides) at desktop. This matches the Figma frames' own padding values exactly rather than reusing the sitewide scale — a deliberate one-page exception, similar in spirit to `CaseStudyNext`'s padding exception below.
+
+### Editorial Sidebar
+
+File: `src/components/case-study-editorial-sidebar.tsx` (`EditorialSidebar` + `EditorialMobileBar`)
+
+GoRight and Arrowhead Transit use a persistent identity sidebar instead of `CaseStudyHeader`, inspired by `HomeSidebar` and the Figma wireframe at node 268:1037 — adapted, not a literal port, per that node's own "don't copy exactly" brief. Two real differences from `HomeSidebar` drove the adaptation rather than reuse:
+
+- The bio statement here is a plain `<p>`, never the page's `h1` — each case study's own title (in `CaseStudyProjectHeader`) owns that role, and a page can only have one `h1`.
+- The name/role lockup is a real `<Link href="/">` (with its own hover/active dim, since it isn't a single-tone element `text-white/60` alone would cover) and a separate "← Back to portfolio" link sits above it, reusing `CaseStudyHeader`'s exact arrow-icon-and-slide treatment — this page isn't the homepage, so it needs an explicit way back, which the wireframe itself didn't show.
+
+Responsive split, `lg`-only for the full sidebar rather than `HomeSidebar`'s three-tier stack: below `lg`, `EditorialMobileBar` renders a compact `border-b border-stroke-dark` bar with just the back link (matching `CaseStudyHeader`'s existing mobile/tablet treatment); `EditorialSidebar` itself is `hidden lg:flex`. The wireframe only supplied a desktop frame, and stacking the full bio/tools/icons block above a long case study's own title on a phone would push real content too far down — content should lead there, not identity.
+
+At `lg`, `EditorialSidebar` is `lg:sticky lg:top-16 lg:w-72`, matching `HomeSidebar`'s exact sticky/width treatment (see above) for consistency between the two sidebar-based layouts. The page wrapper (`mx-auto max-w-[1280px] ... lg:flex-row lg:gap-12 lg:p-16`) also matches the homepage's padding scale rather than the site's standard case-study padding, since both are the same "sidebar layout family" — distinct from the simpler single-column showcase-case-study/`/about` family that keeps `CaseStudyHeader` and the sitewide `px-6 md:px-10 lg:px-16` scale.
+
+Both editorial pages drop `SiteFooter` — the sidebar's own `© 2026` line covers that role, same reasoning as the homepage. `CaseStudyNext` still renders after `</main>`, full-width and unaffected by the sidebar, exactly as on every other case study page.
 
 ### CaseStudyYear
 
@@ -140,7 +204,7 @@ The onward link closing every case study. A full-width `border-t border-stroke-d
 
 Deliberate exception to the site's standard `px-6 md:px-10 lg:px-16` page padding: only the text side carries the responsive `pl-*` inset (`pl-6 md:pl-10 lg:pl-16`) — the image thumbnail has no right-side padding or rounding, so it sits flush against the `max-w-[1280px]` container's own right edge. This is the one image treatment on the site that isn't padded and rounded; it was chosen deliberately as a more editorial, image-forward closing beat, distinct from every other framed image. A `min-h-28 md:min-h-32 lg:min-h-40` floor on the text column keeps the image band a reasonable height even when the project title is short and wouldn't otherwise stretch the row.
 
-It renders between `</main>` and `SiteFooter`, outside `main`, as its own `nav` landmark.
+It renders between `</main>` and `SiteFooter` on the pages that still use a footer (the three showcase case studies and `/about`), outside `main`, as its own `nav` landmark. The homepage and the two editorial case studies have no `SiteFooter` — their own sidebar's `© 2026` line covers that role instead, but `CaseStudyNext` still renders on the editorial pages.
 
 ### Share Cards
 
@@ -158,7 +222,7 @@ Storybook is the isolated component reference for the portfolio. Its stories liv
 
 Document component variants that affect responsive behavior, content length, icon use, or accessibility. Storybook's viewport toolbar mirrors the portfolio's 390px, 768px, and 1440px review widths; use fluid stories to inspect any of those sizes. Pin dedicated reference stories to each width when a component changes layout across breakpoints.
 
-Review the accessibility add-on's Canvas results as part of component QA. The current reference stories cover `Chip`, `CaseStudyCard`, `Header`, and `SiteFooter`.
+Review the accessibility add-on's Canvas results as part of component QA. The current reference stories cover `Chip`, `CaseStudyCard`, `CaseStudyHeader` (`case-study-header.stories.tsx` — `SiteHeader` was removed along with its story once the redesigned homepage stopped using it), and `SiteFooter`.
 
 ## Components
 
@@ -176,23 +240,22 @@ Use chips for concise metadata only. Keep them light; they should support the hi
 
 The shared component supports an optional 14px decorative icon. Use this only when a chip identifies a product or tool and the visible text label supplies its accessible name. About's skills chips (Figma, Claude Code, Codex, GitHub, Storybook) use their corresponding brand marks; project metadata chips stay text-only.
 
-The homepage's tool sentence intentionally does not use `Chip` — see Homepage Hero Copy below for that pattern.
+The homepage's tool sentence intentionally does not use `Chip` — see Homepage Sidebar Copy below for that pattern.
 
 ### CaseStudyCard
 
 File: `src/components/case-study-card.tsx`
 
-Current structure:
+Current structure — a responsive layout switch, not just a size change:
 
 - Entire card is a `Link`.
-- Card: `rounded-token-xl border border-stroke-dark bg-dark-primary p-2`.
-- Hover: border lifts to `gray-dark`, ambient shadow appears, image zooms.
-- Active: `scale-[0.99]`.
-- Image: fixed responsive height (`220px`, `md:240px`, `lg:280px`) with contained `object-cover`.
-- Content: `gap-3 px-4 pb-5 md:px-5`.
+- Below `md`: stacked, borderless, edge-to-edge. Image is a fixed `h-64` (256px) block on top; content sits below it with its own `p-6`.
+- At `md` and up: horizontal split inside a bordered box — `md:border md:border-stroke-dark md:p-2`, image and content each `md:flex-1` in a `md:flex-row md:items-stretch` row. The image side has no explicit height; it's `md:h-auto md:self-stretch`, so its rendered height matches whatever the content side's text/chips make the row — cards are not a uniform height across the grid, by design.
+- Hover (`md`+): border lifts to `gray-dark`, ambient shadow appears, image zooms `scale-105`.
+- Active: `scale-[0.99]` at every breakpoint.
+- Content: `gap-6 p-6`, with `gap-4` between the title+description group and `gap-2` in the chip row.
 - Title: `text-heading-h4`.
-- Description: `text-body-h2 text-white/68`.
-- Tags: chip row with `gap-2 pt-1`.
+- Description: `text-body-h3 text-white/68` (not `text-body-h2` — the redesign uses the smaller sidebar-matching scale for card copy).
 
 Card title hierarchy should be stronger than body copy. Avoid making body text as large or visually loud as the title.
 
@@ -307,15 +370,13 @@ Every page must include:
 - Real headings in logical order
 - Real image alt text for meaningful images
 
-## Homepage Hero Copy
+## Homepage Sidebar Copy
 
-Current tool sentence — plain text, not `Chip`:
+This copy lives in `HomeSidebar` now (see the Homepage Sidebar component section above), not in a large hero — the redesign dropped the old hero-statement treatment entirely. Current tool sentence — plain text, not `Chip`:
 
 `Based in Colombia, working globally with` `[icon] Figma` `,` `[icon] Claude Code` `and` `[icon] Codex`
 
-Each tool name is a decorative `ToolIcon` plus its label in one `inline-flex` item at `text-body-h1 text-white/70` — no border, no background, matching the surrounding sentence rather than standing apart as a tag. The comma is a separate flex item so it has equal spacing on both sides. Keep that spacing behavior unless the design asks punctuation to hug a tool name.
-
-The intro paragraph carries `text-balance` so mobile's line break lands evenly instead of stranding a short trailing word like "with" alone on its own line.
+Each tool name is a decorative `ToolIcon` (`size-3`) plus its label in one `inline-flex` item at `text-body-h3 text-white/70` — no border, no background, matching the surrounding sentence rather than standing apart as a tag. The comma is a separate flex item. The whole line is `flex flex-wrap` at every breakpoint (no mobile-stack/`md`-row split) since the sidebar column is narrow everywhere, not just on mobile.
 
 ## Documentation Upkeep
 
