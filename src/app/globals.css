@@ -1,25 +1,47 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-inconsolata);
+  /*
+   * Three-tier type system: --font-sans (Noto Sans) is the body/default
+   * voice; --font-heading (Space Grotesk) is applied explicitly below to
+   * every heading-scale utility; --font-mono (JetBrains Mono) is Tailwind's
+   * built-in mono slot, used explicitly per-component for labels, chips,
+   * captions, and meta text — never inherited from a shared size token,
+   * since e.g. text-body-h3 is used for both genuine prose (card
+   * descriptions) and short labels (chips, ROLE/TOOLS captions) depending on
+   * context.
+   */
+  --font-sans: var(--font-noto-sans);
+  --font-heading: var(--font-space-grotesk);
+  --font-mono: var(--font-jetbrains-mono);
 
   /* Core color tokens */
   --color-dark-primary: #121212;
   --color-stroke-dark: #282828;
   --color-gray-dark: #535353;
 
-  /* Responsive type scale */
+  /*
+   * Responsive type scale. Negative letter-spacing on h1-h3 only — they're
+   * the sizes large enough (32px+ at the low end of each clamp) to visibly
+   * benefit from tightening; h4/h5 and below stay at the font's natural
+   * spacing. Matches the deck's own big-statement headlines
+   * (case-studies-deck.tsx), which already use -0.06em to -0.08em at
+   * comparable display sizes.
+   */
   --text-heading-h1: clamp(2.5rem, 2.1rem + 1.25vw, 3rem);
   --text-heading-h1--line-height: 1.12;
   --text-heading-h1--font-weight: 600;
+  --text-heading-h1--letter-spacing: -0.02em;
 
   --text-heading-h2: clamp(2rem, 1.72rem + 0.9vw, 2.5rem);
   --text-heading-h2--line-height: 1.18;
   --text-heading-h2--font-weight: 600;
+  --text-heading-h2--letter-spacing: -0.015em;
 
   --text-heading-h3: clamp(1.75rem, 1.6rem + 0.5vw, 2rem);
   --text-heading-h3--line-height: 1.25;
   --text-heading-h3--font-weight: 600;
+  --text-heading-h3--letter-spacing: -0.01em;
 
   --text-project-subtitle: clamp(1.5rem, 1.2rem + 0.95vw, 2rem);
   --text-project-subtitle--line-height: 1.25;
@@ -59,12 +81,33 @@
 body {
   background: var(--color-dark-primary);
   color: white;
-  font-family: var(--font-sans), ui-monospace, Menlo, Consolas, monospace;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings:
     "kern" 1,
     "liga" 1,
     "calt" 1;
   text-rendering: optimizeLegibility;
+}
+
+/*
+ * Every heading-scale utility gets the display typeface. text-overline is
+ * included even though it's also used for a couple of small kicker/eyebrow
+ * labels (About, CaseStudySectionHeading) — it's the same element that
+ * upgrades to text-project-subtitle at `md` in CaseStudyProjectHeader, so
+ * both need to share a family or that one piece of copy would visibly swap
+ * fonts at the breakpoint. These rules are unlayered (plain CSS, not a
+ * Tailwind @layer), so they take precedence over the layered utility classes
+ * Tailwind generates for font-size/line-height/weight on the same names —
+ * the two sets of rules target different properties and don't conflict.
+ */
+.text-heading-h1,
+.text-heading-h2,
+.text-heading-h3,
+.text-heading-h4,
+.text-heading-h5,
+.text-project-subtitle,
+.text-overline {
+  font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* On-brand focus ring — a soft white outline reads clearly on the

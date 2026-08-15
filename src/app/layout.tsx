@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inconsolata } from "next/font/google";
+import { Space_Grotesk, Noto_Sans, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import {
   author,
@@ -13,10 +13,32 @@ import {
 } from "@/lib/site";
 import "./globals.css";
 
-const inconsolata = Inconsolata({
+/**
+ * Three-tier type system (replaces the old single-family Inconsolata setup):
+ * Space Grotesk for display/heading-scale text, Noto Sans for reading body
+ * copy and links, JetBrains Mono for labels/chips/captions/meta. All three
+ * are variable Google fonts, so — like the previous Inconsolata setup — no
+ * `weight` array is passed; arbitrary CSS font-weight values interpolate
+ * across each family's variable range.
+ */
+const spaceGrotesk = Space_Grotesk({
+  display: "swap",
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+const notoSans = Noto_Sans({
+  display: "swap",
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
+  variable: "--font-noto-sans",
+  subsets: ["latin"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
   display: "swap",
   fallback: ["ui-monospace", "Menlo", "Consolas", "monospace"],
-  variable: "--font-inconsolata",
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
@@ -87,7 +109,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inconsolata.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${spaceGrotesk.variable} ${notoSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col bg-dark-primary">
         <script
           type="application/ld+json"

@@ -43,7 +43,7 @@ export function CaseStudyNext({ currentHref }: { currentHref: string }) {
           className="group flex w-full items-stretch gap-6 transition-opacity duration-200 hover:opacity-70 active:opacity-50 lg:gap-10"
         >
           <span className="flex min-h-28 flex-1 flex-col justify-center gap-2 py-10 pl-6 md:min-h-32 md:py-12 md:pl-10 lg:min-h-40 lg:pl-16">
-            <span className="text-body-h3 text-white/70">
+            <span className="font-mono text-body-h3 text-white/70">
               Next case study
             </span>
             <span className="flex items-center gap-2.5">
