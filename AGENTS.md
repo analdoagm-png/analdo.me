@@ -23,7 +23,7 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 - `src/app/about/page.tsx` — resume-style About page: hero, credentials strip, experience list, and skills chips built from the site owner's actual résumé content. Linked from `SiteHeader`'s "Resume" link, indexed, and included in the sitemap.
 - `src/app/case-studies-deck/page.tsx` — presentation route with an initial case-study chooser and interactive GoRight and Arrowhead Transit slide sequences.
 - `src/app/case-studies/*/page.tsx` — five case study pages: Forty5Park, Uber Suite, Github's Security Findings, GoRight, Arrowhead Transit.
-- `src/components/` — shared, flat component files. `case-studies-deck.tsx` is an intentional client leaf because keyboard and button controls change the active slide. Avoid nested component folders unless the project structure changes substantially.
+- `src/components/` — shared, flat component files. `case-studies-deck.tsx` and `mobile-nav.tsx` are intentional client leaves — the deck because keyboard and button controls change the active slide, `MobileNav` because it toggles a fixed pill/expandable menu and locks body scroll while open. `SiteHeader` itself stays a server component and renders `MobileNav` as a child. Avoid nested component folders unless the project structure changes substantially.
 - `src/lib/site.ts` — canonical site URL, site name, shared description, author entity, and the `expertise` list used by `Person` schema.
 - `src/lib/case-studies.ts` — the single source of truth for the five case studies plus the `caseStudyMetadata()` helper. The homepage grid and `app/sitemap.ts` both read this array, so a project cannot appear on the homepage while missing from the sitemap.
 - `src/app/robots.ts` and `src/app/sitemap.ts` — Next.js metadata routes that generate `/robots.txt` and `/sitemap.xml`.
@@ -45,6 +45,10 @@ When Figma provides desktop, tablet, and mobile frames, inspect each independent
 Shared components may expose override props such as `aspectClassName`, `roundedClassName`, `mdGapClassName`, and `maxWidthClassName` because individual case studies deviate by breakpoint. Re-check the target page before generalizing values.
 
 Breakpoint gotcha: when a flex row switches to `flex-row` at one breakpoint, child width or `flex-1` overrides must switch at the same breakpoint. If the child waits until a later breakpoint, it can keep claiming full width and force wrapping.
+
+**Mobile nav clearance:** every route that renders `SiteHeader` must give its first section `pt-20` (80px) below `md`, then step back down to its own `md:pt-*`. `MobileNav`'s pill is `fixed` and ends at 64px from the top, so 80px keeps content clear of it with 16px to spare. All seven such routes (homepage, `/about`, five case studies) carry this; a new route needs it too. `/case-studies-deck` is exempt — it renders its own `<main>` without `SiteHeader`, so there is no pill to clear.
+
+Keep the mobile and `md` top padding on the **same `pt-*` axis** (`pt-20 md:pt-16`), never a shorthand plus an override (`p-6 … md:py-16` alongside `pt-20`). Tailwind orders padding utilities by property specificity — `p` → `py` → `pt` — independently of the order written in the class attribute, so a base `pt-20` would otherwise beat `md:py-16` and leak the mobile value into every larger breakpoint.
 
 ## Design System
 
@@ -86,6 +90,12 @@ The intro paragraph ("Based in Colombia, working globally with") carries `text-b
 
 Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label as the accessible name and do not add a redundant accessible name to the SVG.
 
+The `Contact me` / `LinkedIn` / `GitHub` row below the hero (and its `SiteFooter` counterpart) follows the same icon-plus-label idiom via `ContactIcon` (`src/components/contact-icon.tsx`), replacing an earlier plain `/ ` text prefix. Unlike `ToolIcon`'s fixed brand colors, every `ContactIcon` draws with `currentColor` so it dims together with the link text on hover/active. That row is a vertical stack below `md` (`flex-col gap-4`) and the wrapping horizontal row described above from `md` up (`md:flex-row md:flex-wrap md:gap-6`) — a mobile-only tweak, not a change to the row's desktop/tablet behavior.
+
+Directly above the `h1`, the hero also carries a mobile-only (`md:hidden`) copy of `SiteHeader`'s name/role lockup — plain stacked text, not a link, with a `font-semibold` name. This exists because `SiteHeader`'s own bar is now `md:`-and-up only (`MobileNav` covers mobile navigation instead, and its collapsed pill only shows the current page's label, not the name/role) — see DESIGN.md's Header and MobileNav sections. This lockup is homepage-only for now; `/about` and the case-study pages don't yet have an equivalent mobile identity treatment.
+
+Mobile homepage also runs the case-study cards **full-bleed** (no section padding, no card padding or resting ring below `md`) and steps the hero's top padding **up** to `pt-20` to clear the floating nav pill, then back down to `md:pt-16`. The tool sentence is 16px on mobile (`text-body-h2 md:text-body-h1`). See DESIGN.md's `CaseStudyCard` and Homepage Hero Copy sections.
+
 ## SEO And Metadata
 
 - `metadataBase` is set once in `src/app/layout.tsx` from `siteUrl`. Every relative Open Graph image path resolves against it, so do not hardcode absolute URLs in page metadata.
@@ -114,7 +124,9 @@ Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label 
 ## Accessibility Conventions
 
 - Every page's `<main>` must have `id="main-content"`.
-- `SiteHeader` renders a `.skip-link` as its first child. It's the one shared header for every route — the old `CaseStudyHeader` was removed once `SiteHeader` gained a "Home" link and took over its job.
+- `SiteHeader` renders a `.skip-link` as its first child, unconditionally at every breakpoint. It's the one shared header for every route — the old `CaseStudyHeader` was removed once `SiteHeader` gained a "Home" link and took over its job. Below `md`, `SiteHeader`'s own bar renders nothing (`hidden md:block`) and `MobileNav` takes over as a fixed pill + expandable menu — see DESIGN.md's Header and MobileNav sections.
+- `MobileNav`'s expanded menu is a real dialog: `role="dialog" aria-modal="true"`, `autoFocus` on its Close button, dismissible via the × button, Escape, or the scrim, and locks `document.body` scroll while open (restored on close) since it sits over an otherwise-scrollable page. The collapsed pill stays mounted underneath (the opaque panel covers it, which is what makes the open/close animation continuous) and carries `inert` so its links stay out of the tab order while covered.
+- `MobileNav`'s pill has no padding of its own — the label link and menu toggle each own their share so the whole pill is active area, giving the toggle a full 48×48 target and the label the pill's full height. Keep it that way: an active link with dead padding around it is the thing this structure exists to avoid.
 - Global focus is handled in `globals.css` for `a:focus-visible` and `button:focus-visible`. Do not add per-element focus overrides unless a specific component needs a different visible treatment.
 - Global reduced-motion handling in `globals.css` neutralizes transitions and animations under `prefers-reduced-motion: reduce`.
 - `ProjectImage` requires real `alt` text. `CaseStudyFigure` may fall back to its caption when the visible caption already describes the image.
@@ -124,10 +136,14 @@ Tool chips may pass a decorative `ToolIcon` into `Chip`. Keep the visible label 
 
 - Text links dim on hover to `text-white/60` and active press to `text-white/40` with `transition-colors duration-200`.
 - Case-study card images zoom to `scale-105` on hover with `duration-500 ease-out`.
-- `CaseStudyCard` border shifts from `stroke-dark` to `gray-dark`, adds `hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]`, and presses with `active:scale-[0.99]`.
-- Card arrows slide in on hover — hidden at rest, sliding in from `-translate-x-1` — an idiom `CaseStudyNext` reuses for its own onward-link arrow.
+- `CaseStudyCard` gets its hover depth from `box-shadow` alone (no border — see DESIGN.md's Elevation section), strengthening from a 1px ring to a ring plus ambient lift on hover, and presses with `active:scale-[0.99]`.
+- Card arrows slide in on hover — hidden at rest, sliding in from `-translate-x-1` — an idiom `CaseStudyNext` reuses for its own onward-link arrow. Both transition exactly `[opacity,translate]`, never `transition-all`.
+- Every product image (`CaseStudyCard`, `ProjectImage`, `CaseStudyFigure`, `CaseStudyImagePair`, `CaseStudyNext`'s thumbnail, the deck's `DeckImage`) carries a sitewide `outline outline-1 -outline-offset-1 outline-white/10` on its wrapper for consistent depth — see DESIGN.md's Image Outlines section. `outline` over `border` deliberately, since it never adds layout width.
 - `.animate-fade-up` is a zero-JS page-load animation: 12px translateY + opacity, 700ms `cubic-bezier(0.16, 1, 0.3, 1)`, `both` fill mode.
 - Use small server-rendered stagger delays for side-by-side mapped items only. Sequential content blocks do not need individual staggering.
+- The deck's control-cluster buttons and lightbox `Close` button add `active:scale-[0.96]` on top of their color transition, for tactile press feedback on the deck's primary, frequently-clicked controls. The lightbox also plays a 150ms reverse fade/scale on close instead of unmounting instantly, so the exit mirrors (a little softer than) its own entrance — see DESIGN.md's `CaseStudiesDeck` section.
+- `MobileNav`'s toggle and close buttons follow the same `active:scale-[0.96]` convention. Its menu does **not** simply fade in: the panel grows out of the collapsed pill's own corner (`transform-origin: top right`, 300ms scale `0.92 → 1`) and collapses back into it on close (150ms), with `.menu-stagger` settling the panel's three groups in behind that growth — see DESIGN.md's `MobileNav` section.
+- Icons traced by hand drift from the design. `MobileNav`'s menu and close glyphs are the exact path data exported from Figma via `exportAsync({ format: "SVG_STRING" })`, recoloured to `currentColor`; re-export rather than redraw when a design changes.
 
 ## Case Study Patterns
 
@@ -147,6 +163,8 @@ Editorial case studies such as GoRight and Arrowhead additionally use:
 - `CaseStudyImagePair`
 
 For callouts/results boxes, align content left and let text fill the available width. This was fixed on GoRight and Arrowhead after browser annotations showed centered or capped text felt misplaced.
+
+The standard label for editorial meta text is a small `Chip` (`size="sm"`), not a plain mono `<p>`: `CaseStudyDecisionBlock`'s per-block label and `CaseStudyProjectHeader`'s `Role`/`Tools` labels (plus `CaseStudyYear`'s `Year` label, shared with the showcase pages) all use it, so every small caption-style label across a case study now shares one chip treatment instead of two different ad hoc ones. `Chip`'s default (`size="md"`) stays reserved for the homepage `CaseStudyCard` tags — see DESIGN.md's Chip section for the full size table.
 
 ## Verification
 

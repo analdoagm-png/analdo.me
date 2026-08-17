@@ -2,6 +2,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyCard } from "@/components/case-study-card";
 import { ToolIcon } from "@/components/tool-icon";
+import { ContactIcon } from "@/components/contact-icon";
 import type { Metadata } from "next";
 import { caseStudies } from "@/lib/case-studies";
 import { author } from "@/lib/site";
@@ -18,8 +19,26 @@ export default function Home() {
       <SiteHeader />
 
       <main id="main-content" className="flex-1">
-        <section className="mx-auto w-full max-w-[1280px] px-6 pt-12 pb-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
+        {/*
+          Mobile top padding (80px) is deliberately larger than tablet's, to
+          clear the floating MobileNav pill; at `md` a real header bar sits
+          above instead, so it steps back down to 64px.
+        */}
+        <section className="mx-auto w-full max-w-[1280px] px-6 pt-20 pb-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
           <div className="flex flex-col items-start gap-6">
+            {/*
+              Mobile-only identity intro. SiteHeader's bar (which used to
+              carry this lockup at every breakpoint) now only renders md and
+              up — MobileNav's fixed pill replaces it below md and doesn't
+              show the name/role, so the homepage's own hero carries it
+              instead, directly above the h1.
+            */}
+            <div className="flex flex-col animate-fade-up md:hidden">
+              <span className="text-body-h2 font-semibold text-white">Analdo Gomez</span>
+              <span className="text-balance text-body-h2 text-white/70">
+                Senior Product Designer
+              </span>
+            </div>
             <h1 className="w-full animate-fade-up text-balance text-heading-h4 text-white md:text-heading-h2 lg:max-w-[884px]">
               Over a decade solving complex B2B problems with design
               systems built to ship straight to code, and clearer paths to
@@ -33,7 +52,7 @@ export default function Home() {
               leading sentence and the tool list as two separate stacked
               chunks instead of one continuous line.
             */}
-            <p className="w-full animate-fade-up text-balance text-body-h1 text-white/70 [animation-delay:100ms]">
+            <p className="w-full animate-fade-up text-balance text-body-h2 text-white/70 [animation-delay:100ms] md:text-body-h1">
               Based in Colombia, working globally with{" "}
               <span className="inline-flex items-center gap-1.5 align-middle">
                 <span
@@ -65,33 +84,47 @@ export default function Home() {
                 Codex
               </span>
             </p>
-            <div className="flex flex-wrap items-start gap-6 animate-fade-up [animation-delay:200ms]">
+            <div className="flex flex-col gap-4 animate-fade-up [animation-delay:200ms] md:flex-row md:flex-wrap md:items-start md:gap-6">
               <a
                 href={`mailto:${author.email}`}
                 target="_blank"
-                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+                className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
               >
-                / Contact me
+                <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+                  <ContactIcon name="mail" />
+                </span>
+                Contact me
               </a>
               <a
                 href={author.linkedIn}
                 target="_blank"
-                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+                className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
               >
-                / LinkedIn
+                <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+                  <ContactIcon name="linkedin" />
+                </span>
+                LinkedIn
               </a>
               <a
                 href={author.github}
                 target="_blank"
-                className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+                className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
               >
-                / GitHub
+                <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+                  <ContactIcon name="github" />
+                </span>
+                GitHub
               </a>
             </div>
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-[1280px] px-6 pb-16 md:px-10 lg:px-16">
+        {/*
+          No horizontal padding below `md` — the mobile design runs the cards
+          full-bleed to the viewport edges (see CaseStudyCard). Standard page
+          padding resumes at `md`.
+        */}
+        <section className="mx-auto w-full max-w-[1280px] pb-16 md:px-10 lg:px-16">
           {/*
             Card titles are h3, so this names the section and keeps the document
             outline from jumping h1 → h3. Visually hidden to leave the minimal

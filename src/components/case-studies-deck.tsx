@@ -287,7 +287,7 @@ function DeckImage({
   className?: string;
 }) {
   return (
-    <div className={`relative min-w-0 overflow-hidden rounded-token-xl bg-[#1a1a1a] ${className}`}>
+    <div className={`relative min-w-0 overflow-hidden rounded-token-xl bg-[#1a1a1a] outline outline-1 -outline-offset-1 outline-white/10 ${className}`}>
       <Image
         src={src}
         alt={alt}
@@ -465,7 +465,7 @@ function ProjectSlide({
                 label={`Process view ${index + 1}`}
                 className={
                   index === 2
-                    ? "aspect-[16/7] w-full border border-white/10 lg:h-[clamp(8rem,19vh,15rem)] lg:aspect-auto"
+                    ? "aspect-[16/7] w-full lg:h-[clamp(8rem,19vh,15rem)] lg:aspect-auto"
                     : "aspect-[4/3] w-full lg:h-[clamp(7.5rem,17vh,14rem)] lg:aspect-auto"
                 }
                 onExpand={() => onExpand({ src: image.src, alt: image.alt, label: `Process view ${index + 1}` })}
@@ -579,7 +579,9 @@ export function CaseStudiesDeck() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [activeMedia, setActiveMedia] = useState<{ src: string; alt: string; label: string } | null>(null);
+  const [isMediaClosing, setIsMediaClosing] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const mediaCloseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const project = projectKey ? projects[projectKey] : null;
   const slideKind = project ? slideKinds[slideIndex] : null;
@@ -598,10 +600,39 @@ export function CaseStudiesDeck() {
     setSlideIndex(0);
   };
 
+  const openMedia = useCallback((media: { src: string; alt: string; label: string }) => {
+    if (mediaCloseTimeoutRef.current) {
+      clearTimeout(mediaCloseTimeoutRef.current);
+      mediaCloseTimeoutRef.current = null;
+    }
+    setIsMediaClosing(false);
+    setActiveMedia(media);
+  }, []);
+
+  const closeMedia = useCallback(() => {
+    setIsMediaClosing(true);
+    mediaCloseTimeoutRef.current = setTimeout(() => {
+      setActiveMedia(null);
+      setIsMediaClosing(false);
+      mediaCloseTimeoutRef.current = null;
+    }, 150);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (mediaCloseTimeoutRef.current) clearTimeout(mediaCloseTimeoutRef.current);
+    };
+  }, []);
+
   const chooseAnotherProject = useCallback(() => {
+    if (mediaCloseTimeoutRef.current) {
+      clearTimeout(mediaCloseTimeoutRef.current);
+      mediaCloseTimeoutRef.current = null;
+    }
     setProjectKey(null);
     setSlideIndex(0);
     setActiveMedia(null);
+    setIsMediaClosing(false);
   }, []);
 
   const nextSlide = useCallback(() => {
@@ -659,12 +690,12 @@ export function CaseStudiesDeck() {
     if (!activeMedia) return;
 
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setActiveMedia(null);
+      if (event.key === "Escape") closeMedia();
     };
 
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [activeMedia]);
+  }, [activeMedia, closeMedia]);
 
   useEffect(() => {
     headingRef.current?.focus();
@@ -736,7 +767,7 @@ export function CaseStudiesDeck() {
                 key={`${project.key}-${slideIndex}`}
                 className={`h-full min-h-0 w-full overflow-hidden animate-deck-slide ${slideTransitionClass}`}
               >
-                <ProjectSlide project={project} kind={slideKind!} onExpand={setActiveMedia} />
+                <ProjectSlide project={project} kind={slideKind!} onExpand={openMedia} />
               </div>
             </div>
           </section>
@@ -744,7 +775,7 @@ export function CaseStudiesDeck() {
       </div>
 
       {project ? (
-        <div className="fixed bottom-6 right-6 z-40 flex flex-wrap items-center justify-end gap-x-4 gap-y-2 rounded-token-lg border border-white/15 bg-dark-primary/90 px-5 py-3 text-body-h3 backdrop-blur-sm md:bottom-10 md:right-10 lg:bottom-16 lg:right-16">
+        <div className="fixed bottom-6 right-6 z-40 flex flex-wrap items-center justify-end gap-x-4 gap-y-2 rounded-token-lg border border-white/15 bg-dark-primary/90 px-5 py-3 text-body-h3 shadow-[0_8px_24px_oklch(0_0_0/0.35)] backdrop-blur-sm md:bottom-10 md:right-10 lg:bottom-16 lg:right-16">
           <p className="whitespace-nowrap font-mono text-white/58">
             {project.title} / {slideIndex + 1} of {slideKinds.length}
           </p>
@@ -752,7 +783,7 @@ export function CaseStudiesDeck() {
           <button
             type="button"
             onClick={chooseAnotherProject}
-            className="whitespace-nowrap text-white/70 transition-colors duration-200 hover:text-white active:text-white/40"
+            className="whitespace-nowrap text-white/70 transition-[color,scale] duration-200 ease-out hover:text-white active:scale-[0.96] active:text-white/40"
           >
             Choose a case study
           </button>
@@ -768,14 +799,14 @@ export function CaseStudiesDeck() {
             <button
               type="button"
               onClick={previousSlide}
-              className="whitespace-nowrap transition-colors duration-200 hover:text-white/60 active:text-white/40"
+              className="whitespace-nowrap transition-[color,scale] duration-200 ease-out hover:text-white/60 active:scale-[0.96] active:text-white/40"
             >
               {isFirstSlide ? "Choose" : "Previous"}
             </button>
             <button
               type="button"
               onClick={nextSlide}
-              className="whitespace-nowrap rounded-token border border-white/22 px-3 py-1.5 text-white transition-colors duration-200 hover:border-white/45 hover:text-white/70 active:text-white/40"
+              className="whitespace-nowrap rounded-token border border-white/22 px-3 py-1.5 text-white transition-[color,border-color,scale] duration-200 ease-out hover:border-white/45 hover:text-white/70 active:scale-[0.96] active:text-white/40"
             >
               {isLastSlide ? "Choose another" : "Next"}
             </button>
@@ -788,11 +819,11 @@ export function CaseStudiesDeck() {
           role="dialog"
           aria-modal="true"
           aria-label={`${activeMedia.label} larger view`}
-          className="animate-lightbox-scrim fixed inset-0 z-50 flex items-center justify-center bg-black/88 p-6 md:p-10 lg:p-16"
-          onClick={() => setActiveMedia(null)}
+          className={`fixed inset-0 z-50 flex items-center justify-center bg-black/88 p-6 md:p-10 lg:p-16 ${isMediaClosing ? "animate-lightbox-scrim-exit" : "animate-lightbox-scrim"}`}
+          onClick={closeMedia}
         >
           <div
-            className="animate-lightbox-media flex h-full w-full max-w-[1600px] flex-col gap-4"
+            className={`flex h-full w-full max-w-[1600px] flex-col gap-4 ${isMediaClosing ? "animate-lightbox-media-exit" : "animate-lightbox-media"}`}
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-5">
@@ -800,8 +831,8 @@ export function CaseStudiesDeck() {
               <button
                 type="button"
                 autoFocus
-                onClick={() => setActiveMedia(null)}
-                className="rounded-token border border-white/22 px-3 py-1.5 text-body-h3 text-white transition-colors duration-200 hover:border-white/45 hover:text-white/70 active:text-white/40"
+                onClick={closeMedia}
+                className="rounded-token border border-white/22 px-3 py-1.5 text-body-h3 text-white transition-[color,border-color,scale] duration-200 ease-out hover:border-white/45 hover:text-white/70 active:scale-[0.96] active:text-white/40"
               >
                 Close
               </button>

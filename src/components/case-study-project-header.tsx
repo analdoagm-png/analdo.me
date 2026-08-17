@@ -1,4 +1,5 @@
 import { CaseStudyYear } from "@/components/case-study-year";
+import { Chip } from "@/components/chip";
 
 export function CaseStudyProjectHeader({
   title,
@@ -27,16 +28,12 @@ export function CaseStudyProjectHeader({
       </div>
 
       <div className="flex w-full flex-col items-start gap-4 md:flex-row md:gap-12">
-        <div className="flex flex-col items-start">
-          <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
-            Role
-          </p>
+        <div className="flex flex-col items-start gap-1.5">
+          <Chip label="Role" size="sm" />
           <p className="text-body-h2 text-white">{role}</p>
         </div>
-        <div className="flex flex-col items-start">
-          <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
-            Tools
-          </p>
+        <div className="flex flex-col items-start gap-1.5">
+          <Chip label="Tools" size="sm" />
           <p className="text-body-h2 text-white">{tools}</p>
         </div>
         <CaseStudyYear year={year} />

@@ -1,4 +1,5 @@
 import { author } from "@/lib/site";
+import { ContactIcon } from "@/components/contact-icon";
 
 export function SiteFooter() {
   return (
@@ -11,23 +12,32 @@ export function SiteFooter() {
           <a
             href={`mailto:${author.email}`}
             target="_blank"
-            className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+            className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
           >
-            / Contact me
+            <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+              <ContactIcon name="mail" />
+            </span>
+            Contact me
           </a>
           <a
             href={author.linkedIn}
             target="_blank"
-            className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+            className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
           >
-            / LinkedIn
+            <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+              <ContactIcon name="linkedin" />
+            </span>
+            LinkedIn
           </a>
           <a
             href={author.github}
             target="_blank"
-            className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+            className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
           >
-            / GitHub
+            <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+              <ContactIcon name="github" />
+            </span>
+            GitHub
           </a>
         </div>
       </div>

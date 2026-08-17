@@ -30,7 +30,7 @@ export default function GoRightCaseStudy() {
       <SiteHeader />
 
       <main id="main-content" className="flex-1">
-        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-6 p-6 md:gap-16 md:px-10 md:py-16 lg:p-16">
+        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-6 px-6 pt-20 pb-6 md:gap-16 md:px-10 md:pt-16 md:pb-16 lg:px-16">
           <CaseStudyProjectHeader
             title="GoRight"
             subtitle="Merlin Platform"

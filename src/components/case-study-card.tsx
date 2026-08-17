@@ -21,6 +21,13 @@ function ArrowForwardIcon() {
   );
 }
 
+/**
+ * Below `md` the card is full-bleed per the mobile design: no padding frame
+ * and no resting ring, so the image runs edge to edge and the card reads as a
+ * section of the page rather than a floating surface. The padded, ringed card
+ * (and its hover lift) returns at `md` and up. The image keeps its own 1px
+ * outline at every breakpoint.
+ */
 export function CaseStudyCard({
   href,
   image,
@@ -42,9 +49,9 @@ export function CaseStudyCard({
     <Link
       href={href}
       style={style}
-      className="group flex w-full flex-col gap-6 rounded-token-xl border border-stroke-dark bg-dark-primary p-2 animate-fade-up transition-[transform,border-color,box-shadow] duration-200 ease-out hover:border-gray-dark hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)] active:scale-[0.99]"
+      className="group flex w-full flex-col gap-6 rounded-token-xl bg-dark-primary animate-fade-up transition-[scale,box-shadow] duration-200 ease-out active:scale-[0.99] md:p-2 md:shadow-[0_0_0_1px_oklch(1_0_0/0.08)] md:hover:shadow-[0_0_0_1px_oklch(1_0_0/0.13),0_8px_24px_oklch(0_0_0/0.35)]"
     >
-      <div className="relative h-[220px] w-full overflow-hidden rounded-none md:h-[240px] lg:h-[280px]">
+      <div className="relative h-[220px] w-full overflow-hidden rounded-none outline outline-1 -outline-offset-1 outline-white/10 md:h-[240px] lg:h-[280px]">
         <Image
           src={image}
           alt={`${title} project thumbnail`}
@@ -60,7 +67,7 @@ export function CaseStudyCard({
             {title}
           </h3>
           <span
-            className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+            className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-[opacity,translate] duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
             aria-hidden="true"
           >
             <ArrowForwardIcon />

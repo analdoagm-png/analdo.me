@@ -49,7 +49,7 @@ export default function AboutPage() {
       <SiteHeader />
 
       <main id="main-content" className="flex-1">
-        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-12 pb-16 md:gap-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
+        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-20 pb-16 md:gap-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
           <div className="flex flex-col items-start gap-6">
             {/*
               SiteHeader now shows the name/role lockup at every breakpoint

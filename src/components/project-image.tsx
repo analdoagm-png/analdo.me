@@ -17,7 +17,7 @@ export function ProjectImage({
 }) {
   return (
     <div
-      className={`relative w-full overflow-hidden bg-stroke-dark ${roundedClassName} ${aspectClassName ?? ""} animate-fade-up ${priority ? "[animation-delay:200ms]" : ""}`}
+      className={`relative w-full overflow-hidden bg-stroke-dark outline outline-1 -outline-offset-1 outline-white/10 ${roundedClassName} ${aspectClassName ?? ""} animate-fade-up ${priority ? "[animation-delay:200ms]" : ""}`}
       style={
         aspectClassName
           ? undefined

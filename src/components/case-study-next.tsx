@@ -51,14 +51,14 @@ export function CaseStudyNext({ currentHref }: { currentHref: string }) {
                 {next.title}
               </span>
               <span
-                className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+                className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-[opacity,translate] duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
                 aria-hidden="true"
               >
                 <ArrowForwardIcon />
               </span>
             </span>
           </span>
-          <span className="relative w-2/5 shrink-0 overflow-hidden md:w-72 lg:w-80">
+          <span className="relative w-2/5 shrink-0 overflow-hidden outline outline-1 -outline-offset-1 outline-white/10 md:w-72 lg:w-80">
             <Image
               src={next.image}
               alt=""

@@ -1,4 +1,5 @@
 import { CaseStudyFigure } from "@/components/case-study-figure";
+import { Chip } from "@/components/chip";
 
 export function CaseStudyDecisionBlock({
   label,
@@ -32,7 +33,7 @@ export function CaseStudyDecisionBlock({
       }`}
     >
       <div className="flex w-full flex-col items-start gap-2 animate-fade-up lg:w-[400px] lg:shrink-0">
-        <p className="font-mono text-body-h3 text-white">{label}</p>
+        <Chip label={label} size="sm" />
         <h3 className="w-full text-balance text-heading-h5 text-white">
           {title}
         </h3>

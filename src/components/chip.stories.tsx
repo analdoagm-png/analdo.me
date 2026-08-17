@@ -28,3 +28,22 @@ export const ToolChips: Story = {
     </div>
   ),
 };
+
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex flex-col items-start gap-4">
+      <div className="flex items-center gap-3">
+        <Chip label="Case Study" size="md" />
+        <span className="font-mono text-body-h3 text-white/50">
+          md — homepage CaseStudyCard tags
+        </span>
+      </div>
+      <div className="flex items-center gap-3">
+        <Chip label="Decision" size="sm" />
+        <span className="font-mono text-body-h3 text-white/50">
+          sm — editorial case-study labels (Decision, Role, Tools, Year)
+        </span>
+      </div>
+    </div>
+  ),
+};
