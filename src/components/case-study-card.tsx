@@ -61,9 +61,9 @@ export function CaseStudyCard({
           sizes="(min-width: 1024px) 50vw, 100vw"
         />
       </div>
-      <div className="flex w-full flex-col gap-3 px-4 pb-5 md:px-5">
+      <div className="flex w-full flex-col gap-3 px-6 pb-5 md:px-5">
         <div className="flex items-center gap-2.5">
-          <h3 className="text-balance text-heading-h4 text-white">
+          <h3 className="text-balance text-heading-h5 text-white md:text-heading-h4">
             {title}
           </h3>
           <span

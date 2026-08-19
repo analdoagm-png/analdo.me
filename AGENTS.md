@@ -68,7 +68,7 @@ Current high-level design choices:
 - Body copy should not use very light weights. Use 400 for body text and 500 for small labels.
 - Home project cards use stronger titles (`text-heading-h4`), calmer descriptions (`text-body-h2 text-white/68`), and light chips (`border-white/15 bg-white/[0.04] text-white/72`).
 - Case-study callouts and results boxes should fill their container width and align content left. Do not cap callout paragraph width unless the design explicitly calls for a centered editorial quote.
-- `SiteFooter` centers its copyright and links on mobile, then uses its left/right desktop alignment from `md` upward.
+- `SiteFooter` is one `justify-between` row at every breakpoint (copyright left, links right); below `md` its contact links are icon-only, with the label kept as `sr-only` (not `aria-label`) and restored by `md:not-sr-only`. See DESIGN.md's Footer section.
 
 ## Typography
 
@@ -94,7 +94,7 @@ The `Contact me` / `LinkedIn` / `GitHub` row below the hero (and its `SiteFooter
 
 Directly above the `h1`, the hero also carries a mobile-only (`md:hidden`) copy of `SiteHeader`'s name/role lockup — plain stacked text, not a link, with a `font-semibold` name. This exists because `SiteHeader`'s own bar is now `md:`-and-up only (`MobileNav` covers mobile navigation instead, and its collapsed pill only shows the current page's label, not the name/role) — see DESIGN.md's Header and MobileNav sections. This lockup is homepage-only for now; `/about` and the case-study pages don't yet have an equivalent mobile identity treatment.
 
-Mobile homepage also runs the case-study cards **full-bleed** (no section padding, no card padding or resting ring below `md`) and steps the hero's top padding **up** to `pt-20` to clear the floating nav pill, then back down to `md:pt-16`. The tool sentence is 16px on mobile (`text-body-h2 md:text-body-h1`). See DESIGN.md's `CaseStudyCard` and Homepage Hero Copy sections.
+Mobile homepage also runs the case-study cards **full-bleed** (no section padding, no card padding or resting ring below `md`) and steps the hero's top padding **up** to `pt-20` to clear the floating nav pill, then back down to `md:pt-16`. The tool sentence is 16px on mobile (`text-body-h2 md:text-body-h1`). Card copy is inset 24px on mobile (`px-6 md:px-5`) to line up with the page gutter, and card titles drop to `text-heading-h5` below `md` so they don't tie with the `h1`, which is itself `text-heading-h4` (24px) at that width. See DESIGN.md's `CaseStudyCard` and Homepage Hero Copy sections.
 
 ## SEO And Metadata
 

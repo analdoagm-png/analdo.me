@@ -115,8 +115,8 @@ export function MobileNav() {
         The pill carries no padding of its own — each child owns its share, so
         every pixel of the pill is either the label link or the menu toggle
         rather than dead space. The child paddings still add up to the spec's
-        102x48 pill with 12/16 insets and a 16px gap between label and glyph
-        (12+34+8 | 8+24+16), and `items-stretch` gives the shorter label the
+        106x48 pill with symmetric 16px insets and a 16px gap between label
+        and glyph (16+34+8 | 8+24+16), and `items-stretch` gives the label the
         toggle's full 48px height.
       */}
       <div
@@ -125,7 +125,7 @@ export function MobileNav() {
       >
         <Link
           href={pill.href}
-          className="flex items-center pr-2 pl-3 font-mono text-body-h3 text-white/72 transition-colors duration-200 hover:text-white active:text-white/50"
+          className="flex items-center pr-2 pl-4 font-mono text-body-h3 text-white/72 transition-colors duration-200 hover:text-white active:text-white/50"
         >
           {pill.label}
         </Link>
