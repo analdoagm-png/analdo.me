@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { author, siteDescription, siteUrl } from "@/lib/site";
+import { author, shareHeadline, siteUrl } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -8,6 +8,11 @@ export const alt = `${author.name} — ${author.jobTitle}`;
 /**
  * Site-wide share card. Case studies override this with their own cover image
  * through `openGraph.images` in their page metadata.
+ *
+ * The headline is `shareHeadline`, a short line written for this card — not
+ * `siteDescription`. The meta description runs 150-160 characters by design,
+ * which at display size wrapped to six lines, overflowed the 630px canvas and
+ * covered the domain line. Keep anything used here under ~60 characters.
  *
  * ImageResponse renders through satori, which supports flexbox only — every
  * container with more than one child needs an explicit `display: "flex"`.
@@ -34,14 +39,15 @@ export default function OpengraphImage() {
         <div
           style={{
             display: "flex",
-            fontSize: 64,
+            fontSize: 72,
             fontWeight: 600,
-            lineHeight: 1.15,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
             color: "#ffffff",
-            maxWidth: "900px",
+            maxWidth: "940px",
           }}
         >
-          {siteDescription}
+          {shareHeadline}
         </div>
 
         <div

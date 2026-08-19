@@ -27,7 +27,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The one shared header used on every route: name/role lockup on the left, Home and Resume links on the right.",
+          "The one shared header used on every route. Its bar — name/role lockup left, Home and Resume right — renders at md and up only; below md it renders just the skip link and hands navigation to MobileNav's fixed pill, which is what the Mobile story shows.",
       },
     },
   },

@@ -8,6 +8,11 @@ import { MobileNav } from "@/components/mobile-nav";
  * lockup that used to live in this bar on mobile has moved into the
  * homepage's own hero content instead. The skip-link stays unconditional so
  * keyboard/screen-reader users keep it at every breakpoint.
+ *
+ * The Home/Resume nav links are mono — they're controls, and the type system
+ * splits by function (see DESIGN.md's Typography section). The name/role
+ * lockup stays in the body voice even though it's also a link: it reads as
+ * identity, and a monospaced personal name reads like a filename.
  */
 export function SiteHeader() {
   return (
@@ -39,13 +44,13 @@ export function SiteHeader() {
           <div className="flex shrink-0 items-center gap-6">
             <Link
               href="/"
-              className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+              className="font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
             >
               Home
             </Link>
             <Link
               href="/about"
-              className="text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+              className="font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
             >
               Resume
             </Link>

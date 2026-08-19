@@ -3,7 +3,15 @@
 **Owner:** Analdo — Senior Product Designer (agentic/AI-backed workflow)
 **Purpose:** Define what “done” looks like when frontend work hands off to a backend team. Any AI agent should be able to use this file to identify the required artifacts, their canonical locations, and the decisions that need explicit agreement.
 
-If you are an agent working in this repo, read **§6, Instructions for Agents**, before starting.
+> **Scope.** This is a portable playbook for products that talk to a backend.
+> It is *not* a description of this repository, which is a static portfolio
+> site with no API, no MSW, and none of the directories named below
+> (`src/features/`, `contracts/`, `mocks/`). Nothing here overrides
+> `AGENTS.md`, which is the operating guidance for this repo. Read it as a
+> reference for the next backend-backed project, or as evidence of how this
+> work gets handed off.
+
+If you are an agent working on **a backend-backed product**, read **§6, Instructions for Agents**, before starting. If you are working in *this* repo, read `AGENTS.md` instead.
 
 ---
 

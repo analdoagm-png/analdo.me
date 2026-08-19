@@ -11,8 +11,8 @@ export function CaseStudyStatement({
     <>
       <div className="flex w-full items-center justify-center md:hidden">
         <p className="w-full animate-fade-up text-balance text-heading-h5 text-white">
-          {lead}
-          {emphasis}
+          <span className="font-normal">{lead}</span>
+          <span className="font-semibold">{emphasis}</span>
         </p>
       </div>
       <div className="hidden w-full items-center justify-center py-8 md:flex lg:py-16">

@@ -9,7 +9,6 @@ export function CaseStudyDecisionBlock({
   figureCaption,
   figureAspect,
   figureAspectClassName,
-  figureRoundedClassName,
   reverseOnDesktop = false,
   mdGapClassName = "md:gap-16",
   figureCaptionHiddenAtDesktop = false,
@@ -21,7 +20,6 @@ export function CaseStudyDecisionBlock({
   figureCaption: string;
   figureAspect?: string;
   figureAspectClassName?: string;
-  figureRoundedClassName?: string;
   reverseOnDesktop?: boolean;
   mdGapClassName?: string;
   figureCaptionHiddenAtDesktop?: boolean;
@@ -47,7 +45,6 @@ export function CaseStudyDecisionBlock({
           caption={figureCaption}
           aspect={figureAspect}
           aspectClassName={figureAspectClassName}
-          roundedClassName={figureRoundedClassName}
           captionClassName={`text-white/70 lg:text-white${figureCaptionHiddenAtDesktop ? " lg:hidden" : ""}`}
         />
       </div>

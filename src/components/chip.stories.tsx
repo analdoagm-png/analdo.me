@@ -35,13 +35,13 @@ export const Sizes: Story = {
       <div className="flex items-center gap-3">
         <Chip label="Case Study" size="md" />
         <span className="font-mono text-body-h3 text-white/50">
-          md — homepage CaseStudyCard tags
+          md — homepage CaseStudyCard tags, About skills
         </span>
       </div>
       <div className="flex items-center gap-3">
         <Chip label="Decision" size="sm" />
         <span className="font-mono text-body-h3 text-white/50">
-          sm — editorial case-study labels (Decision, Role, Tools, Year)
+          sm — CaseStudyDecisionBlock labels only
         </span>
       </div>
     </div>

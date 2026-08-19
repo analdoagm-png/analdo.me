@@ -52,11 +52,12 @@ export default function AboutPage() {
         <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-20 pb-16 md:gap-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
           <div className="flex flex-col items-start gap-6">
             {/*
-              SiteHeader now shows the name/role lockup at every breakpoint
-              (not just md+, like the old CaseStudyHeader did), so this stays
-              a plain "About" eyebrow throughout rather than swapping to the
-              name on mobile — showing it twice on the same screen would be
-              redundant now that the header already covers it everywhere.
+              A plain "About" eyebrow at every breakpoint. Note that below md
+              this page has no identity lockup at all: SiteHeader's bar is
+              md-and-up only, and MobileNav's pill shows the page label rather
+              than the name/role. The homepage carries its own mobile lockup in
+              its hero; /about and the case studies don't yet. See DESIGN.md's
+              Header section — it's a known gap, not an oversight.
             */}
             <p className="animate-fade-up text-overline text-white/70">
               About
@@ -82,19 +83,16 @@ export default function AboutPage() {
           <CaseStudyPointsGrid
             items={[
               {
-                number: "1.",
                 title: "14+",
                 description:
                   "Years designing B2B products for fintech, retirement, and SaaS clients",
               },
               {
-                number: "2.",
                 title: "3",
                 description:
                   "Design systems built and scaled from the ground up",
               },
               {
-                number: "3.",
                 title: "200+",
                 description:
                   "Components shipped in the Merlin Design System for GoRight",

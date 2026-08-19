@@ -1,14 +1,22 @@
-import Image from "next/image";
+import { ProjectImage } from "@/components/project-image";
 
+/**
+ * `ProjectImage` plus a caption, as a real `<figure>`/`<figcaption>` pair.
+ * The frame, mat, outline and click-to-expand behaviour all come from
+ * `ProjectImage` — this component used to rebuild that wrapper by hand, which
+ * meant every change to the image treatment had to be made in two places.
+ *
+ * `alt` falls back to the caption, since a visible caption that already
+ * describes the image makes a separate alt string redundant.
+ */
 export function CaseStudyFigure({
   src,
   alt,
   caption,
-  aspect = "2880/1800",
+  aspect,
   aspectClassName,
   captionClassName = "text-white/70",
   gapClassName = "gap-2",
-  roundedClassName = "rounded-none",
   priority = false,
 }: {
   src: string;
@@ -18,31 +26,20 @@ export function CaseStudyFigure({
   aspectClassName?: string;
   captionClassName?: string;
   gapClassName?: string;
-  roundedClassName?: string;
   priority?: boolean;
 }) {
   return (
-    <div className={`flex w-full flex-col items-start ${gapClassName}`}>
-      <div
-        className={`relative w-full overflow-hidden bg-stroke-dark outline outline-1 -outline-offset-1 outline-white/10 ${roundedClassName} ${aspectClassName ?? ""} animate-fade-up ${priority ? "[animation-delay:200ms]" : ""}`}
-        style={
-          aspectClassName
-            ? undefined
-            : { aspectRatio: aspect.replace("/", " / ") }
-        }
-      >
-        <Image
-          src={src}
-          alt={alt ?? caption}
-          fill
-          className="object-cover"
-          sizes="(min-width: 1280px) 1280px, 100vw"
-          priority={priority}
-        />
-      </div>
-      <p className={`w-full text-center font-mono text-body-h3 ${captionClassName}`}>
+    <figure className={`flex w-full flex-col items-start ${gapClassName}`}>
+      <ProjectImage
+        src={src}
+        alt={alt ?? caption}
+        aspect={aspect}
+        aspectClassName={aspectClassName}
+        priority={priority}
+      />
+      <figcaption className={`w-full text-center font-mono text-body-h3 ${captionClassName}`}>
         {caption}
-      </p>
-    </div>
+      </figcaption>
+    </figure>
   );
 }

@@ -1,12 +1,15 @@
 import type { ReactNode } from "react";
 
 /**
- * `md` is the original size: homepage `CaseStudyCard` metadata tags. `sm` is
- * the smaller variant standardized on for editorial case-study labels
- * (`CaseStudyDecisionBlock`, `CaseStudyProjectHeader`'s Role/Tools,
- * `CaseStudyYear`) — same border/fill/font system, tighter padding. Text
- * size never shrinks between the two: `text-body-h3` is already the site's
- * 14px minimum readable size.
+ * `md` is the original size: homepage `CaseStudyCard` metadata tags and
+ * About's skills chips. `sm` is the smaller variant, now used only by
+ * `CaseStudyDecisionBlock`'s per-block label — same border/fill/font system,
+ * tighter padding. Text size never shrinks between the two: `text-body-h3`
+ * is already the site's 14px minimum readable size.
+ *
+ * A chip means "this is a tag with a value of its own". Role/Tools/Year used
+ * `sm` too until they moved to `CaseStudyMetaLabel`, since those labels only
+ * name the line beneath them rather than carrying a value.
  */
 const sizeClasses = {
   md: "gap-1.5 px-3 py-1.5",

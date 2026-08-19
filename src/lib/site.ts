@@ -14,6 +14,14 @@ export const siteName = "Analdo Gomez";
 export const siteDescription =
   "Senior Product Designer with 14+ years building B2B software for fintech, retirement, and SaaS — case studies span dispatch, real estate, and security platforms.";
 
+/**
+ * Headline for the generated share card (`src/app/opengraph-image.tsx`), which
+ * renders it at display size. Deliberately separate from `siteDescription`:
+ * the meta description is written for search results at 150–160 characters and
+ * overflowed the card when it was reused here. Keep this under ~60 characters.
+ */
+export const shareHeadline = "Design systems B2B teams can ship straight to code.";
+
 /** Title for `/`, kept in the 50–60 character range. */
 export const siteTitle =
   "Analdo Gomez / Senior Product Designer for B2B Software";
@@ -32,6 +40,17 @@ export const author = {
   github: "https://github.com/analdoagm-png",
   country: "Colombia",
 } as const;
+
+/**
+ * The three contact links, in display order. Shared by the homepage hero,
+ * `SiteFooter`, and `MobileNav`'s panel so the set can't drift between them —
+ * all three used to declare their own copy of this array.
+ */
+export const contactLinks = [
+  { href: `mailto:${author.email}`, icon: "mail", label: "Contact me" },
+  { href: author.linkedIn, icon: "linkedin", label: "LinkedIn" },
+  { href: author.github, icon: "github", label: "GitHub" },
+] as const;
 
 /** `sameAs` targets for `Person` schema. Add every profile that is genuinely his. */
 export const profiles = [author.linkedIn, author.github];

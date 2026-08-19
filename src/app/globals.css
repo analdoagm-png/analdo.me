@@ -2,23 +2,30 @@
 
 @theme inline {
   /*
-   * Three-tier type system: --font-sans (Noto Sans) is the body/default
-   * voice; --font-heading (Space Grotesk) is applied explicitly below to
-   * every heading-scale utility; --font-mono (JetBrains Mono) is Tailwind's
-   * built-in mono slot, used explicitly per-component for labels, chips,
-   * captions, and meta text — never inherited from a shared size token,
-   * since e.g. text-body-h3 is used for both genuine prose (card
-   * descriptions) and short labels (chips, ROLE/TOOLS captions) depending on
-   * context.
+   * Two-family type system split by function, not by scale: Noto Sans
+   * (--font-sans, the body/default voice) is everything you read, JetBrains
+   * Mono (--font-mono) is everything you operate or scan — nav, standalone
+   * links, chips, meta labels and values, counters. --font-heading stays a
+   * separate token even though it currently resolves to Noto Sans too, so
+   * the heading tier's family is stated rather than inherited and a future
+   * display face is a one-line change.
+   *
+   * --font-mono is applied explicitly per call site, never inherited from a
+   * shared size token, since e.g. text-body-h3 is used for both genuine
+   * prose (card descriptions) and interface text (chips, meta labels).
    */
   --font-sans: var(--font-noto-sans);
-  --font-heading: var(--font-space-grotesk);
+  --font-heading: var(--font-noto-sans);
   --font-mono: var(--font-jetbrains-mono);
 
   /* Core color tokens */
   --color-dark-primary: #121212;
   --color-stroke-dark: #282828;
   --color-gray-dark: #535353;
+  /* One step up from stroke-dark, for the hover state of a zoomable image
+     frame. Deliberately a small step: the mat lifting slightly is the whole
+     affordance, and anything louder competes with the image it surrounds. */
+  --color-stroke-lift: #333333;
 
   /*
    * Responsive type scale. Negative letter-spacing on h1-h3 only — they're
@@ -71,11 +78,12 @@
   --text-body-h3--line-height: 1.5;
   --text-body-h3--font-weight: 500;
 
-  /* Only chips keep a radius — every other surface (cards, images,
-     callouts, buttons) is sharp-cornered by design. */
+  /* Only chips, skip links and the mobile nav pill keep a radius — every
+     other surface (cards, images, callouts, buttons) is sharp-cornered by
+     design and says so with `rounded-none`. There are deliberately no
+     zero-valued radius tokens: two used to exist, which meant the site had
+     three different ways to spell "sharp". */
   --radius-token: 4px;
-  --radius-token-lg: 0px;
-  --radius-token-xl: 0px;
 }
 
 body {
@@ -90,24 +98,32 @@ body {
 }
 
 /*
- * Every heading-scale utility gets the display typeface. text-overline is
- * included even though it's also used for a couple of small kicker/eyebrow
- * labels (About, CaseStudySectionHeading) — it's the same element that
- * upgrades to text-project-subtitle at `md` in CaseStudyProjectHeader, so
- * both need to share a family or that one piece of copy would visibly swap
- * fonts at the breakpoint. These rules are unlayered (plain CSS, not a
- * Tailwind @layer), so they take precedence over the layered utility classes
- * Tailwind generates for font-size/line-height/weight on the same names —
- * the two sets of rules target different properties and don't conflict.
+ * Every heading-scale utility gets the display typeface explicitly, even
+ * though --font-heading currently resolves to the same family as the body
+ * voice — the tier states its own family so swapping in a display face
+ * later is one token, not an audit. text-overline is included even though
+ * it's also used for a couple of small kicker/eyebrow labels (About,
+ * CaseStudySectionHeading) — it's the same element that upgrades to
+ * text-project-subtitle at `md` in CaseStudyProjectHeader, so both need to
+ * share a family or that one piece of copy would visibly swap fonts at the
+ * breakpoint.
+ *
+ * These live in `@layer base`, deliberately, so a `font-mono` at the call
+ * site still wins: utilities is the later layer. (They used to be unlayered,
+ * which beat every layered utility regardless of specificity — that silently
+ * ignored `font-mono` on any heading-scale element, e.g. MobileNav's panel
+ * links, which are nav controls sized with text-heading-h5.)
  */
-.text-heading-h1,
-.text-heading-h2,
-.text-heading-h3,
-.text-heading-h4,
-.text-heading-h5,
-.text-project-subtitle,
-.text-overline {
-  font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+@layer base {
+  .text-heading-h1,
+  .text-heading-h2,
+  .text-heading-h3,
+  .text-heading-h4,
+  .text-heading-h5,
+  .text-project-subtitle,
+  .text-overline {
+    font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  }
 }
 
 /* On-brand focus ring — a soft white outline reads clearly on the

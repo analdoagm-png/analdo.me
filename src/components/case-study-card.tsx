@@ -49,12 +49,18 @@ export function CaseStudyCard({
     <Link
       href={href}
       style={style}
-      className="group flex w-full flex-col gap-6 rounded-token-xl bg-dark-primary animate-fade-up transition-[scale,box-shadow] duration-200 ease-out active:scale-[0.99] md:p-2 md:shadow-[0_0_0_1px_oklch(1_0_0/0.08)] md:hover:shadow-[0_0_0_1px_oklch(1_0_0/0.13),0_8px_24px_oklch(0_0_0/0.35)]"
+      className="group flex w-full flex-col gap-6 rounded-none bg-dark-primary animate-fade-up transition-[scale,box-shadow] duration-200 ease-out active:scale-[0.99] md:p-2 md:shadow-[0_0_0_1px_oklch(1_0_0/0.08)] md:hover:shadow-[0_0_0_1px_oklch(1_0_0/0.13),0_8px_24px_oklch(0_0_0/0.35)]"
     >
       <div className="relative h-[220px] w-full overflow-hidden rounded-none outline outline-1 -outline-offset-1 outline-white/10 md:h-[240px] lg:h-[280px]">
+        {/*
+          Decorative: the link already contains the title and description, so
+          real alt text here would make the accessible name say the project
+          name three times. Same reasoning as CaseStudyNext's thumbnail.
+        */}
         <Image
           src={image}
-          alt={`${title} project thumbnail`}
+          alt=""
+          aria-hidden="true"
           fill
           priority={priority}
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"

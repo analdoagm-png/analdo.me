@@ -5,7 +5,7 @@ import { ToolIcon } from "@/components/tool-icon";
 import { ContactIcon } from "@/components/contact-icon";
 import type { Metadata } from "next";
 import { caseStudies } from "@/lib/case-studies";
-import { author } from "@/lib/site";
+import { contactLinks } from "@/lib/site";
 
 export const metadata: Metadata = {
   alternates: {
@@ -85,36 +85,19 @@ export default function Home() {
               </span>
             </p>
             <div className="flex flex-col gap-4 animate-fade-up [animation-delay:200ms] md:flex-row md:flex-wrap md:items-start md:gap-6">
-              <a
-                href={`mailto:${author.email}`}
-                target="_blank"
-                className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
-              >
-                <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
-                  <ContactIcon name="mail" />
-                </span>
-                Contact me
-              </a>
-              <a
-                href={author.linkedIn}
-                target="_blank"
-                className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
-              >
-                <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
-                  <ContactIcon name="linkedin" />
-                </span>
-                LinkedIn
-              </a>
-              <a
-                href={author.github}
-                target="_blank"
-                className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
-              >
-                <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
-                  <ContactIcon name="github" />
-                </span>
-                GitHub
-              </a>
+              {contactLinks.map(({ href, icon, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  className="inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+                >
+                  <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+                    <ContactIcon name={icon} />
+                  </span>
+                  {label}
+                </a>
+              ))}
             </div>
           </div>
         </section>
@@ -135,7 +118,11 @@ export default function Home() {
             {caseStudies.map((cs, index) => (
               <CaseStudyCard
                 key={cs.href}
-                {...cs}
+                href={cs.href}
+                image={cs.image}
+                title={cs.title}
+                description={cs.description}
+                chips={cs.chips}
                 priority={index === 0}
                 style={{ animationDelay: `${index * 70}ms` }}
               />

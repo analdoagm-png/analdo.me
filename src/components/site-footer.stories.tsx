@@ -18,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The footer centers its copyright and links on mobile, then changes to the portfolio's horizontal left/right layout from the tablet breakpoint onward.",
+          "One justify-between row at every breakpoint: copyright left, contact links right. Below md the links are icon-only, with their labels kept as sr-only and restored at md.",
       },
     },
   },

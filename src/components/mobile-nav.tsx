@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ContactIcon } from "@/components/contact-icon";
-import { author } from "@/lib/site";
+import { contactLinks } from "@/lib/site";
 
 /**
  * The collapsed pill's label names the page you're currently on, so it reads
@@ -60,6 +60,11 @@ function CloseIcon() {
  * and Escape-key interaction change what's on screen. `SiteHeader` (a server
  * component) renders this alongside its own desktop/tablet markup.
  *
+ * Every piece of text in here is a control, so the whole component sits in
+ * the mono voice — pill label, the two panel nav links, and the contact row.
+ * The panel links keep the Figma spec's 20/32 bold sizing; only the family
+ * moved, since the spec's display face (Space Grotesk) has been retired.
+ *
  * Both the pill and the panel take their geometry straight from Figma:
  * `rounded-token` (4px), a flat `dark-primary` fill, and depth from the same
  * `0 0 0 1px oklch(1 0 0 / 0.08)` ring `CaseStudyCard` rests at — no border
@@ -94,12 +99,6 @@ export function MobileNav() {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [isOpen]);
-
-  const contactLinks = [
-    { href: `mailto:${author.email}`, icon: "mail" as const, label: "Contact me" },
-    { href: author.linkedIn, icon: "linkedin" as const, label: "LinkedIn" },
-    { href: author.github, icon: "github" as const, label: "GitHub" },
-  ];
 
   return (
     <div className="md:hidden">
@@ -171,14 +170,14 @@ export function MobileNav() {
               <Link
                 href="/"
                 onClick={close}
-                className="w-full px-4 py-4 text-center text-heading-h5 font-bold leading-[1.6] text-white transition-colors duration-200 hover:text-white/70 active:text-white/50"
+                className="w-full px-4 py-4 text-center font-mono text-heading-h5 font-bold leading-[1.6] text-white transition-colors duration-200 hover:text-white/70 active:text-white/50"
               >
                 Home
               </Link>
               <Link
                 href="/about"
                 onClick={close}
-                className="w-full px-4 py-4 text-center text-heading-h5 font-bold leading-[1.6] text-white transition-colors duration-200 hover:text-white/70 active:text-white/50"
+                className="w-full px-4 py-4 text-center font-mono text-heading-h5 font-bold leading-[1.6] text-white transition-colors duration-200 hover:text-white/70 active:text-white/50"
               >
                 Resume
               </Link>
@@ -191,7 +190,7 @@ export function MobileNav() {
                   href={href}
                   target="_blank"
                   onClick={close}
-                  className="inline-flex items-center gap-2 text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+                  className="inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
                 >
                   <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
                     <ContactIcon name={icon} />

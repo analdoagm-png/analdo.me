@@ -3,7 +3,7 @@ export function CaseStudyPointsGrid({
   showNumbers = true,
   titleClassName = "text-heading-h5",
 }: {
-  items: { number: string; title: string; description: string }[];
+  items: { number?: string; title: string; description: string }[];
   showNumbers?: boolean;
   titleClassName?: string;
 }) {
@@ -11,11 +11,11 @@ export function CaseStudyPointsGrid({
     <div className="flex w-full flex-col items-start gap-12 md:flex-row">
       {items.map((item, index) => (
         <div
-          key={item.number}
+          key={item.title}
           className="flex w-full flex-col items-start gap-2 animate-fade-up md:flex-1 md:min-w-0"
           style={{ animationDelay: `${index * 80}ms` }}
         >
-          {showNumbers ? (
+          {showNumbers && item.number ? (
             <p className="text-body-h1 text-white" aria-hidden="true">
               {item.number}
             </p>

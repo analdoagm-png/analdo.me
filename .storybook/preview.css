@@ -1,3 +1,13 @@
+/*
+ * Storybook doesn't render the root layout, so the `next/font` variables the
+ * app relies on (`--font-noto-sans`, `--font-jetbrains-mono`) are never
+ * defined here — without this file every story would silently fall back to a
+ * system face. Load the same two families from Google Fonts and map them onto
+ * the variables `globals.css` reads through `--font-sans` / `--font-mono`.
+ */
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
 :root {
-  --font-inconsolata: ui-monospace, Menlo, Consolas, monospace;
+  --font-noto-sans: "Noto Sans";
+  --font-jetbrains-mono: "JetBrains Mono";
 }

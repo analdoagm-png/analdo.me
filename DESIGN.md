@@ -16,8 +16,9 @@ This document is the living design-system reference for `analdo.me`. Keep it upd
 - Font setup: `src/app/layout.tsx`
 - Homepage cards: `src/components/case-study-card.tsx`
 - Chips: `src/components/chip.tsx`
+- Case-study meta labels: `src/components/case-study-meta-label.tsx`
 - Editorial callouts: `src/components/case-study-callout.tsx`
-- Case study images and figures: `src/components/project-image.tsx`, `src/components/case-study-figure.tsx`
+- Case study images and figures: `src/components/project-image.tsx`, `src/components/case-study-figure.tsx`, `src/components/image-zoom.tsx`
 - Contact link icons: `src/components/contact-icon.tsx`
 
 ## Color Tokens
@@ -29,6 +30,12 @@ Defined in `src/app/globals.css` under `@theme inline`.
 | `--color-dark-primary` | `#121212` | Site background and card base |
 | `--color-stroke-dark` | `#282828` | Default borders and subtle surfaces |
 | `--color-gray-dark` | `#535353` | Elevated border/hover accents |
+| `--color-stroke-lift` | `#333333` | Hover state of a zoomable image frame's mat |
+
+Every framed image sits on `stroke-dark`, including the deck's slide imagery
+and its lightbox. The deck used to use two hardcoded greys of its own
+(`#1a1a1a`, `#181818`) that were in neither this table nor the token file —
+three near-identical darks for one job. Use the token.
 
 Common opacity usage:
 
@@ -47,22 +54,19 @@ metadata layer rather than a leftover default.
 
 | Token | Value | Usage |
 | --- | --- | --- |
-| `--radius-token` | `4px` | Chips only |
-| `--radius-token-lg` | `0px` | The deck's floating control cluster (`case-studies-deck.tsx`) — pinned at 0 to keep that cluster sharp, matching the deck's own sharp-corners language. Not actually unused; do not repurpose it for a new rounded surface, or the deck cluster rounds too |
-| `--radius-token-xl` | `0px` | Project cards and other large framed blocks |
+| `--radius-token` | `4px` | Chips, skip links, `MobileNav`'s pill and panel |
 
-`Chip` is the only component that uses `rounded-token`. Everything else that
-previously used `rounded-lg`/`rounded-xl`/`rounded-token-xl` now uses
-`rounded-none` explicitly (or inherits 0 automatically via the token, for
-anything still built on `rounded-token-xl`). Skip-links (`.skip-link`) keep
-their own `rounded-token` (4px) as a small, chip-adjacent control — not part
-of the card/image system this rule governs.
+There is exactly **one** radius token, and every sharp surface says so with
+`rounded-none` at the call site. Two zero-valued tokens
+(`--radius-token-lg`, `--radius-token-xl`) used to exist alongside it, which
+meant the site had three different ways to spell "no radius" — the deck
+cluster said it one way, cards another, everything else a third. They were
+removed; do not reintroduce a zero-valued token.
 
-`MobileNav`'s pill and expanded panel also use `rounded-token` (4px), per the
-Figma spec — so chips, skip-links, and the mobile nav chrome are the complete
-set of 4px surfaces, and there is no separate large-radius exception anywhere
-on the site. (An earlier revision of this component used a one-off
-`rounded-[16px]`; that was wrong and has been corrected.)
+Chips, skip links, and `MobileNav`'s pill and panel are the complete set of
+4px surfaces; there is no large-radius exception anywhere on the site. (An
+earlier revision of `MobileNav` used a one-off `rounded-[16px]`; that was
+wrong and has been corrected.)
 
 ## Elevation
 
@@ -97,53 +101,117 @@ on the image edge, not depth. The deck previously gave dark-UI-screenshot
 images a one-off `border border-white/10`; that's now covered by
 `DeckImage`'s own default outline, so the special case was removed.
 
+### Image Frames And Zoom
+
+File: `src/components/project-image.tsx`, `src/components/image-zoom.tsx`
+
+`ProjectImage` is the framed product-image box used across the case studies,
+and `CaseStudyFigure` is that same component plus a caption (as a real
+`<figure>`/`<figcaption>` — it used to rebuild the wrapper by hand, so every
+change to the image treatment had to be made twice).
+
+**The 24px mat.** The image sits inset 24px inside its frame, so the frame
+reads as a mount around the screenshot rather than a crop of it. That padding
+goes on the `<Image>` element, *not* on the wrapper — a `fill` image is
+absolutely positioned against the wrapper's **padding box**, so padding there
+does nothing at all. Padding on the replaced element does inset it, because
+`object-fit` resolves against its content box. The same technique is used in
+the zoom overlay. Keep the mat at 24px at every breakpoint; if it ever needs
+to shrink on mobile, change it in both places together.
+
+**Hover.** The frame's mat lifts one step, `stroke-dark` → `stroke-lift`, over
+`transition-colors duration-200`. That is the *entire* hover treatment: no
+scale on the frame, no zoom on the image. The image is the content and holds
+still; the mount around it is what acknowledges the pointer — which also
+keeps this distinct from `CaseStudyCard`, where the image itself zooms because
+the whole card is the link. There is no `active:` press state either; the
+lightbox opening is the feedback.
+
+The `group-hover` lives on the frame in `ProjectImage` and pairs with the
+`group` on `ImageZoom`'s trigger. A non-zoomable frame has no `group`
+ancestor, so the utility is simply inert rather than needing a conditional.
+
+**Click to expand.** `ImageZoom` wraps the frame and opens it in a lightbox on
+click. Deliberately **`md` and up only**: below that there is no room to
+expand into, so it renders the image untouched rather than a button that does
+nothing. `canZoom` starts `false` and is set from `matchMedia` after mount, so
+the server output is the non-interactive version and also the correct no-JS
+fallback; if the viewport crosses back under `md` while the overlay is open,
+the `matchMedia` listener closes it.
+
+`ImageZoom` is an intentional client leaf, the third on the site after
+`CaseStudiesDeck` and `MobileNav`. The framed image itself stays
+server-rendered and is passed in as `children`, so the component adds
+behaviour without moving markup to the client. Its motion, chrome and
+three-way dismissal (Close button, Escape, scrim) deliberately match the
+deck's lightbox and reuse the same `animate-lightbox-*` keyframes; it also
+returns focus to the image that opened it.
+
+Pass `zoomable={false}` for an image that is decorative or too small to
+benefit. `CaseStudyImagePair` is not zoomable and has no mat — it is a
+side-by-side pair with fixed heights and its own cropping behaviour.
+
 ## Typography
 
-Three-tier system, all via `next/font/google` in `src/app/layout.tsx`, each a
-variable font loaded with `subsets: ["latin"]`, `display: "swap"`, and
-explicit fallbacks (no `weight` array needed — arbitrary CSS font-weight
-values interpolate across each family's variable range, same as the previous
-single-font setup did):
+Two-family system, split by **function rather than by scale**. Both are
+variable Google fonts loaded via `next/font/google` in `src/app/layout.tsx`
+with `subsets: ["latin"]`, `display: "swap"`, and explicit fallbacks (no
+`weight` array — arbitrary CSS font-weight values interpolate across each
+family's variable range):
 
 | Role | Family | CSS variable | Fallback |
 | --- | --- | --- | --- |
-| Heading | Space Grotesk | `--font-space-grotesk` | `ui-sans-serif, system-ui, sans-serif` |
-| Body / links | Noto Sans | `--font-noto-sans` | `ui-sans-serif, system-ui, sans-serif` |
-| Labels / chips / captions / meta | JetBrains Mono | `--font-jetbrains-mono` | `ui-monospace, Menlo, Consolas, monospace` |
+| Everything you read | Noto Sans | `--font-noto-sans` | `ui-sans-serif, system-ui, sans-serif` |
+| Everything you operate or scan | JetBrains Mono | `--font-jetbrains-mono` | `ui-monospace, Menlo, Consolas, monospace` |
 
-This replaced an earlier single-family Inconsolata-everywhere setup. The
-three variables feed `@theme inline` in `globals.css` as `--font-heading`,
-`--font-sans` (Tailwind's body/default slot — Noto Sans is the site's base
-voice, applied to `body`), and `--font-mono` (Tailwind's built-in mono slot,
-available as the `font-mono` utility).
+This replaced a three-tier system whose display face was Space Grotesk (which
+itself replaced a single-family Inconsolata setup). Space Grotesk is retired:
+the heading tier is now Noto Sans, and the site's typographic personality
+comes from where mono appears, not from a third family.
 
-**Font-family is never baked into a shared size token** — `text-body-h3`, for
-example, is used for both genuine prose (card descriptions) and short labels
-(`Chip`, `CaseStudyYear`'s `YEAR` caption, About's date/location lines).
-Baking a family into that one size class would force both uses into the same
-voice. Instead:
+The two variables feed `@theme inline` in `globals.css` as `--font-sans`
+(Tailwind's body/default slot, applied to `body`) and `--font-mono`
+(Tailwind's built-in mono slot, available as the `font-mono` utility).
+`--font-heading` is kept as its own token even though it currently resolves
+to Noto Sans as well, so the heading tier states its family rather than
+inheriting it and a future display face is a one-line change.
 
-- Every heading-scale utility (`text-heading-h1` through `h5`,
-  `text-project-subtitle`, and `text-overline`) gets `font-family:
-  var(--font-heading)` directly in its own plain CSS rule in `globals.css`
-  (unlayered, so it takes precedence over Tailwind's layered utilities for
-  the same class names without conflicting — the two rule sets target
-  different properties). `text-overline` is included deliberately: it's the
-  same element that upgrades to `text-project-subtitle` at `md` in
-  `CaseStudyProjectHeader`, so both must share a family or that one piece of
-  copy would visibly swap typefaces at the breakpoint.
-- Everything else defaults to Noto Sans (the `body` element's font-family),
-  which is correct for prose and for interactive text links (`SiteHeader`'s
-  "Home"/"Resume", `Contact me`/`LinkedIn`/`GitHub`, deck buttons) — the
-  working rule is **links stay body voice, static labels get mono**.
-  Genuinely mono contexts opt in explicitly with the `font-mono` utility at
-  the call site: `Chip`, `CaseStudyYear`'s `YEAR` caption,
-  `CaseStudyProjectHeader`'s `ROLE`/`TOOLS` captions,
-  `CaseStudyDecisionBlock`'s label, `CaseStudyNext`'s "Next case study"
-  eyebrow, `CaseStudyFigure`'s caption, About's job-date/location lines and
-  `DESIGN`/`FRONT-END & TOOLS` group labels, the two case-study closing
-  pull-quote attribution lines, and the deck's `SlideEyebrow`, platform-view
-  captions, HUD slide counter, and lightbox caption.
+### The rule
+
+**Prose is Noto Sans. Interface is JetBrains Mono.** The split is about what
+a piece of text *does*, not how big it is:
+
+| Noto Sans | JetBrains Mono |
+| --- | --- |
+| Every heading, `h1` through `h5` | `SiteHeader`'s Home / Resume nav links |
+| Body copy, intros, card descriptions | `MobileNav`'s pill label, panel nav links, and contact links |
+| Case-study prose and pull-quotes | The hero and `SiteFooter` contact rows, plus the footer copyright |
+| Inline links inside running text | Chips, `CaseStudyMetaLabel`, and the Role/Tools/Year **values** |
+| `SiteHeader`'s name/role lockup | Figure captions, `CaseStudyNext`'s eyebrow, About's date/location and group labels |
+| About's stat figures (they're display headings) | The deck's control cluster, slide counter, platform captions, and lightbox chrome |
+
+Two deliberate exceptions on the Noto Sans side, both worth keeping:
+
+- **The name/role lockup** in `SiteHeader` is a link, but it reads as
+  identity, not as a control — and a monospaced personal name reads like a
+  filename.
+- **Inline links inside prose** (About's Forty5Park / GoRight mentions) stay
+  in the body voice. Swapping families mid-sentence breaks the line far more
+  than it signals interactivity. Mono is for links that stand alone as
+  controls.
+
+Family is never baked into a shared size token. `text-body-h3`, for example,
+serves both genuine prose and interface labels, so every mono context opts in
+explicitly with the `font-mono` utility at the call site.
+
+The heading-scale utilities (`text-heading-h1` through `h5`,
+`text-project-subtitle`, `text-overline`) get `font-family: var(--font-heading)`
+from a rule in `globals.css` that lives **in `@layer base`**. That placement
+matters: the rule used to be unlayered, which beat every layered utility
+regardless of specificity and silently ignored `font-mono` on any
+heading-scale element — including `MobileNav`'s panel links, which are nav
+controls sized with `text-heading-h5`. In `@layer base` the utilities layer
+wins, so a call-site family override works.
 
 Global rendering:
 
@@ -163,11 +231,12 @@ Global rendering:
 | `text-heading-h5` | `1.25rem` | `1.4` | `600` | Heading | Small headings |
 | `text-body-h1` | `1.125rem` | `1.65` | `400` | Body (default) | Large body copy |
 | `text-body-h2` | `1rem` | `1.6` | `400` | Body (default) | Default body copy |
-| `text-body-h3` | `0.875rem` | `1.5` | `500` | Body by default, `font-mono` where used as a label | Labels, chips, captions, and some small prose — see above |
+| `text-body-h3` | `0.875rem` | `1.5` | `500` | Body by default, `font-mono` in every interface context | Labels, chips, captions, and some small prose — see above |
 
-"Font" above is the token's *default* — `text-body-h3` is the one size that
-genuinely serves both voices depending on where it's used, per the rule
-above.
+"Font" above is the token's *default*. "Heading" and "Body (default)" both
+resolve to Noto Sans today; the distinction is which token they read from.
+`text-body-h3` is the one size that genuinely serves both voices depending on
+where it's used, per the rule above.
 
 Rules:
 
@@ -197,6 +266,8 @@ Standard visual QA widths:
 
 `SiteHeader` is the single shared header for every route (homepage, `/about`, and all five case studies — it replaced the old `CaseStudyHeader`, which only the case-study pages used and which showed a "Back to portfolio" link instead of a real nav). Its own bar — the name/role lockup linking to `/`, plus "Home" and "Resume" nav links, wrapped in `<nav aria-label="Primary">` — is now **`md:` and up only** (`hidden md:block` on the `<header>`). Because the lockup is two-tone (`text-white` name, `text-white/70` role), a parent text-colour change would be overridden by the child spans, so this one link dims with `transition-opacity` + `hover:opacity-60` / `active:opacity-40` instead of the standard colour dim. Keep the colour-based rule for all single-tone text links, including "Home" and "Resume".
 
+The `Home` and `Resume` links are `font-mono` — they're controls, and the type system splits by function. The lockup stays in the body voice even though it's a link too: it reads as identity, and a monospaced personal name reads like a filename.
+
 `Home` deliberately duplicates the lockup's destination (`/`) rather than replacing it — the lockup reads as branding, "Home" as an explicit nav item, a common and intentional pairing rather than redundancy. On the homepage itself, clicking "Home" is a harmless no-op to the same page.
 
 Below `md`, `SiteHeader` renders nothing of its own — `MobileNav` (see below) takes over navigation entirely as a fixed pill + expandable menu. The skip-link is the one thing `SiteHeader` still renders unconditionally at every breakpoint, ahead of both the desktop `<header>` and `MobileNav`, since it's a keyboard/screen-reader affordance independent of which nav chrome is visible.
@@ -212,20 +283,47 @@ The mobile (`<md`) counterpart to `SiteHeader`'s bar: a small fixed pill in the 
 - **Collapsed pill** (106×48, symmetric 16px insets): `rounded-token bg-dark-primary` with depth from `shadow-[0_0_0_1px_oklch(1_0_0/0.08)]` — the same resting ring `CaseStudyCard` uses. Deliberately **not** the deck cluster's `border border-white/15` + ambient-shadow + `backdrop-blur` formula: this is a resting surface on the flat canvas, not an overlay floating above slide imagery, so it takes the card's ring instead.
 - **Pill label**: names the page you're on — "Home" on `/`, "Resume" on `/about` (`pillLabels` + `usePathname`). Case-study routes have no short label that fits the pill, so they fall back to "Home", where the label doubles as the way back out. Styled as `font-mono text-body-h3 text-white/72` — the same treatment as `Chip` text — and brightens to full white on hover (the dimmed-rest convention the deck's "Choose a case study" uses), rather than the standard dim-on-hover for full-white links.
 - **Pill hit areas**: the pill itself carries **no padding**; the label link and the toggle each own their share (`pr-2 pl-4` and `py-3 pr-4 pl-2`), with `items-stretch` giving the shorter label the toggle's full 48px height. Every pixel of the pill therefore belongs to one of the two controls — no dead space around an active link — while the child paddings still sum to the spec's symmetric 16px insets and 16px label-to-glyph gap.
-- **Expanded panel** (358 wide, `fixed inset-x-4 top-4`): same `rounded-token`, `bg-dark-primary` and ring as the pill; `flex flex-col items-end gap-4` with `pt-3 pr-4 pb-3 pl-3`. Children: a 24px `Close` (×) button, then `Home`/`Resume` as 330×64 centered rows (`text-heading-h5 font-bold leading-[1.6]` — the spec's Space Grotesk 700 at 20/32, so the token's own 600/1.4 is overridden), then a `border-t border-white/[0.08]` contact group at `py-8 gap-6` reusing `ContactIcon` exactly as the hero and footer do.
+- **Expanded panel** (358 wide, `fixed inset-x-4 top-4`): same `rounded-token`, `bg-dark-primary` and ring as the pill; `flex flex-col items-end gap-4` with `pt-3 pr-4 pb-3 pl-3`. Children: a 24px `Close` (×) button, then `Home`/`Resume` as 330×64 centered rows (`font-mono text-heading-h5 font-bold leading-[1.6]` — the spec's 700 at 20/32, so the token's own 600/1.4 is overridden; the family is mono because these are nav controls, not the spec's now-retired display face), then a `border-t border-white/[0.08]` contact group at `py-8 gap-6` reusing `ContactIcon` exactly as the hero and footer do.
 - **Icons**: the four-bar menu mark and the filled × are the **exact path data exported from Figma**, with `fill="white"` swapped for `currentColor`. Do not re-trace them by hand — re-export if the design changes. (Note the menu glyph is four bars, not the usual three.)
 - **Dismissal**: the × button, Escape, or tapping the `bg-black/50` scrim — matching the deck lightbox's three-way-dismiss convention. Opening the menu locks `document.body` scroll (restored on close) since, unlike the deck's fixed-viewport lightbox, the underlying page here is normally scrollable.
 - **Motion**: the panel *grows out of the pill's own corner* rather than cross-fading in as an unrelated surface. `.animate-menu-panel` sets `transform-origin: top right` and scales `0.92 → 1` over 300ms, with opacity fully in by 40% of the duration; `.animate-menu-panel-exit` reverses it in 150ms so the close reads as the panel collapsing back into the pill. `.menu-stagger` settles the three panel groups in behind that growth (40/100/160ms), and is applied on enter only so nothing replays while closing. Scrim uses `.animate-menu-scrim` (200ms) / `-exit` (150ms). All share the site's `cubic-bezier(0.16, 1, 0.3, 1)`.
 - **The pill stays mounted while the menu is open** rather than unmounting. Because the panel shares its corner, radius, fill and ring and is opaque, it covers the pill exactly — which is what makes the growth/collapse read continuously instead of flashing scrim through that corner mid-animation. The covered pill carries `inert` so its links stay out of the tab order and unclickable meanwhile.
 - Both the toggle and close buttons add `active:scale-[0.96]` alongside their color transition, matching the deck's button press-feedback convention. The 24px close button expands its hit area to 40px with `before:absolute before:-inset-2` so the layout box stays exactly 24px and the panel's 16px gaps are preserved.
 
+### CaseStudyMetaLabel
+
+File: `src/components/case-study-meta-label.tsx`
+
+The one label style for case-study meta — `ROLE`, `TOOLS`, `YEAR` — shared by
+`CaseStudyProjectHeader` and `CaseStudyYear` so the editorial and showcase
+pages can't drift apart:
+
+```tsx
+font-mono text-body-h3 tracking-[0.05em] text-white/70 uppercase
+```
+
+Plain uppercase mono, **no pill**. These were `Chip size="sm"` until the
+two-family type system landed; a bordered pill reads as a tag carrying a
+value of its own, when these labels only name the line underneath. Same
+treatment as About's `DESIGN` / `FRONT-END & TOOLS` group labels, so the two
+places on the site that label a group of facts now match.
+
+The value beneath each label is `font-mono text-body-h2 text-white`, and the
+label-to-value gap is `gap-2`. Both label and value are mono because the
+whole meta row is scannable data, not prose — see the Typography rule above.
+
 ### CaseStudyYear
 
 File: `src/components/case-study-year.tsx`
 
-A `YEAR` label at `text-body-h3 text-white/70` above the year at `text-body-h2 text-white`, reusing the `ROLE`/`TOOLS` grammar. Renders a real `<time dateTime>` element so the date is machine readable.
+A `CaseStudyMetaLabel` reading `Year` above the year at `font-mono
+text-body-h2 text-white`, reusing the `ROLE`/`TOOLS` grammar. Renders a real
+`<time dateTime>` element so the date is machine readable.
 
-`CaseStudyProjectHeader` places it as the third column of its meta row (ROLE / TOOLS / YEAR). The three showcase pages, which have no meta row, place it directly under their `h1`. Every case study shows a year — keep it that way when adding new work.
+`CaseStudyProjectHeader` places it as the third column of its meta row (ROLE /
+TOOLS / YEAR). The three showcase pages, which have no meta row, place it
+directly under their `h1` — which is how the label change reaches those pages
+too. Every case study shows a year — keep it that way when adding new work.
 
 ### CaseStudyNext
 
@@ -248,6 +346,8 @@ The shared `SiteFooter` is a single `justify-between` row at **every** breakpoin
 The three contact links (`Contact me`, `LinkedIn`, `GitHub`) each pair a 16px decorative `ContactIcon` with their label in one `inline-flex items-center gap-2` item — the same icon component and pattern used by the homepage hero's contact row. This replaced an earlier plain `/ ` text prefix. Every `ContactIcon` draws with `currentColor` (unlike `ToolIcon`'s fixed brand colors) specifically so the icon dims in step with the link text on hover/active instead of staying a flat color while the text around it changes.
 
 **Below `md` those links are icon-only** — 24×24 boxes around the 16px glyph, `gap-4` apart. The visible label is not removed but hidden with `sr-only`, then restored by `md:not-sr-only`; keep it that way rather than switching to `aria-label`, so each link keeps its accessible name and the markup stays one element across breakpoints instead of two conditional branches. The 24px box reproduces the design's spacing exactly, so the touch target is widened to 40px with `before:absolute before:-inset-2` (no layout effect) and dropped again at `md` via `md:before:content-none`, where the visible labels already make the target large enough. 40px rather than a full 44px is deliberate: the design's 16px gaps put adjacent centers 40px apart, so anything larger would make neighbouring hit areas overlap.
+
+Both the copyright line and the three links are `font-mono`: the links are controls and the copyright is scannable meta text, so the whole row reads in one register. See the Typography rule above.
 
 Vertical padding is `py-6` (24px top/bottom) at every breakpoint — deliberately not scaled up at `lg`, so the footer's height stays identical between tablet and desktop. Only horizontal padding follows the standard `px-6`/`md:px-10`/`lg:px-16` scale.
 
@@ -280,7 +380,7 @@ The homepage's tool sentence intentionally does not use `Chip` — see Homepage 
 **Sizes:** `Chip` takes a `size` prop, `"md"` (default) or `"sm"`. Both share the same border/fill/font/color; only padding (and the icon slot) scale down — `text-body-h3` never shrinks further, since it's already the site's 14px minimum readable size.
 
 - `md` — homepage `CaseStudyCard` metadata tags (`gap-1.5 px-3 py-1.5`). This is the size shown in the example above.
-- `sm` — the standard label chip for editorial case studies (`gap-1 px-2 py-1`): `CaseStudyDecisionBlock`'s per-block label (`Decision`, `Constraint`, …), and `CaseStudyProjectHeader`'s `Role`/`Tools` labels plus `CaseStudyYear`'s `Year` label (all three sit in the same meta row, so they need to match). This replaced an earlier inconsistency — decision labels were plain white text, Role/Tools/Year were uppercase-tracked and dimmed — with one shared chip treatment. Because `CaseStudyYear` is shared with the three showcase pages, they picked up the same `sm` chip too; that's intentional, not scope creep — the whole point was one standard label style instead of two.
+- `sm` — `CaseStudyDecisionBlock`'s per-block label (`Decision`, `Constraint`, …), and nothing else (`gap-1 px-2 py-1`). `CaseStudyProjectHeader`'s `Role`/`Tools` and `CaseStudyYear`'s `Year` labels used this size too until they moved to `CaseStudyMetaLabel` — see below. The dividing line is what the label *is*: a decision label is a category the block belongs to, so it earns a pill; Role/Tools/Year only name the line beneath them, and a pill there reads as a tag with a value of its own.
 
 ### CaseStudyCard
 
@@ -312,6 +412,7 @@ The presentation route is a focused dark, full-viewport experience at `/case-stu
 - Slides use real case-study imagery, large editorial type, and sparse borders rather than dashboards or dense card layouts.
 - Controls support buttons plus Left/Right Arrow, Page Up/Page Down, Home, and End keys. The first and final slide return to the chooser through their controls.
 - There is no persistent header or footer bar. All chrome for an active deck is consolidated into two floating elements so slide content can use the full viewport: a 2px progress bar fixed to the top edge (`bg-white/10` track, `bg-white` fill sized to `(slideIndex + 1) / slideKinds.length`, animated with `transition-[width] duration-300`), and a single control cluster fixed to the bottom-right corner (`bottom-6 right-6`, scaling to `lg:bottom-16 lg:right-16` with the standard responsive padding steps) holding the slide counter, "Choose a case study", the conditional "View full case study" link, and Previous/Next. Neither renders on the chooser screen — there is nothing to show progress on or navigate between until a project is selected. The cluster pairs its `border border-white/15` with an ambient `shadow-[0_8px_24px_oklch(0_0_0/0.35)]`, since it's a floating overlay sitting on top of varying slide imagery rather than a resting card — the border keeps a crisp legible edge and the shadow gives it the lift a border alone can't.
+- The control cluster carries `font-mono` on its wrapper, so the counter, `Choose a case study`, `View full case study`, and `Previous`/`Next` all inherit it — the cluster is nothing but controls. The lightbox's `Close` button sets it directly.
 - Every button in the control cluster (`Choose a case study`, `Previous`/`Choose`, `Next`/`Choose another`) and the lightbox's `Close` button add `active:scale-[0.96]` alongside their existing color transition, so the deck's primary, repeatedly-clicked controls get tactile press feedback and not just a color swap.
 - Process and platform visuals expand into a full-viewport lightbox. The image button must retain descriptive alternative text, the visible caption names the view, and Escape, the close button, or the scrim close the lightbox. Closing plays a short (150ms) reverse of the open animation — the scrim fades out and the media scales back down to `0.97` — instead of vanishing instantly; the media stays mounted for that duration (an `isMediaClosing` flag swaps in the exit animation classes, then the actual unmount follows on a matching timeout) so the exit is never a harder cut than the entrance.
 - Additional platform-view slides follow the main platform slide. They show only enough views to orient the audience; larger examination belongs in the lightbox. Each thumbnail carries a visible `text-body-h3 text-white/70` caption naming the view below it, in addition to the lightbox label, so the grid reads without requiring a click.
@@ -423,7 +524,7 @@ Each tool name is a decorative `ToolIcon` plus its label in one `inline-flex` it
 
 The intro paragraph carries `text-balance` so mobile's line break lands evenly instead of stranding a short trailing word like "with" alone on its own line.
 
-Below the intro, the `Contact me` / `LinkedIn` / `GitHub` row follows the same icon-plus-label idiom as the tool sentence: a 16px decorative `ContactIcon` (`src/components/contact-icon.tsx`) inside an `aria-hidden` wrapper, paired with the visible label in one `inline-flex items-center gap-2` link. This replaced a plain `/ ` text prefix on each link. `ContactIcon` differs from `ToolIcon` in one deliberate way — every icon draws with `fill`/`stroke="currentColor"` instead of a fixed brand color, so the icon dims together with the link text on hover/active rather than sitting at a flat brightness while the text around it changes tone. `SiteFooter`'s matching contact row uses the same component and pattern; see its own section.
+Below the intro, the `Contact me` / `LinkedIn` / `GitHub` row follows the same icon-plus-label idiom as the tool sentence: a 16px decorative `ContactIcon` (`src/components/contact-icon.tsx`) inside an `aria-hidden` wrapper, paired with the visible label in one `inline-flex items-center gap-2` link. This replaced a plain `/ ` text prefix on each link. `ContactIcon` differs from `ToolIcon` in one deliberate way — every icon draws with `fill`/`stroke="currentColor"` instead of a fixed brand color, so the icon dims together with the link text on hover/active rather than sitting at a flat brightness while the text around it changes tone. `SiteFooter`'s matching contact row uses the same component and pattern; see its own section. Both rows are `font-mono` — they're standalone controls, unlike the tool sentence above them, which is prose and stays in the body voice. That contrast between the two adjacent rows is the clearest demonstration of the type rule on the site.
 
 Below `md`, this row is a vertical stack (`flex flex-col gap-4`) rather than the wrapping horizontal row it is at `md` and up (`md:flex-row md:flex-wrap md:items-start md:gap-6`) — a deliberate mobile-only layout tweak, not a universal change to the pattern.
 

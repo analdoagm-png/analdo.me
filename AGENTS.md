@@ -15,7 +15,7 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 - Next.js 16 App Router, TypeScript, Tailwind CSS v4.
 - All pages are Server Components. Do not add client-side state, forms, data fetching, or scroll observers without a real architecture reason.
 - Use `next/image` for project images from `public/images/`.
-- Use `next/font` from the root layout for fonts. This project uses a three-tier system, each loaded as a variable Google font with `display: "swap"` and explicit fallbacks, applied sitewide: Space Grotesk (`--font-space-grotesk`) for heading-scale text, Noto Sans (`--font-noto-sans`) as the body/default voice, and JetBrains Mono (`--font-jetbrains-mono`) for labels/chips/captions/meta text. See DESIGN.md's Typography section for exactly which tokens and components use which.
+- Use `next/font` from the root layout for fonts. This project uses a **two-family system split by function, not by scale**: Noto Sans (`--font-noto-sans`) is everything you read, JetBrains Mono (`--font-jetbrains-mono`) is everything you operate or scan. Both are variable Google fonts with `display: "swap"` and explicit fallbacks. Space Grotesk was retired when this landed — the heading tier is Noto Sans now. See DESIGN.md's Typography section for the full table, including the two deliberate Noto Sans exceptions (`SiteHeader`'s identity lockup, and inline links inside prose).
 
 ## Structure
 
@@ -23,7 +23,7 @@ Keep this file and `DESIGN.md` updated as the project changes. `AGENTS.md` is th
 - `src/app/about/page.tsx` — resume-style About page: hero, credentials strip, experience list, and skills chips built from the site owner's actual résumé content. Linked from `SiteHeader`'s "Resume" link, indexed, and included in the sitemap.
 - `src/app/case-studies-deck/page.tsx` — presentation route with an initial case-study chooser and interactive GoRight and Arrowhead Transit slide sequences.
 - `src/app/case-studies/*/page.tsx` — five case study pages: Forty5Park, Uber Suite, Github's Security Findings, GoRight, Arrowhead Transit.
-- `src/components/` — shared, flat component files. `case-studies-deck.tsx` and `mobile-nav.tsx` are intentional client leaves — the deck because keyboard and button controls change the active slide, `MobileNav` because it toggles a fixed pill/expandable menu and locks body scroll while open. `SiteHeader` itself stays a server component and renders `MobileNav` as a child. Avoid nested component folders unless the project structure changes substantially.
+- `src/components/` — shared, flat component files. `case-studies-deck.tsx`, `mobile-nav.tsx` and `image-zoom.tsx` are intentional client leaves — the deck because keyboard and button controls change the active slide, `MobileNav` because it toggles a fixed pill/expandable menu and locks body scroll while open, `ImageZoom` because it opens a lightbox on click (at `md` and up only) and closes on Escape. `SiteHeader` itself stays a server component and renders `MobileNav` as a child. Avoid nested component folders unless the project structure changes substantially.
 - `src/lib/site.ts` — canonical site URL, site name, shared description, author entity, and the `expertise` list used by `Person` schema.
 - `src/lib/case-studies.ts` — the single source of truth for the five case studies plus the `caseStudyMetadata()` helper. The homepage grid and `app/sitemap.ts` both read this array, so a project cannot appear on the homepage while missing from the sitemap.
 - `src/app/robots.ts` and `src/app/sitemap.ts` — Next.js metadata routes that generate `/robots.txt` and `/sitemap.xml`.
@@ -41,6 +41,8 @@ Use the three-tier breakpoint system that matches the Figma frames where availab
 - Desktop `lg`, 1024px+: 64px page padding (`lg:px-16`).
 
 When Figma provides desktop, tablet, and mobile frames, inspect each independently. Do not assume a desktop frame scales uniformly.
+
+All seven routes now use the three tiers. The three showcase case studies had drifted to `px-6 md:px-16` — 64px gutters from 768px up, with no `lg` step — which made them 24px narrower than the rest of the site on a tablet. Check this when adding a page.
 
 Shared components may expose override props such as `aspectClassName`, `roundedClassName`, `mdGapClassName`, and `maxWidthClassName` because individual case studies deviate by breakpoint. Re-check the target page before generalizing values.
 
@@ -62,7 +64,7 @@ Use `DESIGN.md` as the source of truth for:
 Current high-level design choices:
 
 - Dark base: `dark-primary` background, `stroke-dark` borders, `gray-dark` low-emphasis strokes.
-- Three-tier variable font system via `next/font`: Space Grotesk (headings), Noto Sans (body/links), JetBrains Mono (labels/chips/captions/meta).
+- Two-family variable font system via `next/font`: Noto Sans (headings, body, prose) and JetBrains Mono (nav, standalone links, chips, meta labels and values, counters, deck controls).
 - Sharp corners everywhere except chips: chips keep a 4px `rounded-token` radius; every card, image, and callout is `rounded-none`. See `DESIGN.md`'s Radius Tokens section for the full rule.
 - Fluid display type for large headings; readable minimum text size is 14px.
 - Body copy should not use very light weights. Use 400 for body text and 500 for small labels.
@@ -104,6 +106,8 @@ Mobile homepage also runs the case-study cards **full-bleed** (no section paddin
 - Case study pages must build metadata through `caseStudyMetadata()` rather than hand-writing an `openGraph` block. Next.js replaces `openGraph` wholesale instead of deep-merging with the layout, which is why the helper repeats `siteName` and `locale`. The helper throws at build time for an unregistered `href`.
 - The same wholesale-replace rule applies to any route without a metadata helper: if a page defines `title`/`description` but omits `openGraph`/`twitter` entirely, it inherits the root layout's `openGraph`/`twitter` object verbatim — including the layout's `url`, so shared links point at `/`. `/about` shipped this way and had to be fixed with an explicit override. Any new standalone route (not a case study) needs the same treatment: set `openGraph.title`/`description`/`url` and `twitter.title`/`description` by hand, resolving the title through `titleTemplate.replace("%s", title)`. The generated `opengraph-image` file convention still applies automatically — no need to set `images`.
 - The generated `opengraph-image.tsx` renders through satori, which supports flexbox only. Every container with more than one child needs an explicit `display: "flex"`.
+- That card's headline is `shareHeadline` (`src/lib/site.ts`), written for the card and kept under ~60 characters. It is deliberately **not** `siteDescription`: the meta description runs 150–160 characters for search results, and reusing it here wrapped to six lines, overflowed the 630px canvas mid-word, and rendered on top of the domain line. Anything put in that slot needs to fit two lines at display size.
+- `/case-studies-deck` restates `openGraph`/`twitter` for the same reason `/about` does. Being `noindex` does not exempt a route from this: an inherited `url: "/"` makes a pasted deck link preview as the homepage, and sharing that link is the route's entire purpose.
 - Case-study share cards intentionally use each project's real cover image; only the site-wide card is generated type.
 - Titles use the root layout's `title.template` (`titleTemplate` in `src/lib/site.ts`). Child routes therefore pass only the descriptive part and must **not** repeat "Analdo Gomez" — doing so renders the name twice. Keep each resolved title inside 60 characters.
 - The template applies to `title` but not to `openGraph.title`, so `caseStudyMetadata()` resolves it manually with `titleTemplate.replace("%s", title)`. Do not hardcode the suffix.
@@ -114,7 +118,7 @@ Mobile homepage also runs the case-study cards **full-bleed** (no section paddin
 - Homepage card titles are `h3`, so `page.tsx` carries an `sr-only` `h2` ("Selected work") to keep the outline from jumping `h1` → `h3`. If a visible section heading is ever added, remove the `sr-only` one rather than having both.
 - Same pattern on `/about`: `CaseStudyPointsGrid` renders `h3` item titles, which on case-study pages always sit below a visible `h2`. About has no section heading above its stats block, so it carries its own `sr-only` `h2` ("Highlights") for the same reason.
 - `siteDescription` and `expertise` (`src/lib/site.ts`) are kept in sync with the About page's bio by hand — there is no shared source. About is the more detailed, authoritative account (specific years, named employers), so when the two drift, update `site.ts` to match About rather than the reverse.
-- Each case study carries its ship year in `caseStudies` (`year`). It drives the visible `CaseStudyYear` block, `article:published_time`, and `datePublished` in structured data. Year-only precision is deliberate — do not invent a month or day.
+- Each case study carries its ship year in `caseStudies` (`year`). It drives the visible `CaseStudyYear` block, `article:published_time`, and `datePublished` in structured data. Year-only precision is deliberate — do not invent a month or day. `"2022"` is valid reduced-precision ISO 8601, though some consumers expect a full date and may drop the field; that trade is accepted rather than fabricating a January placeholder.
 - `CaseStudyJsonLd` emits per-case-study `CreativeWork` schema whose `author` and `isPartOf` reference the `@id`s from the root layout's graph, so one Person and one WebSite resolve across the page. `CreativeWork` over `Article` on purpose: these are portfolio pieces, and Article rich results would not apply.
 - Outbound identity links live in `profiles` (`src/lib/site.ts`) and feed `Person.sameAs`. Add a real visible link alongside any new entry — an actual link is a stronger entity signal than `sameAs` alone.
 - `author.email`, `author.linkedIn`, and `author.github` are the single source for contact links. Do not re-hardcode these URLs in components.
@@ -129,7 +133,7 @@ Mobile homepage also runs the case-study cards **full-bleed** (no section paddin
 - `MobileNav`'s pill has no padding of its own — the label link and menu toggle each own their share so the whole pill is active area, giving the toggle a full 48×48 target and the label the pill's full height. Keep it that way: an active link with dead padding around it is the thing this structure exists to avoid.
 - Global focus is handled in `globals.css` for `a:focus-visible` and `button:focus-visible`. Do not add per-element focus overrides unless a specific component needs a different visible treatment.
 - Global reduced-motion handling in `globals.css` neutralizes transitions and animations under `prefers-reduced-motion: reduce`.
-- `ProjectImage` requires real `alt` text. `CaseStudyFigure` may fall back to its caption when the visible caption already describes the image.
+- `ProjectImage` requires real `alt` text. `CaseStudyFigure` may fall back to its caption when the visible caption already describes the image. Images *inside* a titled link are the opposite case: `CaseStudyCard` and `CaseStudyNext` both use `alt=""` with `aria-hidden`, since the link already contains the title and description and real alt text there makes the accessible name repeat the project name three times.
 - Do not claim accessibility compliance from screenshots alone. For visual QA, check layout, focus affordance, text contrast risk, text reflow, and reduced-motion behavior where relevant.
 
 ## Interaction And Motion
@@ -138,6 +142,7 @@ Mobile homepage also runs the case-study cards **full-bleed** (no section paddin
 - Case-study card images zoom to `scale-105` on hover with `duration-500 ease-out`.
 - `CaseStudyCard` gets its hover depth from `box-shadow` alone (no border — see DESIGN.md's Elevation section), strengthening from a 1px ring to a ring plus ambient lift on hover, and presses with `active:scale-[0.99]`.
 - Card arrows slide in on hover — hidden at rest, sliding in from `-translate-x-1` — an idiom `CaseStudyNext` reuses for its own onward-link arrow. Both transition exactly `[opacity,translate]`, never `transition-all`.
+- Case-study images sit on a 24px mat inside their frame and expand into a lightbox on click at `md` and up. Their only hover treatment is the mat lifting `stroke-dark` → `stroke-lift`; the image itself does not move, unlike `CaseStudyCard`'s. See DESIGN.md's Image Frames And Zoom section, especially the note about why the padding goes on the image and not the wrapper.
 - Every product image (`CaseStudyCard`, `ProjectImage`, `CaseStudyFigure`, `CaseStudyImagePair`, `CaseStudyNext`'s thumbnail, the deck's `DeckImage`) carries a sitewide `outline outline-1 -outline-offset-1 outline-white/10` on its wrapper for consistent depth — see DESIGN.md's Image Outlines section. `outline` over `border` deliberately, since it never adds layout width.
 - `.animate-fade-up` is a zero-JS page-load animation: 12px translateY + opacity, 700ms `cubic-bezier(0.16, 1, 0.3, 1)`, `both` fill mode.
 - Use small server-rendered stagger delays for side-by-side mapped items only. Sequential content blocks do not need individual staggering.
@@ -154,6 +159,8 @@ Simple/showcase case studies (Forty5Park, Uber Suite, Github's Security Findings
 Editorial case studies such as GoRight and Arrowhead additionally use:
 
 - `CaseStudyProjectHeader`
+- `CaseStudyMetaLabel`
+- `ImageZoom` (via `ProjectImage`/`CaseStudyFigure`)
 - `CaseStudySectionHeading`
 - `CaseStudyPointsGrid`
 - `CaseStudyCallout`
@@ -164,7 +171,7 @@ Editorial case studies such as GoRight and Arrowhead additionally use:
 
 For callouts/results boxes, align content left and let text fill the available width. This was fixed on GoRight and Arrowhead after browser annotations showed centered or capped text felt misplaced.
 
-The standard label for editorial meta text is a small `Chip` (`size="sm"`), not a plain mono `<p>`: `CaseStudyDecisionBlock`'s per-block label and `CaseStudyProjectHeader`'s `Role`/`Tools` labels (plus `CaseStudyYear`'s `Year` label, shared with the showcase pages) all use it, so every small caption-style label across a case study now shares one chip treatment instead of two different ad hoc ones. `Chip`'s default (`size="md"`) stays reserved for the homepage `CaseStudyCard` tags — see DESIGN.md's Chip section for the full size table.
+Case-study meta labels (`ROLE` / `TOOLS` / `YEAR`) use the shared `CaseStudyMetaLabel` — plain uppercase mono, no pill — on both the editorial and showcase pages, since `CaseStudyYear` is shared by both. `Chip size="sm"` is now `CaseStudyDecisionBlock`'s label only: a decision label is a category the block belongs to, so it earns a pill, while Role/Tools/Year only name the line beneath them. `Chip`'s default (`size="md"`) stays reserved for the homepage `CaseStudyCard` tags and About's skills chips — see DESIGN.md's Chip section for the full size table.
 
 ## Verification
 

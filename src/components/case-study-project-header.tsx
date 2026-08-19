@@ -1,5 +1,5 @@
 import { CaseStudyYear } from "@/components/case-study-year";
-import { Chip } from "@/components/chip";
+import { CaseStudyMetaLabel } from "@/components/case-study-meta-label";
 
 export function CaseStudyProjectHeader({
   title,
@@ -28,13 +28,13 @@ export function CaseStudyProjectHeader({
       </div>
 
       <div className="flex w-full flex-col items-start gap-4 md:flex-row md:gap-12">
-        <div className="flex flex-col items-start gap-1.5">
-          <Chip label="Role" size="sm" />
-          <p className="text-body-h2 text-white">{role}</p>
+        <div className="flex flex-col items-start gap-2">
+          <CaseStudyMetaLabel>Role</CaseStudyMetaLabel>
+          <p className="font-mono text-body-h2 text-white">{role}</p>
         </div>
-        <div className="flex flex-col items-start gap-1.5">
-          <Chip label="Tools" size="sm" />
-          <p className="text-body-h2 text-white">{tools}</p>
+        <div className="flex flex-col items-start gap-2">
+          <CaseStudyMetaLabel>Tools</CaseStudyMetaLabel>
+          <p className="font-mono text-body-h2 text-white">{tools}</p>
         </div>
         <CaseStudyYear year={year} />
       </div>

@@ -6,22 +6,16 @@ type ContactIconName = "mail" | "linkedin" | "github";
  * brand colors for chips that never change tone), every icon here uses
  * `currentColor` so it dims in lockstep with the surrounding link text on
  * hover/active instead of staying a flat fixed color.
+ *
+ * All three are solid glyphs. The envelope used to be a 2px outline mark,
+ * which read visibly lighter than the two filled brand marks beside it at the
+ * 16px these render at.
  */
 export function ContactIcon({ name }: { name: ContactIconName }) {
   if (name === "mail") {
     return (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="size-full"
-        focusable="false"
-      >
-        <rect x="3" y="5" width="18" height="14" rx="2" />
-        <path d="m4 7 8 6 8-6" />
+      <svg viewBox="0 0 24 24" fill="currentColor" className="size-full" focusable="false">
+        <path d="M2.25 6.75A2.25 2.25 0 0 1 4.5 4.5h15a2.25 2.25 0 0 1 2.25 2.25v.32l-9.75 5.42-9.75-5.42v-.32Zm0 2.53v7.97A2.25 2.25 0 0 0 4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V9.28l-9.386 5.216a.75.75 0 0 1-.728 0L2.25 9.28Z" />
       </svg>
     );
   }

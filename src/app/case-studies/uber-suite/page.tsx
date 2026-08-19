@@ -4,10 +4,8 @@ import { SiteFooter } from "@/components/site-footer";
 import { CaseStudyNext } from "@/components/case-study-next";
 import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
 import { CaseStudyYear } from "@/components/case-study-year";
-import {
-  CaseStudyIntroBlock,
-  CaseStudySectionBlock,
-} from "@/components/case-study-text-block";
+import { CaseStudyIntroBlock } from "@/components/case-study-intro-block";
+import { CaseStudySectionBlock } from "@/components/case-study-section-block";
 import { ProjectImage } from "@/components/project-image";
 
 export const metadata = caseStudyMetadata({
@@ -23,7 +21,7 @@ export default function UberSuiteCaseStudy() {
       <SiteHeader />
 
       <main id="main-content" className="flex-1">
-        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-20 pb-16 md:gap-16 md:px-16 md:pt-16">
+        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-20 pb-16 md:gap-16 md:px-10 md:pt-16 lg:px-16">
           <h1 className="w-full animate-fade-up text-balance text-heading-h3 text-white md:text-heading-h1">
             Uber Suite
           </h1>
