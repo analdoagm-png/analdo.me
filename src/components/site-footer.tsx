@@ -2,24 +2,15 @@ import { contactLinks } from "@/lib/site";
 import { ContactIcon } from "@/components/contact-icon";
 
 /**
- * Icon-only contact links on mobile *and* desktop, with the labelled row
- * kept only at `md` (tablet): `sr-only` (mobile) → `md:not-sr-only`
- * (tablet) → `lg:sr-only` (desktop) toggles the label off, on, then off
- * again as the three tiers step up. Mobile is unchanged from its original
- * behaviour; only the `lg` end is new — a labelled row read as too wide
- * next to the wider `lg` gutters, so desktop drops back to icon-only same
- * as mobile.
+ * Icon-only contact links at every breakpoint (24x24 boxes around 16px
+ * glyphs) — previously the labels reappeared from `md` up; now the footer
+ * stays this compact everywhere, matching the mobile design's density
+ * instead of switching to a labelled row at `md`.
  *
  * The labels stay in the DOM as `sr-only` rather than being swapped for
- * `aria-label`, so each link keeps its accessible name at every breakpoint,
- * and the markup stays one element instead of splitting into conditional
- * branches. The 24px icon box reproduces the design's spacing exactly, so
- * the touch target is widened to 40px with `before:absolute before:-inset-2`
- * (no layout effect) whenever the row is icon-only (mobile and `lg`), and
- * dropped at `md` where the visible label already makes the target large
- * enough. 40px rather than a full 44px is deliberate: the design's 16px
- * gaps put adjacent centers 40px apart, so anything larger would make
- * neighbouring hit areas overlap.
+ * `aria-label`, so each link keeps its accessible name. `before:-inset-2`
+ * widens the touch target to 40px without affecting layout, at every
+ * breakpoint now that there's no wider labelled row to make it unnecessary.
  *
  * Both the copyright line and the links sit in the mono voice: the links are
  * controls, the copyright is scannable meta text, and mono keeps the one row
@@ -36,12 +27,12 @@ export function SiteFooter() {
               key={label}
               href={href}
               target="_blank"
-              className="relative inline-flex items-center justify-center gap-2 p-1 font-mono text-body-h2 text-white transition-colors duration-200 before:absolute before:-inset-2 before:content-[''] hover:text-white/60 active:text-white/40 md:p-0 md:before:content-none lg:p-1 lg:before:content-['']"
+              className="relative inline-flex items-center justify-center gap-2 p-1 font-mono text-body-h2 text-white transition-colors duration-200 before:absolute before:-inset-2 before:content-[''] hover:text-white/60 active:text-white/40"
             >
               <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
                 <ContactIcon name={icon} />
               </span>
-              <span className="sr-only md:not-sr-only lg:sr-only">{label}</span>
+              <span className="sr-only">{label}</span>
             </a>
           ))}
         </div>
