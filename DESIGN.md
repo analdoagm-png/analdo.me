@@ -15,9 +15,9 @@ This document is the living design-system reference for `analdo.me`. Keep it upd
 - Global tokens and global styles: `src/app/globals.css`
 - Font setup: `src/app/layout.tsx`
 - Homepage cards: `src/components/case-study-card.tsx`
-- Homepage sidebar/identity block: `src/components/home-sidebar.tsx`
-- Homepage mobile top bar + menu: `src/components/mobile-top-bar.tsx`
-- Homepage contact icons: `src/components/contact-glyph.tsx` (distinct from `src/components/social-icon.tsx`, which `case-study-editorial-sidebar.tsx` still uses — see the Homepage Sidebar / Mobile Top Bar sections)
+- Sidebar/identity block, shared by the homepage and case studies on the new system: `src/components/home-sidebar.tsx`
+- Mobile top bar + menu, mobile footer: `src/components/mobile-top-bar.tsx`, `src/components/mobile-footer.tsx`
+- Contact icons for the new system: `src/components/contact-glyph.tsx` (distinct from `src/components/social-icon.tsx`, which `case-study-editorial-sidebar.tsx` still uses — see the Homepage Sidebar / Mobile Top Bar sections)
 - Chips: `src/components/chip.tsx`
 - Editorial callouts: `src/components/case-study-callout.tsx`
 - Case study images and figures: `src/components/project-image.tsx`, `src/components/case-study-figure.tsx`
@@ -181,44 +181,51 @@ There is no shared `SiteHeader` anymore — it was homepage-only and was removed
 File: `src/components/home-sidebar.tsx`
 
 Rebuilt for a second Figma iteration (mobile + tablet frames, desktop
-specified as "an extension of tablet"). The sidebar is now a bordered
-surface (`border border-stroke-dark p-8 rounded-token`, `w-80`/320px)
-holding: name/role lockup (plain text, not a link — this component only
-renders on `/`), the page's `h1` (the "Over a decade solving..." statement,
-back to full `text-body-h2` prose scale), the "based in / working with" tool
-sentence, a `/ Works` (→ `/`) / `/ Resume` (→ `/about`) nav pair, contact
-links (`ContactGlyph` + label), and a `© Analdo Gomez / 2026` line — all
-`font-mono`, per the Typography section's homepage-only exception above.
+specified as "an extension of tablet"), then generalized to a second caller
+once the Forty5Park case study moved to the same system. Holds: name/role
+lockup (plain text, not a link), the bio statement, the "based in / working
+with" tool sentence, a `/ Works` (→ `/`) / `/ Resume` (→ `/about`) nav pair,
+contact links (`ContactGlyph` + label), and a `© Analdo Gomez / 2026` line —
+all `font-mono`, per the Typography section's homepage-only(-and-onward)
+exception above.
 
-**Two-tier now, not three.** The previous version stacked full-width through
-`md` and only became a side column at `lg`. The new Figma tablet frame
-already shows the sidebar as a fixed column at tablet width, so the
-component is `hidden md:flex` at the call site — mobile gets an entirely
-separate top-bar-plus-inline-hero treatment instead (see Mobile Top Bar
-below and `page.tsx`), and the sidebar becomes a real column starting at
-`md`, not `lg`.
+**Shared with case-study pages, via a prop, not a second component.** The
+bio statement is the homepage's own `h1` there, but a case-study page's `h1`
+is the project title — a page can only have one — so callers pass
+`bioAs="h1" | "p"` (default `"h1"`, so the homepage call site is unchanged).
+This replaces what the old (pre-redesign) system did with two separate
+components, `HomeSidebar` and `EditorialSidebar` — see Case Study Sidebar
+below for why the *editorial* case studies (GoRight, Arrowhead) still use
+the old one for now.
 
-`w-80` (320px) replaces the previous `lg:w-72` (288px) — that number was
-tuned against an older, narrower Figma frame that's no longer the source of
-truth; 320px is the new frame's literal width.
+**`md:fixed`, not `sticky` or a stacked block.** `md:fixed md:inset-y-0
+md:left-0 md:w-80` (320px) pins the sidebar flush to the viewport's
+top/left/bottom edges at every scroll position — a true app-shell rail, not
+a scroll-until-it-hits-the-top column (an earlier pass here used `sticky`;
+verify against this file if you find stale references elsewhere). Below
+`md`, it's `hidden` entirely; each page renders its own top-bar-plus-inline-
+content mobile treatment instead (see Mobile Top Bar below).
 
-`md:sticky md:top-12` keeps the sidebar in view while the (typically taller)
-card grid scrolls past — the parent row carries `md:items-start` so the
-sidebar isn't stretched to the grid's height, which sticky positioning needs
-room to work. No `max-w` cap on the grid column: at `lg` it reflows to two
-columns and fills whatever width remains (see `CaseStudyCard` and the
-Layout note below).
+Because `fixed` removes the sidebar from document flow, **every page using
+it must offset its own content**: `md:pl-[368px] lg:pl-[384px]` (320px
+sidebar + that tier's own gutter) on the content wrapper, and `md:pl-80` on
+any full-width element below `<main>` that would otherwise run underneath
+the sidebar (e.g. `CaseStudyNext` — see its own section). This is manual
+per page, not automatic, since the sidebar and its content aren't siblings
+in a flex/grid relationship anymore.
 
-Page padding on `/` stays bespoke: `px-6 pt-24 pb-8` at the base tier — the
-extra top padding clears `MobileTopBar`'s fixed bar, replacing the old
-`py-8` — `md:p-12` (48px all sides) at tablet, `lg:p-16` (64px) at desktop,
-matching the Figma frames' own values.
+`border-r border-stroke-dark` (not a full box): flush against the
+viewport's own edges, a full border would double up on the frame. Reads as
+a structural divider, matching how borders are used sitewide.
+`overflow-y-auto` guards against a viewport short enough that the sidebar's
+own content doesn't fit.
 
-`/ Works` always renders active (bold, full white): this component only
-ever mounts on `/`, so there's no `usePathname` check or client-component
-conversion — it's server-rendered like before. "Works" isn't a real route;
-it duplicates the identity lockup's destination the same way `main`'s
-`SiteHeader` "Home" link duplicates its own lockup.
+`/ Works` always renders active (bold, full white) on every page this
+mounts on — no `usePathname` check or client-component conversion. Every
+Figma frame that includes this sidebar (homepage, both case-study types)
+shows the identical static state, read as intentional: "Works" names the
+homepage's role as the work index, and every page carrying this sidebar is
+either that index or a piece of the work it indexes.
 
 The Figma sidebar's copyright is 12px; kept at `text-body-h3` (14px) instead
 — the site's established minimum readable size — rather than copied
@@ -253,6 +260,46 @@ The page's own `pt-24` (see Homepage Sidebar above) is tuned to this bar's
 height (24px inset + ~48px bar + breathing room) so mobile content clears
 it, the same idea as `main`'s `pt-20`-for-`MobileNav` convention, just a
 different number for a differently-sized bar.
+
+### Mobile Footer
+
+File: `src/components/mobile-footer.tsx`
+
+Mobile-only (`md:hidden`) copyright + icon-only social row for pages on the
+new sidebar system — `HomeSidebar`'s own copyright line covers the same
+role from `md` up, so this never renders alongside it. Extracted out of the
+homepage's `page.tsx` once Forty5Park needed the identical block; both call
+it now rather than each keeping their own copy.
+
+### Case Study Sidebar (new system)
+
+Forty5Park is the first case study moved to the redesigned sidebar —
+`HomeSidebar bioAs="p"` plus `MobileTopBar`/`MobileFooter`, the exact same
+components the homepage uses, not a dedicated case-study sidebar component.
+Its own page comments explain why: the surrounding text blocks (YEAR meta,
+intro statement, section headings) are written inline in
+`case-studies/forty5park/page.tsx` rather than through the shared
+`CaseStudyYear`/`CaseStudyIntroBlock`/`CaseStudySectionBlock` components,
+since those are still used by Uber Suite and Github's Security Findings
+(not yet moved to this system) and editing them in place would change those
+pages' typography too.
+
+Two structural things worth carrying forward to the next case study moved
+to this system:
+
+- **Text caps at `max-w-[720px]`, stacked in a single column** — the title,
+  YEAR meta, and every paragraph/heading pair. This replaced an early
+  attempt that copied `CaseStudyIntroBlock`/`CaseStudySectionBlock`'s
+  `md:flex-row` side-by-side split literally; the actual Figma frame has no
+  such split, just a single reading column, and the side-by-side version
+  read as cramped once corrected.
+- **Images opt into `roundedClassName="rounded-token"`** on each
+  `ProjectImage` call (that prop already existed, unused elsewhere on this
+  branch until now) rather than changing `ProjectImage`'s own default —
+  which stays `rounded-none` for every other case study's images.
+- **`CaseStudyNext` needs a manual `md:pl-80` wrapper** on any page using
+  the fixed sidebar, since the sidebar isn't a flex/grid sibling of
+  anything below `</main>` — see Homepage Sidebar above.
 
 ### Editorial Sidebar
 

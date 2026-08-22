@@ -8,9 +8,17 @@ const contactLinkStyles =
   "inline-flex items-center gap-2 font-mono text-body-h3 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40";
 
 /**
- * Homepage-only (`/` is its only caller) persistent left column at `md` and
- * up — mobile gets its own top bar + inline hero instead (see
- * `MobileTopBar` and `page.tsx`).
+ * Persistent left column at `md` and up, shared by the homepage and (as of
+ * the Forty5Park pass) case-study pages using the new sidebar system —
+ * mobile gets its own top bar + inline hero instead (see `MobileTopBar` and
+ * each page's own mobile block).
+ *
+ * `bioAs` exists for that reuse: the homepage's own statement is its page
+ * `h1` (default `"h1"`), but a case-study page's `h1` is the project title
+ * — a page can only have one — so those call sites pass `bioAs="p"`. This
+ * mirrors the old (pre-redesign) split between `HomeSidebar` and
+ * `EditorialSidebar` on this branch, just as a prop instead of a second
+ * component, since everything else about the two is now identical.
  *
  * `fixed inset-y-0 left-0` (set at the call site, not here — see `page.tsx`)
  * rather than `sticky`: a true app-shell rail flush to the viewport's top
@@ -39,7 +47,15 @@ const contactLinkStyles =
  * unlike the previous `lg:w-72` (288px), which was tuned against an older,
  * narrower Figma frame that's no longer the source of truth.
  */
-export function HomeSidebar({ className = "" }: { className?: string }) {
+export function HomeSidebar({
+  className = "",
+  bioAs = "h1",
+}: {
+  className?: string;
+  bioAs?: "h1" | "p";
+}) {
+  const Bio = bioAs;
+
   return (
     <div
       className={`flex animate-fade-up flex-col gap-10 overflow-y-auto border-r border-stroke-dark p-8 ${className}`}
@@ -51,10 +67,10 @@ export function HomeSidebar({ className = "" }: { className?: string }) {
         </p>
       </div>
 
-      <h1 className="w-full text-pretty font-mono text-body-h2 text-white">
+      <Bio className="w-full text-pretty font-mono text-body-h2 text-white">
         Over a decade solving complex B2B problems with design systems built
         to ship straight to code, and clearer paths to better outcomes.
-      </h1>
+      </Bio>
 
       {/*
         Plain inline text flow (not flex/flex-wrap items) so the browser's
@@ -88,12 +104,15 @@ export function HomeSidebar({ className = "" }: { className?: string }) {
       </p>
 
       {/*
-        "/ Works" always renders active (bold, full white) since this
-        component only ever mounts on "/" — no usePathname/client-component
-        conversion needed. It duplicates the identity lockup's destination
-        the same deliberate way `main`'s SiteHeader "Home" link duplicates
-        its own lockup. "Works" isn't a real route; it names the homepage's
-        role as the work index, matching the Figma copy literally.
+        "/ Works" always renders active (bold, full white), on every page
+        this component mounts on — no usePathname/client-component
+        conversion. Every Figma frame that includes this sidebar (homepage,
+        both case-study types) shows the identical static state, so this is
+        read as intentional rather than a "current page" indicator: "Works"
+        names the homepage's role as the work index, and every page here is
+        either that index or a piece of the work it indexes. It duplicates
+        the identity lockup's destination the same deliberate way `main`'s
+        SiteHeader "Home" link duplicates its own lockup.
       */}
       <nav aria-label="Primary" className="flex flex-col gap-4">
         <Link href="/" className={`${navLinkStyles} font-bold text-white`}>

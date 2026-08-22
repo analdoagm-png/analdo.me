@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CaseStudyCard } from "@/components/case-study-card";
 import { HomeSidebar } from "@/components/home-sidebar";
 import { MobileTopBar } from "@/components/mobile-top-bar";
+import { MobileFooter } from "@/components/mobile-footer";
 import { ContactGlyph } from "@/components/contact-glyph";
 import { ToolIcon } from "@/components/tool-icon";
 import { caseStudies } from "@/lib/case-studies";
@@ -173,47 +174,7 @@ export default function Home() {
         </div>
       </main>
 
-      {/*
-        Mobile-only footer: copyright + icon-only social links, matching the
-        Figma frame's separate site-footer node. md and up, HomeSidebar's
-        own copyright line covers this role instead (see the current
-        redesign/homepage-v2 docs on why no SiteFooter is rendered here).
-      */}
-      <div className="flex items-center justify-between border-t border-stroke-dark px-6 py-6 md:hidden">
-        <p className="font-mono text-body-h2 text-white/70">© Analdo Gomez / 2026</p>
-        <div className="flex items-center gap-4">
-          <a
-            href={`mailto:${author.email}`}
-            target="_blank"
-            aria-label="Email"
-            className="flex size-6 items-center justify-center text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
-          >
-            <span className="flex size-4 items-center justify-center">
-              <ContactGlyph name="mail" />
-            </span>
-          </a>
-          <a
-            href={author.linkedIn}
-            target="_blank"
-            aria-label="LinkedIn"
-            className="flex size-6 items-center justify-center text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
-          >
-            <span className="flex size-4 items-center justify-center">
-              <ContactGlyph name="linkedin" />
-            </span>
-          </a>
-          <a
-            href={author.github}
-            target="_blank"
-            aria-label="GitHub"
-            className="flex size-6 items-center justify-center text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
-          >
-            <span className="flex size-4 items-center justify-center">
-              <ContactGlyph name="github" />
-            </span>
-          </a>
-        </div>
-      </div>
+      <MobileFooter />
     </>
   );
 }
