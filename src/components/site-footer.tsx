@@ -2,16 +2,24 @@ import { contactLinks } from "@/lib/site";
 import { ContactIcon } from "@/components/contact-icon";
 
 /**
- * Below `md` the footer is one compact row per the mobile design: copyright
- * left, three icon-only contact links right (24x24 boxes around 16px glyphs).
+ * Icon-only contact links on mobile *and* desktop, with the labelled row
+ * kept only at `md` (tablet): `sr-only` (mobile) → `md:not-sr-only`
+ * (tablet) → `lg:sr-only` (desktop) toggles the label off, on, then off
+ * again as the three tiers step up. Mobile is unchanged from its original
+ * behaviour; only the `lg` end is new — a labelled row read as too wide
+ * next to the wider `lg` gutters, so desktop drops back to icon-only same
+ * as mobile.
  *
  * The labels stay in the DOM as `sr-only` rather than being swapped for
- * `aria-label`, so each link keeps its accessible name, the markup stays a
- * single element across breakpoints, and `md:not-sr-only` simply restores the
- * visible text for the labelled tablet/desktop row. The 24px boxes reproduce
- * the design's spacing exactly, while `before:-inset-2` widens the touch
- * target to 40px without affecting layout — dropped again at `md`, where the
- * visible labels already make the target large enough.
+ * `aria-label`, so each link keeps its accessible name at every breakpoint,
+ * and the markup stays one element instead of splitting into conditional
+ * branches. The 24px icon box reproduces the design's spacing exactly, so
+ * the touch target is widened to 40px with `before:absolute before:-inset-2`
+ * (no layout effect) whenever the row is icon-only (mobile and `lg`), and
+ * dropped at `md` where the visible label already makes the target large
+ * enough. 40px rather than a full 44px is deliberate: the design's 16px
+ * gaps put adjacent centers 40px apart, so anything larger would make
+ * neighbouring hit areas overlap.
  *
  * Both the copyright line and the links sit in the mono voice: the links are
  * controls, the copyright is scannable meta text, and mono keeps the one row
@@ -28,12 +36,12 @@ export function SiteFooter() {
               key={label}
               href={href}
               target="_blank"
-              className="relative inline-flex items-center justify-center gap-2 p-1 font-mono text-body-h2 text-white transition-colors duration-200 before:absolute before:-inset-2 before:content-[''] hover:text-white/60 active:text-white/40 md:p-0 md:before:content-none"
+              className="relative inline-flex items-center justify-center gap-2 p-1 font-mono text-body-h2 text-white transition-colors duration-200 before:absolute before:-inset-2 before:content-[''] hover:text-white/60 active:text-white/40 md:p-0 md:before:content-none lg:p-1 lg:before:content-['']"
             >
               <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
                 <ContactIcon name={icon} />
               </span>
-              <span className="sr-only md:not-sr-only">{label}</span>
+              <span className="sr-only md:not-sr-only lg:sr-only">{label}</span>
             </a>
           ))}
         </div>
