@@ -16,7 +16,6 @@ const meta = {
   ],
   tags: ["autodocs"],
   args: {
-    index: 1,
     href: "/case-studies/goright",
     image: "/images/goright.png",
     title: "GoRight",
@@ -33,7 +32,6 @@ export const Default: Story = {};
 
 export const LongTitle: Story = {
   args: {
-    index: 5,
     title: "Github's Security Findings",
     image: "/images/github-security.png",
     description:
@@ -46,7 +44,6 @@ export const FullList: Story = {
   render: () => (
     <>
       <CaseStudyIndexRow
-        index={1}
         href="/case-studies/goright"
         image="/images/goright.png"
         title="GoRight"
@@ -54,7 +51,6 @@ export const FullList: Story = {
         chips={["Case Study", "Dispatch", "Desktop", "Mobile"]}
       />
       <CaseStudyIndexRow
-        index={2}
         href="/case-studies/arrowhead-transit"
         image="/images/arrowhead-transit.png"
         title="Arrowhead Transit"
@@ -62,7 +58,6 @@ export const FullList: Story = {
         chips={["Case Study", "Dispatch", "Desktop"]}
       />
       <CaseStudyIndexRow
-        index={3}
         href="/case-studies/forty5park"
         image="/images/forty5park.png"
         title="Forty5Park"

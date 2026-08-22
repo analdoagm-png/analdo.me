@@ -119,7 +119,6 @@ export default function Home() {
             {caseStudies.map((cs, index) => (
               <CaseStudyIndexRow
                 key={cs.href}
-                index={index + 1}
                 href={cs.href}
                 image={cs.image}
                 title={cs.title}

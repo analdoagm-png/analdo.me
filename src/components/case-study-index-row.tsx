@@ -25,9 +25,17 @@ function ArrowForwardIcon() {
  * One row of the homepage's editorial index — a text-forward alternative to
  * `CaseStudyCard`'s full image grid, so all five projects can read as one
  * scannable list instead of a few large cards. The thumbnail reuses
- * `CaseStudyNext`'s flush, unrounded idiom (just smaller) rather than
+ * `CaseStudyNext`'s flush, unrounded idiom (just larger) rather than
  * inventing a new image treatment: still the sitewide `outline` for depth,
  * still no padding or rounding.
+ *
+ * The thumbnail fills the row's full height, `self-stretch`ed against a
+ * `py-2` (8px) row inset — that 8px is the only gap between the image and
+ * the row's top/bottom divider, the same "thumbnail as tall as the row will
+ * allow" idea as `CaseStudyNext`'s. `min-h-28 md:min-h-32 lg:min-h-40` is
+ * copied directly from `CaseStudyNext`'s text column so the thumbnail has a
+ * floor even when a row's own text content (mobile especially, where chips
+ * are hidden) wouldn't otherwise make it that tall.
  *
  * The whole row is a single `Link`, like `CaseStudyCard` and `CaseStudyNext`.
  * Unlike those, hover here adds a faint full-row background tint on top of
@@ -36,7 +44,6 @@ function ArrowForwardIcon() {
  * shadow to catch the eye.
  */
 export function CaseStudyIndexRow({
-  index,
   href,
   image,
   title,
@@ -45,7 +52,6 @@ export function CaseStudyIndexRow({
   priority = false,
   style,
 }: {
-  index: number;
   href: string;
   image: string;
   title: string;
@@ -58,16 +64,9 @@ export function CaseStudyIndexRow({
     <Link
       href={href}
       style={style}
-      className="group flex w-full animate-fade-up items-center gap-4 py-5 transition-colors duration-200 hover:bg-white/[0.03] md:gap-6 md:py-6 lg:gap-8"
+      className="group flex w-full min-h-28 animate-fade-up items-stretch gap-4 py-2 transition-colors duration-200 hover:bg-white/[0.03] md:min-h-32 md:gap-6 lg:min-h-40 lg:gap-8"
     >
-      <span
-        aria-hidden="true"
-        className="hidden shrink-0 font-mono text-body-h3 text-white/40 sm:block"
-      >
-        {String(index).padStart(2, "0")}
-      </span>
-
-      <span className="relative h-16 w-24 shrink-0 overflow-hidden outline outline-1 -outline-offset-1 outline-white/10 md:h-20 md:w-28 lg:h-24 lg:w-32">
+      <span className="relative w-28 shrink-0 self-stretch overflow-hidden outline outline-1 -outline-offset-1 outline-white/10 md:w-40 lg:w-48">
         {/*
           Decorative: the link already contains the title and description, so
           real alt text here would make the accessible name say the project
@@ -80,11 +79,11 @@ export function CaseStudyIndexRow({
           fill
           priority={priority}
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-          sizes="(min-width: 1024px) 128px, (min-width: 768px) 112px, 96px"
+          sizes="(min-width: 1024px) 192px, (min-width: 768px) 160px, 112px"
         />
       </span>
 
-      <span className="flex min-w-0 flex-1 flex-col gap-1.5 md:gap-2">
+      <span className="flex min-w-0 flex-1 flex-col justify-center gap-1.5 md:gap-2">
         <span className="flex items-center gap-2.5">
           <h3 className="truncate text-balance text-heading-h5 text-white">
             {title}

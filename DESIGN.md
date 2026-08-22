@@ -419,13 +419,23 @@ or near the fold as one scannable index instead of a couple of large cards.
   `border-t border-stroke-dark` on the wrapper closing off the first row —
   the list uses the same divider token the deck's two-panel slides use for
   `divide-x`, just on the other axis.
-- Thumbnail: fixed `96×64` / `112×80` (`md`) / `128×96` (`lg`), flush and
-  unrounded — this reuses `CaseStudyNext`'s existing thumbnail treatment at
+- Thumbnail: `w-28 md:w-40 lg:w-48` (112/160/192px), `self-stretch`ed to the
+  row's full content height rather than a fixed height of its own — flush
+  and unrounded, reusing `CaseStudyNext`'s existing thumbnail treatment at
   list scale rather than inventing a new image style. Same sitewide
   `outline outline-1 -outline-offset-1 outline-white/10`, same
   `group-hover:scale-105` zoom.
-- Index number: `01`–`05`, `font-mono text-body-h3 text-white/40`, hidden
-  below `sm` to keep the narrowest rows focused on title and description.
+- Row inset: `py-2` (8px) top and bottom, the same 8px on every breakpoint.
+  Because the thumbnail stretches to the row's content height, that 8px is
+  also the only gap between the image and the row's divider above and
+  below it — the image reads as nearly edge-to-edge within its row. A
+  `min-h-28 md:min-h-32 lg:min-h-40` floor (copied from `CaseStudyNext`'s
+  own text column) keeps the thumbnail a healthy size even on the rows
+  whose own text content is short, mobile especially, where chips are
+  hidden.
+- No index number. An earlier pass had a mono `01`–`05` counter ahead of the
+  thumbnail; removed since the row order alone already communicates
+  sequence and the number added a column without adding information.
 - Title: `text-heading-h5`, one line (`truncate`) so row height stays
   constant regardless of project name length.
 - Description: `line-clamp-1` below `md`, `line-clamp-2` from `md` up — a
