@@ -10,12 +10,28 @@ const contactLinkStyles =
 /**
  * Homepage-only (`/` is its only caller) persistent left column at `md` and
  * up — mobile gets its own top bar + inline hero instead (see
- * `MobileTopBar` and `page.tsx`), so this component is `hidden md:flex` at
- * the call site rather than stacking full-width below `md` the way it used
- * to. That's a real behavior change from this branch's previous 3-tier
- * stack-then-sidebar layout: the new Figma tablet frame already shows the
- * sidebar as a fixed side column, not a stacked block, so the cutover now
- * happens at `md` instead of `lg`.
+ * `MobileTopBar` and `page.tsx`).
+ *
+ * `fixed inset-y-0 left-0` (set at the call site, not here — see `page.tsx`)
+ * rather than `sticky`: a true app-shell rail flush to the viewport's top
+ * and bottom edges, always in view regardless of scroll position, not a
+ * scroll-until-it-hits-the-top sticky column. Because `fixed` takes the
+ * sidebar out of the document flow entirely, `page.tsx`'s content column
+ * carries its own `md:pl-*` offset (320px sidebar width + the page's own
+ * gutter) to keep from sitting underneath it — there's no flex/gap
+ * relationship between the two anymore.
+ *
+ * `overflow-y-auto` guards against a viewport short enough that the
+ * sidebar's own content (identity, statement, nav, contact links,
+ * copyright) doesn't fit — rather than letting it clip or push past the
+ * viewport bottom, which a `fixed` full-height element can't otherwise
+ * resolve on its own.
+ *
+ * Border is `border-r` only, not a full box: flush against the viewport's
+ * own top/left/bottom edges, a full border would just double up on top of
+ * the viewport frame. `border-r` reads as a structural divider between rail
+ * and content, matching how borders are used sitewide (dividers, not card
+ * outlines) rather than as a floating panel's own edge.
  *
  * Every piece of text in here is mono per this iteration's system-wide
  * change (prose included, not just labels/nav — see DESIGN.md's Typography
@@ -26,7 +42,7 @@ const contactLinkStyles =
 export function HomeSidebar({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`flex animate-fade-up flex-col gap-10 border border-stroke-dark p-8 ${className}`}
+      className={`flex animate-fade-up flex-col gap-10 overflow-y-auto border-r border-stroke-dark p-8 ${className}`}
     >
       <div className="flex flex-col gap-2">
         <p className="font-mono text-body-h1 font-bold text-white">Analdo Gomez</p>

@@ -37,133 +37,138 @@ export default function Home() {
 
       <main id="main-content" className="flex-1">
         {/*
+          Fixed, not a flex sibling: HomeSidebar is out of document flow
+          entirely from `md` up (see its own comment for why), so it sits
+          directly under `main` rather than inside the content wrapper
+          below. The wrapper compensates with its own md:pl-* offset.
+        */}
+        <HomeSidebar className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80" />
+
+        {/*
           pt-24 on mobile clears the fixed MobileTopBar (24px inset + ~48px
           bar height + breathing room); md/lg drop back to the padding
-          scale's own p-12/p-16, which is plenty since the bar doesn't exist
-          there. md:items-start keeps the sidebar from being stretched to
-          the grid's height, which its own md:sticky needs room to work.
+          scale's own p-12/p-16. md:pl-[368px]/lg:pl-[384px] (320px sidebar
+          + the tier's own gutter) replaces what used to be a flex md:gap-*
+          between sidebar and content, now that the sidebar is fixed instead
+          of a flow sibling.
         */}
-        <div className="flex flex-col gap-8 px-6 pt-24 pb-8 md:flex-row md:items-start md:gap-12 md:p-12 lg:gap-16 lg:p-16">
-          <HomeSidebar className="hidden md:sticky md:top-12 md:flex md:w-80 md:shrink-0" />
-
-          <div className="flex w-full flex-col gap-8 md:flex-1">
-            {/*
-              Mobile-only hero content. HomeSidebar covers this same content
-              from md up (name/role, statement, tool sentence, contact
-              links) — kept out of the DOM twice by scoping this block to
-              md:hidden rather than hiding pieces of HomeSidebar itself.
-            */}
-            <div className="flex flex-col gap-6 md:hidden">
-              <h1 className="w-full text-pretty font-mono text-body-h2 text-white">
-                Over a decade solving complex B2B problems with design
-                systems built to ship straight to code, and clearer paths to
-                better outcomes.
-              </h1>
-              <p className="w-full text-balance font-mono text-body-h2 text-white/70">
-                Based in Colombia, working globally with{" "}
-                <span className="inline-flex items-center gap-1 align-middle">
-                  <span
-                    aria-hidden="true"
-                    className="flex size-3 shrink-0 items-center justify-center"
-                  >
-                    <ToolIcon name="figma" />
-                  </span>
-                  Figma
+        <div className="flex flex-col gap-8 px-6 pt-24 pb-8 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+          {/*
+            Mobile-only hero content. HomeSidebar covers this same content
+            from md up (name/role, statement, tool sentence, contact
+            links) — kept out of the DOM twice by scoping this block to
+            md:hidden rather than hiding pieces of HomeSidebar itself.
+          */}
+          <div className="flex flex-col gap-6 md:hidden">
+            <h1 className="w-full text-pretty font-mono text-body-h2 text-white">
+              Over a decade solving complex B2B problems with design systems
+              built to ship straight to code, and clearer paths to better
+              outcomes.
+            </h1>
+            <p className="w-full text-balance font-mono text-body-h2 text-white/70">
+              Based in Colombia, working globally with{" "}
+              <span className="inline-flex items-center gap-1 align-middle">
+                <span
+                  aria-hidden="true"
+                  className="flex size-3 shrink-0 items-center justify-center"
+                >
+                  <ToolIcon name="figma" />
                 </span>
-                ,{" "}
-                <span className="inline-flex items-center gap-1 align-middle">
-                  <span
-                    aria-hidden="true"
-                    className="flex size-3 shrink-0 items-center justify-center"
-                  >
-                    <ToolIcon name="claude" />
-                  </span>
-                  Claude Code
-                </span>{" "}
-                and{" "}
-                <span className="inline-flex items-center gap-1 align-middle">
-                  <span
-                    aria-hidden="true"
-                    className="flex size-3 shrink-0 items-center justify-center"
-                  >
-                    <ToolIcon name="codex" />
-                  </span>
-                  Codex
+                Figma
+              </span>
+              ,{" "}
+              <span className="inline-flex items-center gap-1 align-middle">
+                <span
+                  aria-hidden="true"
+                  className="flex size-3 shrink-0 items-center justify-center"
+                >
+                  <ToolIcon name="claude" />
                 </span>
-              </p>
-              <div className="flex flex-col gap-4">
-                <a
-                  href={`mailto:${author.email}`}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+                Claude Code
+              </span>{" "}
+              and{" "}
+              <span className="inline-flex items-center gap-1 align-middle">
+                <span
+                  aria-hidden="true"
+                  className="flex size-3 shrink-0 items-center justify-center"
                 >
-                  <span
-                    aria-hidden="true"
-                    className="flex size-4 shrink-0 items-center justify-center"
-                  >
-                    <ContactGlyph name="mail" />
-                  </span>
-                  Contact me
-                </a>
-                <a
-                  href={author.linkedIn}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+                  <ToolIcon name="codex" />
+                </span>
+                Codex
+              </span>
+            </p>
+            <div className="flex flex-col gap-4">
+              <a
+                href={`mailto:${author.email}`}
+                target="_blank"
+                className="inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+              >
+                <span
+                  aria-hidden="true"
+                  className="flex size-4 shrink-0 items-center justify-center"
                 >
-                  <span
-                    aria-hidden="true"
-                    className="flex size-4 shrink-0 items-center justify-center"
-                  >
-                    <ContactGlyph name="linkedin" />
-                  </span>
-                  LinkedIn
-                </a>
-                <a
-                  href={author.github}
-                  target="_blank"
-                  className="inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+                  <ContactGlyph name="mail" />
+                </span>
+                Contact me
+              </a>
+              <a
+                href={author.linkedIn}
+                target="_blank"
+                className="inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+              >
+                <span
+                  aria-hidden="true"
+                  className="flex size-4 shrink-0 items-center justify-center"
                 >
-                  <span
-                    aria-hidden="true"
-                    className="flex size-4 shrink-0 items-center justify-center"
-                  >
-                    <ContactGlyph name="github" />
-                  </span>
-                  GitHub
-                </a>
-              </div>
+                  <ContactGlyph name="linkedin" />
+                </span>
+                LinkedIn
+              </a>
+              <a
+                href={author.github}
+                target="_blank"
+                className="inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40"
+              >
+                <span
+                  aria-hidden="true"
+                  className="flex size-4 shrink-0 items-center justify-center"
+                >
+                  <ContactGlyph name="github" />
+                </span>
+                GitHub
+              </a>
             </div>
+          </div>
 
+          {/*
+            No horizontal padding below `md` — mobile cards run full-bleed
+            to the viewport edges (see CaseStudyCard). Standard grid gap
+            resumes, and reflows lg:grid-cols-2, once the sidebar is a real
+            side column at md.
+          */}
+          <div className="-mx-6 grid w-full grid-cols-1 gap-6 md:mx-0 lg:grid-cols-2 lg:gap-8">
             {/*
-              No horizontal padding below `md` — mobile cards run full-bleed
-              to the viewport edges (see CaseStudyCard). Standard grid gap
-              resumes, and reflows lg:grid-cols-2, once the sidebar is a real
-              side column at md.
+              Card titles are h3, so this names the section and keeps the
+              document outline from jumping h1 (in HomeSidebar, or the
+              mobile-only h1 above) -> h3.
             */}
-            <div className="-mx-6 grid w-full grid-cols-1 gap-6 md:mx-0 lg:grid-cols-2 lg:gap-8">
-              {/*
-                Card titles are h3, so this names the section and keeps the
-                document outline from jumping h1 (in HomeSidebar, or the
-                mobile-only h1 above) -> h3.
-              */}
-              <h2 className="sr-only">Selected work</h2>
-              {caseStudies.map((cs, index) => (
-                <CaseStudyCard
-                  key={cs.href}
-                  href={cs.href}
-                  image={cs.image}
-                  title={cs.title}
-                  // Drops the leading "Case Study"/"Showcase" type tag for
-                  // this iteration — chips[0] in every entry, see
-                  // lib/case-studies.ts. The underlying data keeps it for
-                  // other consumers (sitemap, a future case-study-page pass).
-                  chips={cs.chips.slice(1)}
-                  description={cs.description}
-                  priority={index === 0}
-                  style={{ animationDelay: `${index * 70}ms` }}
-                />
-              ))}
-            </div>
+            <h2 className="sr-only">Selected work</h2>
+            {caseStudies.map((cs, index) => (
+              <CaseStudyCard
+                key={cs.href}
+                href={cs.href}
+                image={cs.image}
+                title={cs.title}
+                // Drops the leading "Case Study"/"Showcase" type tag for
+                // this iteration — chips[0] in every entry, see
+                // lib/case-studies.ts. The underlying data keeps it for
+                // other consumers (sitemap, a future case-study-page pass).
+                chips={cs.chips.slice(1)}
+                description={cs.description}
+                priority={index === 0}
+                style={{ animationDelay: `${index * 70}ms` }}
+              />
+            ))}
           </div>
         </div>
       </main>
