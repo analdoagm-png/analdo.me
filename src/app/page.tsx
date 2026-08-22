@@ -1,6 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { CaseStudyCard } from "@/components/case-study-card";
+import { CaseStudyIndexRow } from "@/components/case-study-index-row";
 import { ToolIcon } from "@/components/tool-icon";
 import { ContactIcon } from "@/components/contact-icon";
 import type { Metadata } from "next";
@@ -103,21 +103,23 @@ export default function Home() {
         </section>
 
         {/*
-          No horizontal padding below `md` — the mobile design runs the cards
-          full-bleed to the viewport edges (see CaseStudyCard). Standard page
-          padding resumes at `md`.
+          Editorial index instead of an image grid: rows sit inside the
+          standard page padding at every breakpoint (no full-bleed mobile
+          treatment to reproduce, unlike CaseStudyCard) since each row's
+          thumbnail is already inset, not edge-to-edge.
         */}
-        <section className="mx-auto w-full max-w-[1280px] pb-16 md:px-10 lg:px-16">
+        <section className="mx-auto w-full max-w-[1280px] px-6 pb-16 md:px-10 lg:px-16">
           {/*
-            Card titles are h3, so this names the section and keeps the document
-            outline from jumping h1 → h3. Visually hidden to leave the minimal
-            hero-then-grid layout untouched.
+            Row titles are h3, so this names the section and keeps the
+            document outline from jumping h1 → h3. Visually hidden to leave
+            the minimal hero-then-list layout untouched.
           */}
           <h2 className="sr-only">Selected work</h2>
-          <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+          <div className="flex w-full flex-col divide-y divide-stroke-dark border-t border-stroke-dark">
             {caseStudies.map((cs, index) => (
-              <CaseStudyCard
+              <CaseStudyIndexRow
                 key={cs.href}
+                index={index + 1}
                 href={cs.href}
                 image={cs.image}
                 title={cs.title}

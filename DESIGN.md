@@ -386,6 +386,10 @@ The homepage's tool sentence intentionally does not use `Chip` — see Homepage 
 
 File: `src/components/case-study-card.tsx`
 
+On this branch the homepage uses `CaseStudyIndexRow` (below) instead — this
+component is kept for its Storybook reference and as the candidate to
+reinstate if the editorial-index direction isn't the one that ships.
+
 Current structure:
 
 - Entire card is a `Link`.
@@ -400,6 +404,40 @@ Current structure:
 - Tags: chip row with `gap-2 pt-1`.
 
 Card title hierarchy should be stronger than body copy. Avoid making body text as large or visually loud as the title.
+
+### CaseStudyIndexRow
+
+File: `src/components/case-study-index-row.tsx`
+
+The homepage's current project list: a text-forward, single-column
+alternative to `CaseStudyCard`'s image grid, so all five projects read above
+or near the fold as one scannable index instead of a couple of large cards.
+
+- Entire row is a `Link`, styled the same way as `CaseStudyCard` and
+  `CaseStudyNext`.
+- Rows sit in a `flex flex-col divide-y divide-stroke-dark` list with a
+  `border-t border-stroke-dark` on the wrapper closing off the first row —
+  the list uses the same divider token the deck's two-panel slides use for
+  `divide-x`, just on the other axis.
+- Thumbnail: fixed `96×64` / `112×80` (`md`) / `128×96` (`lg`), flush and
+  unrounded — this reuses `CaseStudyNext`'s existing thumbnail treatment at
+  list scale rather than inventing a new image style. Same sitewide
+  `outline outline-1 -outline-offset-1 outline-white/10`, same
+  `group-hover:scale-105` zoom.
+- Index number: `01`–`05`, `font-mono text-body-h3 text-white/40`, hidden
+  below `sm` to keep the narrowest rows focused on title and description.
+- Title: `text-heading-h5`, one line (`truncate`) so row height stays
+  constant regardless of project name length.
+- Description: `line-clamp-1` below `md`, `line-clamp-2` from `md` up — a
+  row is denser than a card, so the description is deliberately terser than
+  `CaseStudyCard`'s uncapped one.
+- Chips (`Chip size="sm"`) and the hover arrow are both `hidden` below `md`;
+  a narrow row has room for a title and one line of description only.
+- Hover: unlike `CaseStudyCard`, a row has no resting shadow or ring to read
+  as clickable, so hover adds a full-row `hover:bg-white/[0.03]` tint on top
+  of the existing image-zoom and arrow-slide idioms.
+- The homepage section drops its `sr-only` "Selected work" `h2` in to keep
+  the same h1 → h2 → h3 outline as the grid version; row titles stay `h3`.
 
 ### CaseStudiesDeck
 
