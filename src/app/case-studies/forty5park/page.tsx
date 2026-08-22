@@ -19,6 +19,21 @@ export const metadata = caseStudyMetadata({
  * `bioAs="p"` since this page's own `h1` is "Forty5Park", not the sidebar's
  * bio statement.
  *
+ * Centered layout, per Figma's `main-content` frame (node 333:451):
+ * `items-center` on the content column, with every text element `w-full
+ * max-w-[720px]` and every image `w-full max-w-[1280px]`. `w-full` is what
+ * makes the boxes *scale down* to fill whatever room is actually available
+ * once the sidebar and page padding are subtracted — at tablet widths
+ * that's well under 720px, so the whole column shrinks with the viewport
+ * rather than staying pinned at a fixed 720px (which would either overflow
+ * or force horizontal scrolling). `max-w` is what stops them growing past
+ * Figma's spec once there's enough room, and `items-center` on the parent
+ * is what centers the (now width-capped) column within the wider content
+ * area rather than leaving it flush against the sidebar's edge — a
+ * definite-width flex item doesn't get centered by `items-stretch` (the
+ * default) even though it isn't full width; that was the bug in the first
+ * pass, which had `max-w-[720px]` but no `items-center` on the parent.
+ *
  * The YEAR meta and intro/section text blocks are written inline here
  * rather than through `CaseStudyYear`/`CaseStudyIntroBlock`/
  * `CaseStudySectionBlock` — those are shared with Uber Suite and Github's
@@ -42,12 +57,12 @@ export default function Forty5ParkCaseStudy() {
       <main id="main-content" className="flex-1">
         <HomeSidebar bioAs="p" className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80" />
 
-        <div className="flex flex-col gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
-          <h1 className="max-w-[720px] animate-fade-up text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">
+        <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+          <h1 className="w-full max-w-[720px] animate-fade-up text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">
             Forty5Park
           </h1>
 
-          <div className="flex max-w-[720px] flex-col items-start">
+          <div className="flex w-full max-w-[720px] flex-col items-start">
             <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
               Year
             </p>
@@ -57,8 +72,7 @@ export default function Forty5ParkCaseStudy() {
           </div>
 
           {/*
-            Single stacked column capped at 720px — matching Figma's actual
-            text-column width — not the old CaseStudyIntroBlock's
+            Single stacked column, not the old CaseStudyIntroBlock's
             side-by-side md:flex-row split, which this page doesn't use.
           */}
           <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6 [animation-delay:100ms]">
@@ -77,17 +91,21 @@ export default function Forty5ParkCaseStudy() {
             </p>
           </div>
 
-          <ProjectImage
-            src="/images/forty5park/project-image-1.png"
-            alt="Forty5Park map view showing acquisition targets plotted across active real estate markets, with a filterable list in the sidebar."
-            roundedClassName="rounded-token"
-            priority
-          />
-          <ProjectImage
-            src="/images/forty5park/project-image-2.png"
-            alt="Forty5Park map view with a market highlights panel summarizing recent deal activity."
-            roundedClassName="rounded-token"
-          />
+          <div className="w-full max-w-[1280px]">
+            <ProjectImage
+              src="/images/forty5park/project-image-1.png"
+              alt="Forty5Park map view showing acquisition targets plotted across active real estate markets, with a filterable list in the sidebar."
+              roundedClassName="rounded-token"
+              priority
+            />
+          </div>
+          <div className="w-full max-w-[1280px]">
+            <ProjectImage
+              src="/images/forty5park/project-image-2.png"
+              alt="Forty5Park map view with a market highlights panel summarizing recent deal activity."
+              roundedClassName="rounded-token"
+            />
+          </div>
 
           <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
             <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
@@ -101,31 +119,41 @@ export default function Forty5ParkCaseStudy() {
             </p>
           </div>
 
-          <ProjectImage
-            src="/images/forty5park/project-image-3.png"
-            alt="Forty5Park map zoomed into a metro area, showing clustered deal density markers."
-            roundedClassName="rounded-token"
-          />
-          <ProjectImage
-            src="/images/forty5park/project-image-4.png"
-            alt="Forty5Park property valuation heatmap, showing forecasted values by neighborhood across a metro area."
-            roundedClassName="rounded-token"
-          />
-          <ProjectImage
-            src="/images/forty5park/project-image-5.png"
-            alt="Forty5Park portfolio view comparing multiple acquisitions side by side with key financial metrics."
-            roundedClassName="rounded-token"
-          />
-          <ProjectImage
-            src="/images/forty5park/project-image-6.png"
-            alt="Forty5Park saved-analysis session list."
-            roundedClassName="rounded-token"
-          />
-          <ProjectImage
-            src="/images/forty5park/project-image-7.png"
-            alt="Forty5Park property detail view showing unit mix and rent data for a prospective acquisition."
-            roundedClassName="rounded-token"
-          />
+          <div className="w-full max-w-[1280px]">
+            <ProjectImage
+              src="/images/forty5park/project-image-3.png"
+              alt="Forty5Park map zoomed into a metro area, showing clustered deal density markers."
+              roundedClassName="rounded-token"
+            />
+          </div>
+          <div className="w-full max-w-[1280px]">
+            <ProjectImage
+              src="/images/forty5park/project-image-4.png"
+              alt="Forty5Park property valuation heatmap, showing forecasted values by neighborhood across a metro area."
+              roundedClassName="rounded-token"
+            />
+          </div>
+          <div className="w-full max-w-[1280px]">
+            <ProjectImage
+              src="/images/forty5park/project-image-5.png"
+              alt="Forty5Park portfolio view comparing multiple acquisitions side by side with key financial metrics."
+              roundedClassName="rounded-token"
+            />
+          </div>
+          <div className="w-full max-w-[1280px]">
+            <ProjectImage
+              src="/images/forty5park/project-image-6.png"
+              alt="Forty5Park saved-analysis session list."
+              roundedClassName="rounded-token"
+            />
+          </div>
+          <div className="w-full max-w-[1280px]">
+            <ProjectImage
+              src="/images/forty5park/project-image-7.png"
+              alt="Forty5Park property detail view showing unit mix and rent data for a prospective acquisition."
+              roundedClassName="rounded-token"
+            />
+          </div>
 
           <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
             <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
