@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CaseStudyHeader } from "@/components/case-study-header";
-import { SiteFooter } from "@/components/site-footer";
-import { CaseStudyPointsGrid } from "@/components/case-study-points-grid";
-import { CaseStudySectionHeading } from "@/components/case-study-section-heading";
+import { HomeSidebar } from "@/components/home-sidebar";
+import { MobileTopBar } from "@/components/mobile-top-bar";
+import { MobileFooter } from "@/components/mobile-footer";
 import { Chip } from "@/components/chip";
 import { ToolIcon } from "@/components/tool-icon";
 import { siteName, titleTemplate } from "@/lib/site";
@@ -41,34 +40,57 @@ export const metadata: Metadata = {
 };
 
 const inlineLinkStyles =
-  "text-white underline decoration-white/30 underline-offset-2 [text-decoration-thickness:from-font] [text-underline-position:from-font] transition-colors duration-200 hover:text-white/60 active:text-white/40";
+  "font-mono text-white underline decoration-white/30 underline-offset-2 [text-decoration-thickness:from-font] [text-underline-position:from-font] transition-colors duration-200 hover:text-white/60 active:text-white/40";
 
+/**
+ * Fourth page moved to the new sidebar system, after the three showcase
+ * case studies — same components (`HomeSidebar bioAs="p"`, `MobileTopBar`,
+ * `MobileFooter`), same `items-center` / `w-full max-w-[720px]` centered
+ * column for prose. No Figma frame exists for this page specifically, so
+ * its structure is extrapolated from the established pattern rather than
+ * matched to a spec — flag for review if a real About/Resume frame shows up
+ * later.
+ *
+ * `CaseStudyPointsGrid` and `CaseStudySectionHeading` (the old page's
+ * stats-grid and section-heading components) are still shared with GoRight
+ * and Arrowhead Transit, which haven't moved to this system — so, matching
+ * the showcase case studies, this page writes its stats grid and section
+ * headings inline rather than editing those components' typography.
+ *
+ * The stats row is the one exception to the 720px text measure: three
+ * compact number+description blocks read better with the extra width a
+ * multi-column row gets, so it's capped at `max-w-[1280px]` instead, the
+ * same measure `ProjectImage`s use elsewhere on this system.
+ */
 export default function AboutPage() {
   return (
     <>
-      <CaseStudyHeader />
+      <a
+        href="#main-content"
+        className="skip-link rounded-token border border-stroke-dark bg-dark-primary px-4 py-2 font-mono text-body-h2 text-white"
+      >
+        Skip to content
+      </a>
+
+      <MobileTopBar />
 
       <main id="main-content" className="flex-1">
-        <section className="mx-auto flex w-full max-w-[1280px] flex-col items-start gap-12 px-6 pt-12 pb-16 md:gap-16 md:px-10 md:pt-16 lg:px-16 lg:pt-40">
-          <div className="flex flex-col items-start gap-6">
-            {/*
-              `CaseStudyHeader` hides the name lockup below `md`, so this swaps
-              the eyebrow for it on mobile rather than losing it — the role is
-              dropped here since the h1 below already covers it. `md` and up
-              keep the plain "About" eyebrow since the header already shows the
-              full lockup there.
-            */}
-            <p className="animate-fade-up text-overline text-white md:hidden">
-              Analdo Gomez
-            </p>
-            <p className="hidden animate-fade-up text-overline text-white/70 md:block">
+        <HomeSidebar
+          bioAs="p"
+          activeNav="resume"
+          className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80"
+        />
+
+        <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+          <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-6">
+            <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
               About
             </p>
-            <h1 className="w-full animate-fade-up text-balance text-heading-h4 text-white md:text-heading-h2 lg:max-w-[884px]">
+            <h1 className="w-full text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">
               Product designer who builds systems B2B teams can ship
               straight to code.
             </h1>
-            <p className="w-full max-w-[65ch] animate-fade-up text-pretty text-body-h1 text-white/70 [animation-delay:100ms]">
+            <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
               14+ years designing intuitive, data-driven products for
               fintech, retirement, and SaaS clients — based in Colombia,
               working with teams across the US.
@@ -76,51 +98,56 @@ export default function AboutPage() {
           </div>
 
           {/*
-            CaseStudyPointsGrid renders h3 item titles, which on case-study
-            pages always follow a visible h2 section heading. About has no
-            section heading above the stats, so this sr-only h2 keeps the
-            outline valid instead of jumping h1 -> h3.
+            The three stat items below render h3 titles, which would
+            otherwise follow this h1 directly — sr-only h2 keeps the
+            document outline valid (h1 -> h2 -> h3) without introducing new
+            visible copy this page doesn't need.
           */}
           <h2 className="sr-only">Highlights</h2>
-          <CaseStudyPointsGrid
-            items={[
-              {
-                number: "1.",
-                title: "14+",
-                description:
-                  "Years designing B2B products for fintech, retirement, and SaaS clients",
-              },
-              {
-                number: "2.",
-                title: "3",
-                description:
-                  "Design systems built and scaled from the ground up",
-              },
-              {
-                number: "3.",
-                title: "200+",
-                description:
-                  "Components shipped in the Merlin Design System for GoRight",
-              },
-            ]}
-            showNumbers={false}
-            titleClassName="text-heading-h3 md:text-heading-h2"
-          />
+          <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-8 [animation-delay:80ms]">
+            <div className="flex w-full flex-col items-start gap-2">
+              <h3 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+                14+
+              </h3>
+              <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+                Years designing B2B products for fintech, retirement, and
+                SaaS clients
+              </p>
+            </div>
+            <div className="flex w-full flex-col items-start gap-2">
+              <h3 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+                3
+              </h3>
+              <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+                Design systems built and scaled from the ground up
+              </p>
+            </div>
+            <div className="flex w-full flex-col items-start gap-2">
+              <h3 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+                200+
+              </h3>
+              <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+                Components shipped in the Merlin Design System for GoRight
+              </p>
+            </div>
+          </div>
 
-          <div className="flex w-full flex-col items-start gap-8">
-            <CaseStudySectionHeading
-              eyebrow="Experience"
-              title="Where I've worked"
-            />
+          <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
+            <div className="flex w-full animate-fade-up flex-col items-start">
+              <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+                Experience
+              </p>
+              <h2 className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
+                Where I&rsquo;ve worked
+              </h2>
+            </div>
 
             <div className="flex w-full animate-fade-up flex-col items-start gap-8">
               <div className="flex w-full flex-col items-start gap-2 border-b border-stroke-dark pb-8">
                 <div className="flex w-full flex-col items-start justify-between gap-1 md:flex-row md:items-baseline">
-                  <h3 className="text-balance text-heading-h5 text-white">
+                  <h3 className="text-balance font-mono text-heading-h5 font-bold text-white">
                     Senior Product Designer — Monks{" "}
-                    <span className="text-white/50">
-                      (formerly Zemoga)
-                    </span>
+                    <span className="text-white/50">(formerly Zemoga)</span>
                   </h3>
                   <p className="shrink-0 font-mono text-body-h3 text-white/50">
                     May 2021 – Jun 2026
@@ -129,22 +156,16 @@ export default function AboutPage() {
                 <p className="font-mono text-body-h3 text-white/50">
                   Colombia · Remote, US clients
                 </p>
-                <p className="w-full text-pretty text-body-h2 text-white/70">
+                <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
                   Owned the Morningstar Plan Advantage platform end to end,
                   built custom configurations that supported three enterprise
                   deals, and advised the Morningstar Design System team. Led
                   design for{" "}
-                  <Link
-                    href="/case-studies/forty5park"
-                    className={inlineLinkStyles}
-                  >
+                  <Link href="/case-studies/forty5park" className={inlineLinkStyles}>
                     Forty5Park
                   </Link>{" "}
                   and{" "}
-                  <Link
-                    href="/case-studies/goright"
-                    className={inlineLinkStyles}
-                  >
+                  <Link href="/case-studies/goright" className={inlineLinkStyles}>
                     GoRight
                   </Link>
                   , including the 200+ component Merlin Design System.
@@ -153,7 +174,7 @@ export default function AboutPage() {
 
               <div className="flex w-full flex-col items-start gap-2 border-b border-stroke-dark pb-8">
                 <div className="flex w-full flex-col items-start justify-between gap-1 md:flex-row md:items-baseline">
-                  <h3 className="text-balance text-heading-h5 text-white">
+                  <h3 className="text-balance font-mono text-heading-h5 font-bold text-white">
                     Senior Product Designer — FullStack Labs
                   </h3>
                   <p className="shrink-0 font-mono text-body-h3 text-white/50">
@@ -163,12 +184,9 @@ export default function AboutPage() {
                 <p className="font-mono text-body-h3 text-white/50">
                   Colombia / US · Remote
                 </p>
-                <p className="w-full text-pretty text-body-h2 text-white/70">
+                <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
                   Partnered with Uber to design{" "}
-                  <Link
-                    href="/case-studies/uber-suite"
-                    className={inlineLinkStyles}
-                  >
+                  <Link href="/case-studies/uber-suite" className={inlineLinkStyles}>
                     Uber Suite
                   </Link>
                   , an all-in-one internal toolset for company-wide
@@ -180,8 +198,8 @@ export default function AboutPage() {
 
               <div className="flex w-full flex-col items-start gap-2">
                 <div className="flex w-full flex-col items-start justify-between gap-1 md:flex-row md:items-baseline">
-                  <h3 className="text-balance text-heading-h5 text-white">
-                    Technical Lead & UX/UI Designer — Ideaware
+                  <h3 className="text-balance font-mono text-heading-h5 font-bold text-white">
+                    Technical Lead &amp; UX/UI Designer — Ideaware
                   </h3>
                   <p className="shrink-0 font-mono text-body-h3 text-white/50">
                     Nov 2011 – Oct 2017
@@ -190,7 +208,7 @@ export default function AboutPage() {
                 <p className="font-mono text-body-h3 text-white/50">
                   Colombia / US · Remote
                 </p>
-                <p className="w-full text-pretty text-body-h2 text-white/70">
+                <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
                   Led multidisciplinary teams of designers and developers
                   across client projects spanning health, real estate,
                   interior design, architecture, e-commerce, and
@@ -200,11 +218,15 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="flex w-full flex-col items-start gap-8">
-            <CaseStudySectionHeading
-              eyebrow="Skills"
-              title="What I bring to a team"
-            />
+          <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
+            <div className="flex w-full animate-fade-up flex-col items-start">
+              <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+                Skills
+              </p>
+              <h2 className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
+                What I bring to a team
+              </h2>
+            </div>
 
             <div className="flex w-full animate-fade-up flex-col items-start gap-6">
               <div className="flex flex-col items-start gap-3">
@@ -228,24 +250,18 @@ export default function AboutPage() {
                 </p>
                 <div className="flex flex-wrap items-center gap-2">
                   <Chip label="Figma" icon={<ToolIcon name="figma" />} />
-                  <Chip
-                    label="Claude Code"
-                    icon={<ToolIcon name="claude" />}
-                  />
+                  <Chip label="Claude Code" icon={<ToolIcon name="claude" />} />
                   <Chip label="Codex" icon={<ToolIcon name="codex" />} />
                   <Chip label="GitHub" icon={<ToolIcon name="github" />} />
-                  <Chip
-                    label="Storybook"
-                    icon={<ToolIcon name="storybook" />}
-                  />
+                  <Chip label="Storybook" icon={<ToolIcon name="storybook" />} />
                 </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
       </main>
 
-      <SiteFooter />
+      <MobileFooter />
     </>
   );
 }

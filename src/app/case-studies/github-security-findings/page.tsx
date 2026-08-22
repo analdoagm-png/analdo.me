@@ -40,7 +40,11 @@ export default function GithubSecurityFindingsCaseStudy() {
       <MobileTopBar />
 
       <main id="main-content" className="flex-1">
-        <HomeSidebar bioAs="p" className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80" />
+        <HomeSidebar
+          bioAs="p"
+          activeNav="works"
+          className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80"
+        />
 
         <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
           <h1 className="w-full max-w-[720px] animate-fade-up text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">

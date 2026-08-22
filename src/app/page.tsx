@@ -43,7 +43,10 @@ export default function Home() {
           directly under `main` rather than inside the content wrapper
           below. The wrapper compensates with its own md:pl-* offset.
         */}
-        <HomeSidebar className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80" />
+        <HomeSidebar
+          activeNav="works"
+          className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80"
+        />
 
         {/*
           pt-24 on mobile clears the fixed MobileTopBar (24px inset + ~48px
