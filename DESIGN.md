@@ -174,7 +174,7 @@ Standard visual QA widths:
 
 ### Header
 
-There is no shared `SiteHeader` anymore — it was homepage-only and was removed once the redesigned homepage stopped using it (see Homepage Sidebar below). `CaseStudyHeader` is used by `/about` and the three showcase case studies (Forty5Park, Uber Suite, Github's Security Findings). It wraps its "Back to portfolio" link in `<nav aria-label="Case study">`. The two editorial case studies (GoRight, Arrowhead Transit) use neither `SiteHeader` nor `CaseStudyHeader` — see Editorial Sidebar below.
+There is no shared `SiteHeader` anymore — it was homepage-only and was removed once the redesigned homepage stopped using it (see Homepage Sidebar below). `CaseStudyHeader` is now used by `/about` only — all three former showcase case studies (Forty5Park, Uber Suite, Github's Security Findings) have moved to the new sidebar system (see Case Study Sidebar below) and no longer render it. It wraps its "Back to portfolio" link in `<nav aria-label="Case study">`. The two editorial case studies (GoRight, Arrowhead Transit) use neither `SiteHeader` nor `CaseStudyHeader` — see Editorial Sidebar below.
 
 ### Homepage Sidebar
 
@@ -273,33 +273,49 @@ it now rather than each keeping their own copy.
 
 ### Case Study Sidebar (new system)
 
-Forty5Park is the first case study moved to the redesigned sidebar —
-`HomeSidebar bioAs="p"` plus `MobileTopBar`/`MobileFooter`, the exact same
-components the homepage uses, not a dedicated case-study sidebar component.
-Its own page comments explain why: the surrounding text blocks (YEAR meta,
-intro statement, section headings) are written inline in
-`case-studies/forty5park/page.tsx` rather than through the shared
-`CaseStudyYear`/`CaseStudyIntroBlock`/`CaseStudySectionBlock` components,
-since those are still used by Uber Suite and Github's Security Findings
-(not yet moved to this system) and editing them in place would change those
-pages' typography too.
+All three showcase case studies (Forty5Park, Uber Suite, Github's Security
+Findings) are on the redesigned sidebar now — `HomeSidebar bioAs="p"` plus
+`MobileTopBar`/`MobileFooter`, the exact same components the homepage uses,
+not a dedicated case-study sidebar component. Each page's own comments
+explain why the surrounding text blocks (YEAR meta, intro statement,
+section headings) are written inline rather than through shared
+`CaseStudyYear`/`CaseStudyIntroBlock`/`CaseStudySectionBlock`-style
+components: doing that would have meant either changing typography on pages
+not yet moved (before all three were converted) or, now that all three
+share the identical inline pattern, is a good candidate to extract into one
+shared component the next time this page shape needs to change. (The old
+`CaseStudyIntroBlock`/`CaseStudySectionBlock` components — `case-study-
+text-block.tsx` — were deleted once all three showcase pages moved off
+them; they had no other callers left.)
 
-Two structural things worth carrying forward to the next case study moved
-to this system:
+Structural things to carry forward to the next page moved to this system
+(the two editorial case studies, GoRight and Arrowhead Transit, are the
+remaining candidates):
 
-- **Text caps at `max-w-[720px]`, stacked in a single column** — the title,
-  YEAR meta, and every paragraph/heading pair. This replaced an early
-  attempt that copied `CaseStudyIntroBlock`/`CaseStudySectionBlock`'s
-  `md:flex-row` side-by-side split literally; the actual Figma frame has no
-  such split, just a single reading column, and the side-by-side version
-  read as cramped once corrected.
+- **`items-center` on the content column, with every child `w-full
+  max-w-[*]`** — matches Figma's `main-content` frame (node 333:451)
+  exactly: text at `max-w-[720px]`, images (each wrapped in its own `w-full
+  max-w-[1280px]` div, since `ProjectImage` itself has no width-cap prop)
+  at `max-w-[1280px]`. The `w-full` half is what makes these boxes actually
+  *scale down* to fill the available width at tablet, where the content
+  area is well under 720px once the sidebar and padding are subtracted,
+  rather than staying pinned at a fixed measure. The `items-center` half is
+  what centers the (width-capped) column within the wider content area —
+  a definite-width flex item is **not** centered by `items-stretch` (the
+  default) just because it's narrower than its container; that was a real
+  bug in the first Forty5Park pass, caught by a direct Figma comparison and
+  fixed after the fact.
 - **Images opt into `roundedClassName="rounded-token"`** on each
   `ProjectImage` call (that prop already existed, unused elsewhere on this
   branch until now) rather than changing `ProjectImage`'s own default —
   which stays `rounded-none` for every other case study's images.
-- **`CaseStudyNext` needs a manual `md:pl-80` wrapper** on any page using
-  the fixed sidebar, since the sidebar isn't a flex/grid sibling of
-  anything below `</main>` — see Homepage Sidebar above.
+- **No `CaseStudyNext`.** Dropped entirely on all three pages, per explicit
+  request — the persistent `/ Works` sidebar link covers the onward path
+  back to the index instead. `CaseStudyNext` itself is untouched and still
+  renders on the two editorial pages.
+- **Per-image `aspect` overrides carry over unchanged** where a project's
+  screenshots aren't the component's `2880/1800` default (several of Uber
+  Suite's and Github's Security Findings' are portrait or near-square).
 
 ### Editorial Sidebar
 
@@ -332,7 +348,7 @@ The onward link closing every case study. A full-width `border-t border-stroke-d
 
 Deliberate exception to the site's standard `px-6 md:px-10 lg:px-16` page padding: only the text side carries the responsive `pl-*` inset (`pl-6 md:pl-10 lg:pl-16`) — the image thumbnail has no right-side padding or rounding, so it sits flush against the `max-w-[1280px]` container's own right edge. This is the one image treatment on the site that isn't padded and rounded; it was chosen deliberately as a more editorial, image-forward closing beat, distinct from every other framed image. A `min-h-28 md:min-h-32 lg:min-h-40` floor on the text column keeps the image band a reasonable height even when the project title is short and wouldn't otherwise stretch the row.
 
-It renders between `</main>` and `SiteFooter` on the pages that still use a footer (the three showcase case studies and `/about`), outside `main`, as its own `nav` landmark. The homepage and the two editorial case studies have no `SiteFooter` — their own sidebar's `© 2026` line covers that role instead, but `CaseStudyNext` still renders on the editorial pages.
+Renders between `</main>` and `SiteFooter`, outside `main`, as its own `nav` landmark — only still used by the two editorial case studies (GoRight, Arrowhead Transit), which have no `SiteFooter` of their own (their sidebar's `© 2026` line covers that role instead). The three showcase case studies dropped it entirely once they moved to the new sidebar system — see Case Study Sidebar above.
 
 ### Share Cards
 

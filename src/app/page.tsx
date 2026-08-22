@@ -145,14 +145,11 @@ export default function Home() {
             {/*
               Card titles are h3, so this names the section and keeps the
               document outline from jumping h1 (in HomeSidebar, or the
-              mobile-only h1 above) -> h3. Visible from `md` up, matching
-              the tablet Figma frame's own "SELECTED CASE STUDIES (N)"
-              label — the mobile frame has no equivalent, so it stays
-              sr-only there rather than introducing new visible copy.
+              mobile-only h1 above) -> h3. sr-only at every breakpoint —
+              the tablet Figma frame has a visible "SELECTED CASE STUDIES
+              (N)" label here, but it was removed by request.
             */}
-            <h2 className="sr-only font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em] md:not-sr-only">
-              Selected Case Studies ({caseStudies.length})
-            </h2>
+            <h2 className="sr-only">Selected Case Studies ({caseStudies.length})</h2>
 
             {/*
               No horizontal padding below `md` — mobile cards run full-bleed
