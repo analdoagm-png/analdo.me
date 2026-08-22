@@ -89,9 +89,20 @@ export function CaseStudyCard({
           </p>
         </div>
         <div className="flex flex-wrap items-start gap-2">
-          {chips.map((chip) => (
-            <Chip key={chip} label={chip} />
-          ))}
+          {chips.map((chip, index) =>
+            index === 0 ? (
+              // The leading tag is always the "Case Study"/"Showcase" type
+              // (see lib/case-studies.ts) — shown below `md` (mobile Figma
+              // frame keeps it) and hidden from `md` up (tablet Figma frame
+              // drops it). A real per-breakpoint disagreement in the
+              // source design, not an oversight.
+              <span key={chip} className="md:hidden">
+                <Chip label={chip} />
+              </span>
+            ) : (
+              <Chip key={chip} label={chip} />
+            ),
+          )}
         </div>
       </div>
     </Link>

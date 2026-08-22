@@ -141,35 +141,45 @@ export default function Home() {
             </div>
           </div>
 
-          {/*
-            No horizontal padding below `md` — mobile cards run full-bleed
-            to the viewport edges (see CaseStudyCard). Standard grid gap
-            resumes, and reflows lg:grid-cols-2, once the sidebar is a real
-            side column at md.
-          */}
-          <div className="-mx-6 grid w-full grid-cols-1 gap-6 md:mx-0 lg:grid-cols-2 lg:gap-8">
+          <div className="flex w-full flex-col gap-8">
             {/*
               Card titles are h3, so this names the section and keeps the
               document outline from jumping h1 (in HomeSidebar, or the
-              mobile-only h1 above) -> h3.
+              mobile-only h1 above) -> h3. Visible from `md` up, matching
+              the tablet Figma frame's own "SELECTED CASE STUDIES (N)"
+              label — the mobile frame has no equivalent, so it stays
+              sr-only there rather than introducing new visible copy.
             */}
-            <h2 className="sr-only">Selected work</h2>
-            {caseStudies.map((cs, index) => (
-              <CaseStudyCard
-                key={cs.href}
-                href={cs.href}
-                image={cs.image}
-                title={cs.title}
-                // Drops the leading "Case Study"/"Showcase" type tag for
-                // this iteration — chips[0] in every entry, see
-                // lib/case-studies.ts. The underlying data keeps it for
-                // other consumers (sitemap, a future case-study-page pass).
-                chips={cs.chips.slice(1)}
-                description={cs.description}
-                priority={index === 0}
-                style={{ animationDelay: `${index * 70}ms` }}
-              />
-            ))}
+            <h2 className="sr-only font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em] md:not-sr-only">
+              Selected Case Studies ({caseStudies.length})
+            </h2>
+
+            {/*
+              No horizontal padding below `md` — mobile cards run full-bleed
+              to the viewport edges (see CaseStudyCard). Standard grid gap
+              resumes, and reflows lg:grid-cols-2, once the sidebar is a real
+              side column at md.
+            */}
+            <div className="-mx-6 grid w-full grid-cols-1 gap-6 md:mx-0 lg:grid-cols-2 lg:gap-8">
+              {caseStudies.map((cs, index) => (
+                <CaseStudyCard
+                  key={cs.href}
+                  href={cs.href}
+                  image={cs.image}
+                  title={cs.title}
+                  // The leading "Case Study"/"Showcase" type tag is
+                  // included below `md` (mobile Figma frame keeps it) and
+                  // dropped from `md` up (tablet Figma frame doesn't show
+                  // it) — CaseStudyCard hides chips[0] itself with
+                  // `md:hidden` rather than this call site slicing the
+                  // array, since the two breakpoints genuinely disagree.
+                  chips={cs.chips}
+                  description={cs.description}
+                  priority={index === 0}
+                  style={{ animationDelay: `${index * 70}ms` }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </main>
