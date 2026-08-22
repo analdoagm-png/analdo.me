@@ -176,56 +176,101 @@ Standard visual QA widths:
 
 There is no shared `SiteHeader` anymore — it was homepage-only and was removed once the redesigned homepage stopped using it (see Homepage Sidebar below). `CaseStudyHeader` is now used by `/about` only — all three former showcase case studies (Forty5Park, Uber Suite, Github's Security Findings) have moved to the new sidebar system (see Case Study Sidebar below) and no longer render it. It wraps its "Back to portfolio" link in `<nav aria-label="Case study">`. The two editorial case studies (GoRight, Arrowhead Transit) use neither `SiteHeader` nor `CaseStudyHeader` — see Editorial Sidebar below.
 
+### Sidebar Shell Layout
+
+File: `src/app/(sidebar-shell)/layout.tsx`
+
+Every route on the new sidebar system — the homepage, `/about`, and the
+three showcase case studies — lives inside this route group now, sharing
+one `layout.tsx` that renders the skip link, `MobileTopBar`, `HomeSidebar`,
+and `MobileFooter` exactly once. `(sidebar-shell)` is a route group: the
+parentheses are invisible in the URL, so `/about` and
+`/case-studies/forty5park` are unaffected — only the file location moved.
+Each page under it (`page.tsx`, `about/page.tsx`,
+`case-studies/forty5park/page.tsx`, etc.) now returns *only* its own
+content column; the shell is no longer duplicated per page.
+
+**Why this exists.** Before this layout, every page independently rendered
+its own copy of `HomeSidebar`/`MobileTopBar` — visually identical across
+routes, but a distinct component instance each time from React's
+perspective, since Next.js unmounts a route's whole tree on navigation
+unless the shared part lives in a common ancestor layout. That remount
+replayed the sidebar's `animate-fade-up` entrance and produced a visible
+jump every time you clicked between `/ Works` and `/ Resume`. A shared
+layout is the actual fix, not a CSS one: `{children}` (each page's content)
+still unmounts and remounts on navigation — so per-page `animate-fade-up`
+content transitions keep firing exactly as before — but `HomeSidebar` and
+`MobileTopBar`, rendered once in the layout, are the same DOM node across
+every navigation within the group and never re-animate or flash. (Verified
+directly: tagging the sidebar's DOM node with a marker attribute before a
+client-side navigation and confirming the same node — same marker — is
+still there afterward, rather than a fresh one.)
+
+**`bioAs`/`activeNav` are derived from `usePathname`, making this layout a
+client component** — the sidebar no longer lives inside any individual
+page to receive them as props. `bioAs` is `"h1"` only on `/` itself, `"p"`
+everywhere else (a page can only have one `h1`, and a case-study/About
+page's `h1` is its own title/heading, not the sidebar's bio statement).
+`activeNav` is `"resume"` only on `/about`, `"works"` everywhere else —
+this replaced an earlier, incorrect assumption that `/ Works` should
+always render active regardless of route (based on every Figma frame
+showing the identical static state); the real requirement is a genuine
+current-page indicator, confirmed by explicit request. Server Components
+(every page under this layout) can still be passed as `children` into a
+Client Component layout without themselves becoming client components —
+this is a normal, supported React Server Components pattern, not a
+workaround.
+
+GoRight and Arrowhead Transit stay outside this route group entirely; they
+have no `layout.tsx` of their own and remain on the old
+`CaseStudyProjectHeader`/`EditorialSidebar` system (see Editorial Sidebar
+below).
+
 ### Homepage Sidebar
 
 File: `src/components/home-sidebar.tsx`
 
 Rebuilt for a second Figma iteration (mobile + tablet frames, desktop
-specified as "an extension of tablet"), then generalized to a second caller
-once the Forty5Park case study moved to the same system. Holds: name/role
-lockup (plain text, not a link), the bio statement, the "based in / working
-with" tool sentence, a `/ Works` (→ `/`) / `/ Resume` (→ `/about`) nav pair,
-contact links (`ContactGlyph` + label), and a `© Analdo Gomez / 2026` line —
-all `font-mono`, per the Typography section's homepage-only(-and-onward)
-exception above.
+specified as "an extension of tablet"), then generalized to every page in
+the `(sidebar-shell)` route group. Holds: name/role lockup (plain text, not
+a link), the bio statement, the "based in / working with" tool sentence, a
+`/ Works` (→ `/`) / `/ Resume` (→ `/about`) nav pair, contact links
+(`ContactGlyph` + label), and a `© Analdo Gomez / 2026` line — all
+`font-mono`, per the Typography section's exception above. It's rendered
+exactly once, by `(sidebar-shell)/layout.tsx` — see that section for why,
+and for where `bioAs`/`activeNav` actually come from now.
 
-**Shared with case-study pages, via a prop, not a second component.** The
-bio statement is the homepage's own `h1` there, but a case-study page's `h1`
-is the project title — a page can only have one — so callers pass
-`bioAs="h1" | "p"` (default `"h1"`, so the homepage call site is unchanged).
-This replaces what the old (pre-redesign) system did with two separate
-components, `HomeSidebar` and `EditorialSidebar` — see Case Study Sidebar
-below for why the *editorial* case studies (GoRight, Arrowhead) still use
-the old one for now.
+**`bioAs`**: `"h1" | "p"` (default `"h1"`). The bio statement is the
+homepage's own `h1`, but a case-study/About page's `h1` is its own title —
+so those routes get `"p"`. This replaces what the old (pre-redesign) system
+did with two separate components, `HomeSidebar` and `EditorialSidebar` —
+see Case Study Sidebar below for why the *editorial* case studies (GoRight,
+Arrowhead) still use the old one for now.
+
+**`activeNav`**: `"works" | "resume"` (default `"works"`), driving which
+nav link renders bold/active (with `aria-current="page"`) versus muted.
 
 **`md:fixed`, not `sticky` or a stacked block.** `md:fixed md:inset-y-0
 md:left-0 md:w-80` (320px) pins the sidebar flush to the viewport's
 top/left/bottom edges at every scroll position — a true app-shell rail, not
 a scroll-until-it-hits-the-top column (an earlier pass here used `sticky`;
 verify against this file if you find stale references elsewhere). Below
-`md`, it's `hidden` entirely; each page renders its own top-bar-plus-inline-
-content mobile treatment instead (see Mobile Top Bar below).
+`md`, it's `hidden` entirely; `MobileTopBar` covers mobile instead (see
+below).
 
 Because `fixed` removes the sidebar from document flow, **every page using
 it must offset its own content**: `md:pl-[368px] lg:pl-[384px]` (320px
 sidebar + that tier's own gutter) on the content wrapper, and `md:pl-80` on
-any full-width element below `<main>` that would otherwise run underneath
-the sidebar (e.g. `CaseStudyNext` — see its own section). This is manual
-per page, not automatic, since the sidebar and its content aren't siblings
-in a flex/grid relationship anymore.
+any full-width element that would otherwise run underneath the sidebar
+(e.g. `CaseStudyNext` — see its own section). This is manual per page, not
+automatic, since the sidebar and each page's content aren't siblings in a
+flex/grid relationship.
 
 `border-r border-stroke-dark` (not a full box): flush against the
 viewport's own edges, a full border would double up on the frame. Reads as
 a structural divider, matching how borders are used sitewide.
 `overflow-y-auto` guards against a viewport short enough that the sidebar's
 own content doesn't fit.
-
-`/ Works` always renders active (bold, full white) on every page this
-mounts on — no `usePathname` check or client-component conversion. Every
-Figma frame that includes this sidebar (homepage, both case-study types)
-shows the identical static state, read as intentional: "Works" names the
-homepage's role as the work index, and every page carrying this sidebar is
-either that index or a piece of the work it indexes.
 
 The Figma sidebar's copyright is 12px; kept at `text-body-h3` (14px) instead
 — the site's established minimum readable size — rather than copied
@@ -256,10 +301,11 @@ The menu icon is the exact path data exported from the new Figma iteration's
 mark `main`'s `MobileNav` already uses — recoloured to `currentColor`. Do
 not re-trace by hand; re-export if the design changes.
 
-The page's own `pt-24` (see Homepage Sidebar above) is tuned to this bar's
+Each page's own `pt-24` (see Homepage Sidebar above) is tuned to this bar's
 height (24px inset + ~48px bar + breathing room) so mobile content clears
 it, the same idea as `main`'s `pt-20`-for-`MobileNav` convention, just a
-different number for a differently-sized bar.
+different number for a differently-sized bar. Like `HomeSidebar`, this is
+rendered once by `(sidebar-shell)/layout.tsx` now, not duplicated per page.
 
 ### Mobile Footer
 
@@ -267,16 +313,18 @@ File: `src/components/mobile-footer.tsx`
 
 Mobile-only (`md:hidden`) copyright + icon-only social row for pages on the
 new sidebar system — `HomeSidebar`'s own copyright line covers the same
-role from `md` up, so this never renders alongside it. Extracted out of the
-homepage's `page.tsx` once Forty5Park needed the identical block; both call
-it now rather than each keeping their own copy.
+role from `md` up, so this never renders alongside it. Originally extracted
+out of the homepage's `page.tsx` once Forty5Park needed the identical
+block; now, like `HomeSidebar` and `MobileTopBar`, rendered once by
+`(sidebar-shell)/layout.tsx` rather than called per page.
 
 ### Case Study Sidebar (new system)
 
 All three showcase case studies (Forty5Park, Uber Suite, Github's Security
-Findings) are on the redesigned sidebar now — `HomeSidebar bioAs="p"` plus
-`MobileTopBar`/`MobileFooter`, the exact same components the homepage uses,
-not a dedicated case-study sidebar component. Each page's own comments
+Findings) are on the redesigned sidebar now — all three live in the
+`(sidebar-shell)` route group (see above) and share `HomeSidebar`
+(`bioAs="p"`)/`MobileTopBar`/`MobileFooter` with the homepage, not a
+dedicated case-study sidebar component. Each page's own comments
 explain why the surrounding text blocks (YEAR meta, intro statement,
 section headings) are written inline rather than through shared
 `CaseStudyYear`/`CaseStudyIntroBlock`/`CaseStudySectionBlock`-style

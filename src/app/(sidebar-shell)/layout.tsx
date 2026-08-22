@@ -1,0 +1,68 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { HomeSidebar } from "@/components/home-sidebar";
+import { MobileTopBar } from "@/components/mobile-top-bar";
+import { MobileFooter } from "@/components/mobile-footer";
+
+/**
+ * Shared shell for every route on the new sidebar system (homepage, About,
+ * and the three showcase case studies — the route group is invisible in
+ * the URL, so `/about` and `/case-studies/forty5park` are unaffected).
+ * GoRight and Arrowhead Transit stay outside this group; they're still on
+ * the old `CaseStudyProjectHeader`/`EditorialSidebar` system and have no
+ * layout of their own.
+ *
+ * This exists specifically so `HomeSidebar` and `MobileTopBar` don't
+ * remount on navigation between these routes. Before this layout, every
+ * page rendered its own copy of both — visually identical, but each a
+ * distinct component instance from React's perspective, since Next.js
+ * unmounts a route's entire tree on navigation unless the shared part
+ * lives in a common ancestor layout. That remount replayed the sidebar's
+ * own `animate-fade-up` entrance and produced a visible jump/flash every
+ * time you clicked between "/ Works" and "/ Resume". Hoisting the sidebar
+ * here means it's the same DOM node across every navigation within this
+ * group — Next.js layouts persist by design — so it never re-animates or
+ * flashes; only `{children}` (each page's own content) unmounts and
+ * remounts, which is exactly where the per-page `animate-fade-up` content
+ * transitions should keep firing.
+ *
+ * `bioAs`/`activeNav` are derived from the pathname here (making this a
+ * client component) rather than passed by each page, since the sidebar no
+ * longer lives inside any individual page to receive them as props.
+ * "works" is active in every case except `/about`; the bio statement is
+ * only the page's own `h1` on `/` itself.
+ */
+export default function SidebarShellLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const bioAs = pathname === "/" ? "h1" : "p";
+  const activeNav = pathname === "/about" ? "resume" : "works";
+
+  return (
+    <>
+      <a
+        href="#main-content"
+        className="skip-link rounded-token border border-stroke-dark bg-dark-primary px-4 py-2 font-mono text-body-h2 text-white"
+      >
+        Skip to content
+      </a>
+
+      <MobileTopBar />
+
+      <main id="main-content" className="flex-1">
+        <HomeSidebar
+          bioAs={bioAs}
+          activeNav={activeNav}
+          className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80"
+        />
+        {children}
+      </main>
+
+      <MobileFooter />
+    </>
+  );
+}
