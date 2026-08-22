@@ -21,6 +21,23 @@ function ArrowForwardIcon() {
   );
 }
 
+/**
+ * Stacked image-then-content card (replaces the old `md:flex-row`
+ * side-by-side layout), matching the new Figma iteration:
+ *
+ * - Below `md`: no card surface at all — image runs full-bleed and sharp
+ *   (`rounded-none`), content sits directly on the page background with
+ *   24px horizontal padding. Matches the Figma mobile frame's
+ *   `case-study-card` node, which has no background or border of its own.
+ * - `md` and up: a `bg-stroke-dark` card surface with 24px padding on every
+ *   side, `rounded-token` (4px) on both the card and the image — this
+ *   iteration's cards and images round to match chips, reversing the old
+ *   sharp-corners-everywhere rule (see DESIGN.md).
+ *
+ * Every text element is explicit `font-mono` per this iteration's
+ * typography change; none of it can rely on inherited family the way body
+ * copy normally would, since prose is mono here too, not just labels.
+ */
 export function CaseStudyCard({
   href,
   image,
@@ -42,9 +59,9 @@ export function CaseStudyCard({
     <Link
       href={href}
       style={style}
-      className="group flex w-full animate-fade-up flex-col gap-3 transition-[transform,border-color,box-shadow] duration-200 ease-out active:scale-[0.99] md:flex-row md:items-stretch md:border md:border-stroke-dark md:bg-dark-primary md:p-2 md:hover:border-gray-dark md:hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+      className="group flex w-full animate-fade-up flex-col gap-6 transition-[scale,box-shadow] duration-200 ease-out active:scale-[0.99] md:gap-5 md:rounded-token md:bg-stroke-dark md:p-6 md:shadow-[0_0_0_1px_rgba(255,255,255,0.08)] md:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.15)]"
     >
-      <div className="relative h-64 w-full overflow-hidden rounded-none md:h-auto md:flex-1 md:self-stretch">
+      <div className="relative h-[220px] w-full overflow-hidden rounded-none outline outline-1 -outline-offset-1 outline-white/10 md:rounded-token">
         <Image
           src={image}
           alt={`${title} project thumbnail`}
@@ -54,20 +71,20 @@ export function CaseStudyCard({
           sizes="(min-width: 1024px) 50vw, 100vw"
         />
       </div>
-      <div className="flex w-full flex-col gap-6 p-6 md:flex-1">
-        <div className="flex w-full flex-col gap-4">
+      <div className="flex w-full flex-col gap-4 px-6 pb-6 md:px-0 md:pb-0">
+        <div className="flex w-full flex-col gap-3">
           <div className="flex items-center gap-2.5">
-            <h3 className="text-balance text-heading-h4 text-white">
+            <h3 className="text-balance font-mono text-heading-h5 font-bold text-white">
               {title}
             </h3>
             <span
-              className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-all duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+              className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-[opacity,translate] duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
               aria-hidden="true"
             >
               <ArrowForwardIcon />
             </span>
           </div>
-          <p className="text-pretty text-body-h3 text-white/68">
+          <p className="text-pretty font-mono text-body-h2 text-white/70 md:text-body-h3">
             {description}
           </p>
         </div>

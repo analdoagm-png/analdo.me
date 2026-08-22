@@ -16,7 +16,8 @@ This document is the living design-system reference for `analdo.me`. Keep it upd
 - Font setup: `src/app/layout.tsx`
 - Homepage cards: `src/components/case-study-card.tsx`
 - Homepage sidebar/identity block: `src/components/home-sidebar.tsx`
-- Homepage/mobile-bar social icons: `src/components/social-icon.tsx`
+- Homepage mobile top bar + menu: `src/components/mobile-top-bar.tsx`
+- Homepage contact icons: `src/components/contact-glyph.tsx` (distinct from `src/components/social-icon.tsx`, which `case-study-editorial-sidebar.tsx` still uses — see the Homepage Sidebar / Mobile Top Bar sections)
 - Chips: `src/components/chip.tsx`
 - Editorial callouts: `src/components/case-study-callout.tsx`
 - Case study images and figures: `src/components/project-image.tsx`, `src/components/case-study-figure.tsx`
@@ -41,23 +42,25 @@ Common opacity usage:
 
 ## Radius Tokens
 
-Deliberate system: chips are the only rounded surface on the site. Every other
-framed element — project cards, images, callouts, results boxes — is sharp
-(`rounded-none`), a considered pairing with the type system's mono-labeled
-metadata layer rather than a leftover default.
+Chips, skip-links, `MobileTopBar`'s bar/panel, `HomeSidebar`, and — as of the
+second homepage iteration — `CaseStudyCard`'s `md`+ surface and image all
+round to the same `rounded-token` (4px). Everything else sitewide (callouts,
+results boxes, the previous card treatment) stays sharp (`rounded-none`).
+This is a partial reversal of the original all-sharp-except-chips rule,
+scoped to the homepage redesign: the new Figma pass rounds cards/images to
+match chips rather than keeping them sharp.
 
 | Token | Value | Usage |
 | --- | --- | --- |
-| `--radius-token` | `4px` | Chips only |
+| `--radius-token` | `4px` | Chips, skip-links, and — since the second homepage iteration — `CaseStudyCard`, `HomeSidebar`, `MobileTopBar` |
 | `--radius-token-lg` | `0px` | Unused — kept at 0 for any future mid-size surface |
-| `--radius-token-xl` | `0px` | Project cards and other large framed blocks |
+| `--radius-token-xl` | `0px` | Unused outside the homepage now that `CaseStudyCard` moved to `rounded-token` |
 
-`Chip` is the only component that uses `rounded-token`. Everything else that
-previously used `rounded-lg`/`rounded-xl`/`rounded-token-xl` now uses
-`rounded-none` explicitly (or inherits 0 automatically via the token, for
-anything still built on `rounded-token-xl`). Skip-links (`.skip-link`) keep
-their own `rounded-token` (4px) as a small, chip-adjacent control — not part
-of the card/image system this rule governs.
+Elsewhere on the site (case-study pages, `/about`, callouts, results boxes)
+the original sharp-corners rule still applies — this change is scoped to the
+homepage-only redesign pass, not a sitewide flip. Below `md`, `CaseStudyCard`
+stays sharp regardless (`rounded-none`), matching its own full-bleed mobile
+treatment — see its own section below.
 
 ## Typography
 
@@ -87,13 +90,15 @@ size class would force both uses into the same voice. Instead:
 
 - Every heading-scale utility (`text-heading-h1` through `h5`,
   `text-project-subtitle`, and `text-overline`) gets `font-family:
-  var(--font-heading)` directly in its own plain CSS rule in `globals.css`
-  (unlayered, so it takes precedence over Tailwind's layered utilities for
-  the same class names without conflicting — the two rule sets target
-  different properties). `text-overline` is included deliberately: it's the
-  same element that upgrades to `text-project-subtitle` at `md` in
-  `CaseStudyProjectHeader`, so both must share a family or that one piece of
-  copy would visibly swap typefaces at the breakpoint.
+  var(--font-heading)` in `globals.css`, in `@layer base` so a `font-mono` at
+  the call site still wins (utilities is the later layer). This used to be
+  unlayered — which beat every layered utility regardless of specificity and
+  silently ignored `font-mono` on any heading-scale element — until the
+  homepage redesign below needed the override and exposed the gotcha.
+  `text-overline` is included deliberately: it's the same element that
+  upgrades to `text-project-subtitle` at `md` in `CaseStudyProjectHeader`, so
+  both must share a family or that one piece of copy would visibly swap
+  typefaces at the breakpoint.
 - Everything else defaults to Noto Sans (the `body` element's font-family),
   which is correct for prose and for interactive text links (`Resume`,
   `Back to portfolio`, `Contact me`/`LinkedIn`/`GitHub`, deck buttons) — the
@@ -111,6 +116,18 @@ Global rendering:
 
 - `font-feature-settings: "kern" 1, "liga" 1, "calt" 1`
 - `text-rendering: optimizeLegibility`
+
+**Homepage-only exception (second iteration):** the new Figma pass for `/`
+is JetBrains Mono end-to-end — headings and prose included, not just labels.
+This is scoped to the homepage's own components (`HomeSidebar`,
+`MobileTopBar`, `CaseStudyCard`, and the mobile-only hero block in
+`page.tsx`), applied with explicit `font-mono` at each call site rather than
+by repointing the global `--font-sans`/`--font-heading` tokens — those stay
+Space Grotesk/Noto Sans for every other route (`/about`, all five case
+studies), since this redesign pass is homepage-only. Do not read this as a
+sitewide typography change; it's a local override, the same mechanism as any
+other `font-mono` opt-in, just applied more broadly within one page's own
+components than elsewhere on the site.
 
 ### Type Tokens
 
@@ -163,15 +180,79 @@ There is no shared `SiteHeader` anymore — it was homepage-only and was removed
 
 File: `src/components/home-sidebar.tsx`
 
-The redesigned homepage replaces the old header/hero/footer stack with a single identity column: name/role lockup (plain text, not a link — this component only renders on `/`), the page's `h1` (the "Over a decade solving..." statement, now compact `text-body-h3` copy rather than a large display heading), the "based in / working with" tool sentence at the same `text-body-h3` scale, a "Resume" link to `/about`, social icons (`SocialIcon`), and a `© 2026` line.
+Rebuilt for a second Figma iteration (mobile + tablet frames, desktop
+specified as "an extension of tablet"). The sidebar is now a bordered
+surface (`border border-stroke-dark p-8 rounded-token`, `w-80`/320px)
+holding: name/role lockup (plain text, not a link — this component only
+renders on `/`), the page's `h1` (the "Over a decade solving..." statement,
+back to full `text-body-h2` prose scale), the "based in / working with" tool
+sentence, a `/ Works` (→ `/`) / `/ Resume` (→ `/about`) nav pair, contact
+links (`ContactGlyph` + label), and a `© Analdo Gomez / 2026` line — all
+`font-mono`, per the Typography section's homepage-only exception above.
 
-The Resume link and social icons are `hidden md:inline-block`/`hidden md:flex` — below `md`, `page.tsx` renders its own top bar with the same Resume link and icons instead, so the two never duplicate each other in the DOM at the same breakpoint. That mobile bar is `border-b border-stroke-dark`, `justify-between`, Resume on the left and icons on the right.
+**Two-tier now, not three.** The previous version stacked full-width through
+`md` and only became a side column at `lg`. The new Figma tablet frame
+already shows the sidebar as a fixed column at tablet width, so the
+component is `hidden md:flex` at the call site — mobile gets an entirely
+separate top-bar-plus-inline-hero treatment instead (see Mobile Top Bar
+below and `page.tsx`), and the sidebar becomes a real column starting at
+`md`, not `lg`.
 
-Layout: at the base tier the sidebar stacks full-width above the card grid (`flex-col`); this continues through `md` (tablet also stacks, just with more padding); only at `lg` does it become a fixed `264px` left column beside the grid (`lg:w-[264px] lg:shrink-0`, parent `lg:flex-row`). This three-way breakpoint split — not just a `md`/`lg` toggle — mirrors the Figma desktop/tablet/mobile frames, which is why it's called out separately from the site's usual two-step responsive patterns.
+`w-80` (320px) replaces the previous `lg:w-72` (288px) — that number was
+tuned against an older, narrower Figma frame that's no longer the source of
+truth; 320px is the new frame's literal width.
 
-At `lg` the sidebar is also `lg:sticky lg:top-16`, so it stays in view while the (typically taller) card grid scrolls past — the parent row carries `lg:items-start` so the sidebar isn't stretched to the grid's height, which sticky positioning requires to have room to work. This is `lg`-only on purpose: below `lg` the sidebar stacks above the grid rather than beside it, where sticking it would just freeze it over the cards as they scroll underneath. The card grid itself is capped at `lg:max-w-[840px]` so it doesn't stretch edge-to-edge on very wide viewports.
+`md:sticky md:top-12` keeps the sidebar in view while the (typically taller)
+card grid scrolls past — the parent row carries `md:items-start` so the
+sidebar isn't stretched to the grid's height, which sticky positioning needs
+room to work. No `max-w` cap on the grid column: at `lg` it reflows to two
+columns and fills whatever width remains (see `CaseStudyCard` and the
+Layout note below).
 
-Page padding on `/` is bespoke to this layout, not the site's standard `px-6 md:px-10 lg:px-16`: `px-6 py-8` at the base tier, `md:p-12` (48px all sides) at tablet, `lg:p-16` (64px all sides) at desktop. This matches the Figma frames' own padding values exactly rather than reusing the sitewide scale — a deliberate one-page exception, similar in spirit to `CaseStudyNext`'s padding exception below.
+Page padding on `/` stays bespoke: `px-6 pt-24 pb-8` at the base tier — the
+extra top padding clears `MobileTopBar`'s fixed bar, replacing the old
+`py-8` — `md:p-12` (48px all sides) at tablet, `lg:p-16` (64px) at desktop,
+matching the Figma frames' own values.
+
+`/ Works` always renders active (bold, full white): this component only
+ever mounts on `/`, so there's no `usePathname` check or client-component
+conversion — it's server-rendered like before. "Works" isn't a real route;
+it duplicates the identity lockup's destination the same way `main`'s
+`SiteHeader` "Home" link duplicates its own lockup.
+
+The Figma sidebar's copyright is 12px; kept at `text-body-h3` (14px) instead
+— the site's established minimum readable size — rather than copied
+literally.
+
+### Mobile Top Bar
+
+File: `src/components/mobile-top-bar.tsx`
+
+Mobile-only (`md:hidden`) replacement for the previous static `border-b`
+bar: a `fixed inset-x-6 top-6` bar reading "Analdo Gomez" plus a menu
+toggle, `rounded-token`, `bg-dark-primary`, the same
+`shadow-[0_0_0_1px_rgba(255,255,255,0.08)]` resting ring `CaseStudyCard`
+uses at `md`+. `inset-x-6 top-6` (24px) matches the Figma frame's own hero
+padding, not `main`'s `MobileNav` 16px pill inset — the two are separately
+specced, not a copy of one another.
+
+Figma only supplies the bar's collapsed state; the expanded menu (nav +
+contact links) is this component's own design, but reuses the same
+accessible dialog mechanics `main`'s `MobileNav` established: real
+`role="dialog"` + `aria-modal`, dismissible via the × button, Escape, or the
+`bg-black/50` scrim, body scroll locked while open, `autoFocus` on the Close
+button. An intentional client leaf, the branch's second one after
+`CaseStudiesDeck`.
+
+The menu icon is the exact path data exported from the new Figma iteration's
+`site-header/menu-icon` node — which turned out to be the identical four-bar
+mark `main`'s `MobileNav` already uses — recoloured to `currentColor`. Do
+not re-trace by hand; re-export if the design changes.
+
+The page's own `pt-24` (see Homepage Sidebar above) is tuned to this bar's
+height (24px inset + ~48px bar + breathing room) so mobile content clears
+it, the same idea as `main`'s `pt-20`-for-`MobileNav` convention, just a
+different number for a differently-sized bar.
 
 ### Editorial Sidebar
 
@@ -246,16 +327,35 @@ The homepage's tool sentence intentionally does not use `Chip` — see Homepage 
 
 File: `src/components/case-study-card.tsx`
 
-Current structure — a responsive layout switch, not just a size change:
+Rebuilt for the second homepage iteration (see Homepage Sidebar below) to
+match a new Figma pass: stacked image-then-content at every breakpoint
+(replacing the previous `md:flex-row` side-by-side split), and every text
+element explicit `font-mono` — this iteration makes card copy mono too, not
+just labels.
 
 - Entire card is a `Link`.
-- Below `md`: stacked, borderless, edge-to-edge. Image is a fixed `h-64` (256px) block on top; content sits below it with its own `p-6`.
-- At `md` and up: horizontal split inside a bordered box — `md:border md:border-stroke-dark md:p-2`, image and content each `md:flex-1` in a `md:flex-row md:items-stretch` row. The image side has no explicit height; it's `md:h-auto md:self-stretch`, so its rendered height matches whatever the content side's text/chips make the row — cards are not a uniform height across the grid, by design.
-- Hover (`md`+): border lifts to `gray-dark`, ambient shadow appears, image zooms `scale-105`.
+- Below `md`: no card surface — image is full-bleed and sharp
+  (`rounded-none`), content sits directly on the page background with 24px
+  horizontal padding. Matches the Figma mobile card node, which has no
+  background or border of its own.
+- `md` and up: a `bg-stroke-dark` surface with `p-6` on every side,
+  `rounded-token` (4px) on both the card and the image. This iteration's
+  cards and images round to match chips — a reversal of the sharp-corners
+  rule the rest of the site (and this branch's own previous card) used.
+  Image height is a fixed `h-[220px]` at every breakpoint, not a
+  content-driven `md:self-stretch` row like the previous version.
+- Hover (`md`+): shadow strengthens from a 1px ring to a firmer one, image
+  zooms `scale-105`.
 - Active: `scale-[0.99]` at every breakpoint.
-- Content: `gap-6 p-6`, with `gap-4` between the title+description group and `gap-2` in the chip row.
-- Title: `text-heading-h4`.
-- Description: `text-body-h3 text-white/68` (not `text-body-h2` — the redesign uses the smaller sidebar-matching scale for card copy).
+- Title: `font-mono text-heading-h5 font-bold` — `font-bold` overrides the
+  token's own 600 weight since the Figma spec is explicitly 700 here.
+- Description: `font-mono text-body-h2 md:text-body-h3 text-white/70` — a
+  real step down in size at `md`, matching the Figma tablet card's smaller
+  14px copy vs. the mobile card's 16px.
+- The homepage drops the leading type chip ("Case Study"/"Showcase") from
+  every card for this iteration — `page.tsx` passes `chips.slice(1)`, since
+  `lib/case-studies.ts`'s `chips[0]` is always that tag. The underlying data
+  keeps it; only the homepage's render of it changes.
 
 Card title hierarchy should be stronger than body copy. Avoid making body text as large or visually loud as the title.
 

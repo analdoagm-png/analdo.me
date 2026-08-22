@@ -95,19 +95,25 @@ body {
  * labels (About, CaseStudySectionHeading) — it's the same element that
  * upgrades to text-project-subtitle at `md` in CaseStudyProjectHeader, so
  * both need to share a family or that one piece of copy would visibly swap
- * fonts at the breakpoint. These rules are unlayered (plain CSS, not a
- * Tailwind @layer), so they take precedence over the layered utility classes
- * Tailwind generates for font-size/line-height/weight on the same names —
- * the two sets of rules target different properties and don't conflict.
+ * fonts at the breakpoint.
+ *
+ * These live in `@layer base`, deliberately, so a `font-mono` at the call
+ * site still wins: utilities is the later layer. (They used to be unlayered,
+ * which beat every layered utility regardless of specificity — that silently
+ * ignored `font-mono` on any heading-scale element. The homepage redesign is
+ * the first thing on this branch that actually needs the override, e.g.
+ * `HomeSidebar`'s name lockup at `text-body-h1 font-mono`.)
  */
-.text-heading-h1,
-.text-heading-h2,
-.text-heading-h3,
-.text-heading-h4,
-.text-heading-h5,
-.text-project-subtitle,
-.text-overline {
-  font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+@layer base {
+  .text-heading-h1,
+  .text-heading-h2,
+  .text-heading-h3,
+  .text-heading-h4,
+  .text-heading-h5,
+  .text-project-subtitle,
+  .text-overline {
+    font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+  }
 }
 
 /* On-brand focus ring — a soft white outline reads clearly on the
