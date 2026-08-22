@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CaseStudyCard } from "@/components/case-study-card";
 import { CaseStudyIndexRow } from "@/components/case-study-index-row";
 import { ToolIcon } from "@/components/tool-icon";
 import { ContactIcon } from "@/components/contact-icon";
@@ -103,19 +104,40 @@ export default function Home() {
         </section>
 
         {/*
-          Editorial index instead of an image grid: rows sit inside the
-          standard page padding at every breakpoint (no full-bleed mobile
-          treatment to reproduce, unlike CaseStudyCard) since each row's
-          thumbnail is already inset, not edge-to-edge.
+          Mobile keeps the original CaseStudyCard grid unchanged (full-bleed,
+          single column, no horizontal padding below `md`); the editorial
+          index list only takes over from `md` up. Both grids render in the
+          DOM and toggle with `md:hidden` / `hidden md:flex` rather than a
+          client-side breakpoint check, so the page stays a server component
+          with no hydration mismatch — the trade-off is that both sets of
+          project images exist in the DOM at once, which is fine since only
+          the first (`priority`) image of whichever grid is visible loads
+          eagerly and the rest lazy-load.
         */}
-        <section className="mx-auto w-full max-w-[1280px] px-6 pb-16 md:px-10 lg:px-16">
+        <section className="mx-auto w-full max-w-[1280px] pb-16 md:px-10 lg:px-16">
           {/*
-            Row titles are h3, so this names the section and keeps the
+            Row/card titles are h3, so this names the section and keeps the
             document outline from jumping h1 → h3. Visually hidden to leave
-            the minimal hero-then-list layout untouched.
+            the minimal hero-then-work layout untouched.
           */}
           <h2 className="sr-only">Selected work</h2>
-          <div className="flex w-full flex-col divide-y divide-stroke-dark border-t border-stroke-dark">
+
+          <div className="grid w-full grid-cols-1 gap-6 md:hidden">
+            {caseStudies.map((cs, index) => (
+              <CaseStudyCard
+                key={cs.href}
+                href={cs.href}
+                image={cs.image}
+                title={cs.title}
+                description={cs.description}
+                chips={cs.chips}
+                priority={index === 0}
+                style={{ animationDelay: `${index * 70}ms` }}
+              />
+            ))}
+          </div>
+
+          <div className="hidden w-full flex-col divide-y divide-stroke-dark border-t border-stroke-dark md:flex">
             {caseStudies.map((cs, index) => (
               <CaseStudyIndexRow
                 key={cs.href}

@@ -386,15 +386,17 @@ The homepage's tool sentence intentionally does not use `Chip` — see Homepage 
 
 File: `src/components/case-study-card.tsx`
 
-On this branch the homepage uses `CaseStudyIndexRow` (below) instead — this
-component is kept for its Storybook reference and as the candidate to
-reinstate if the editorial-index direction isn't the one that ships.
+On this branch the homepage uses this component on mobile only — below `md`
+the grid is unchanged from `main`; from `md` up the homepage switches to
+`CaseStudyIndexRow` (below) instead. Both grids render in the page's DOM
+and toggle with `md:hidden` / `hidden md:flex` rather than a client-side
+breakpoint check, keeping the page a server component.
 
 Current structure:
 
 - Entire card is a `Link`.
 - Card: `rounded-token-xl bg-dark-primary`, with `md:p-2` and depth from `box-shadow` (see Elevation above), not a border.
-- **Below `md` the card is full-bleed**: no padding frame and no resting ring, so the image runs edge to edge and the card reads as a section of the page rather than a floating surface. The homepage's card section drops its horizontal padding to match (`pb-16 md:px-10 lg:px-16`). The padded, ringed card and its hover lift return at `md` and up (`md:p-2 md:shadow-… md:hover:shadow-…`). The image keeps its own 1px outline at every breakpoint.
+- **Below `md` the card is full-bleed**: no padding frame and no resting ring, so the image runs edge to edge and the card reads as a section of the page rather than a floating surface. The homepage's card section drops its horizontal padding to match (`pb-16 md:px-10 lg:px-16`). The padded, ringed card and its hover lift return at `md` and up (`md:p-2 md:shadow-… md:hover:shadow-…`). The image keeps its own 1px outline at every breakpoint. In practice only the below-`md` styling is ever seen on this branch, since `CaseStudyIndexRow` takes over at `md`, but the component keeps its full responsive range rather than being trimmed to a mobile-only variant.
 - Hover (`md`+): shadow strengthens to a firmer ring plus an ambient lift, image zooms.
 - Active: `scale-[0.99]` at every breakpoint.
 - Image: fixed responsive height (`220px`, `md:240px`, `lg:280px`) with contained `object-cover`, wrapped in the standard image outline (see Image Outlines above).
@@ -409,9 +411,13 @@ Card title hierarchy should be stronger than body copy. Avoid making body text a
 
 File: `src/components/case-study-index-row.tsx`
 
-The homepage's current project list: a text-forward, single-column
-alternative to `CaseStudyCard`'s image grid, so all five projects read above
-or near the fold as one scannable index instead of a couple of large cards.
+The homepage's project list from `md` up: a text-forward, single-column
+alternative to `CaseStudyCard`'s image grid, so the projects read above the
+fold as one scannable index instead of a couple of large cards. **Mobile
+(below `md`) keeps the original `CaseStudyCard` grid instead** — this
+component never renders below `md`, so nothing in it needs a mobile state
+of its own; chips, the hover arrow, and the description are shown
+unconditionally rather than toggled with a `md:` prefix.
 
 - Entire row is a `Link`, styled the same way as `CaseStudyCard` and
   `CaseStudyNext`.
@@ -419,35 +425,33 @@ or near the fold as one scannable index instead of a couple of large cards.
   `border-t border-stroke-dark` on the wrapper closing off the first row —
   the list uses the same divider token the deck's two-panel slides use for
   `divide-x`, just on the other axis.
-- Thumbnail: `w-28 md:w-40 lg:w-48` (112/160/192px), `self-stretch`ed to the
-  row's full content height rather than a fixed height of its own — flush
-  and unrounded, reusing `CaseStudyNext`'s existing thumbnail treatment at
-  list scale rather than inventing a new image style. Same sitewide
+- Thumbnail: `w-40 lg:w-48` (160/192px), `self-stretch`ed to the row's full
+  content height rather than a fixed height of its own — flush and
+  unrounded, reusing `CaseStudyNext`'s existing thumbnail treatment at list
+  scale rather than inventing a new image style. Same sitewide
   `outline outline-1 -outline-offset-1 outline-white/10`, same
   `group-hover:scale-105` zoom.
-- Row inset: `py-2` (8px) top and bottom, the same 8px on every breakpoint.
-  Because the thumbnail stretches to the row's content height, that 8px is
-  also the only gap between the image and the row's divider above and
-  below it — the image reads as nearly edge-to-edge within its row. A
-  `min-h-28 md:min-h-32 lg:min-h-40` floor (copied from `CaseStudyNext`'s
-  own text column) keeps the thumbnail a healthy size even on the rows
-  whose own text content is short, mobile especially, where chips are
-  hidden.
+- Row inset: `py-2` (8px) top and bottom, the same 8px at both `md` and
+  `lg`. Because the thumbnail stretches to the row's content height, that
+  8px is also the only gap between the image and the row's divider above
+  and below it — the image reads as nearly edge-to-edge within its row. A
+  `min-h-32 lg:min-h-40` floor (copied from `CaseStudyNext`'s own text
+  column) keeps the thumbnail a healthy size even on a row whose own text
+  content is short.
 - No index number. An earlier pass had a mono `01`–`05` counter ahead of the
   thumbnail; removed since the row order alone already communicates
   sequence and the number added a column without adding information.
 - Title: `text-heading-h5`, one line (`truncate`) so row height stays
   constant regardless of project name length.
-- Description: `line-clamp-1` below `md`, `line-clamp-2` from `md` up — a
-  row is denser than a card, so the description is deliberately terser than
-  `CaseStudyCard`'s uncapped one.
-- Chips (`Chip size="sm"`) and the hover arrow are both `hidden` below `md`;
-  a narrow row has room for a title and one line of description only.
+- Description: `line-clamp-2` — a row is denser than a card, so the
+  description is deliberately terser than `CaseStudyCard`'s uncapped one.
+- Chips use `Chip size="sm"`.
 - Hover: unlike `CaseStudyCard`, a row has no resting shadow or ring to read
   as clickable, so hover adds a full-row `hover:bg-white/[0.03]` tint on top
   of the existing image-zoom and arrow-slide idioms.
-- The homepage section drops its `sr-only` "Selected work" `h2` in to keep
-  the same h1 → h2 → h3 outline as the grid version; row titles stay `h3`.
+- The homepage section's `sr-only` "Selected work" `h2` sits above both the
+  mobile grid and the `md`+ list, so the outline is h1 → h2 → h3 regardless
+  of which one is visible; row/card titles stay `h3` in both.
 
 ### CaseStudiesDeck
 
