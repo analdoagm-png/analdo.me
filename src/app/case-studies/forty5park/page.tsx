@@ -2,7 +2,6 @@ import { caseStudyMetadata } from "@/lib/case-studies";
 import { HomeSidebar } from "@/components/home-sidebar";
 import { MobileTopBar } from "@/components/mobile-top-bar";
 import { MobileFooter } from "@/components/mobile-footer";
-import { CaseStudyNext } from "@/components/case-study-next";
 import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
 import { ProjectImage } from "@/components/project-image";
 
@@ -143,15 +142,11 @@ export default function Forty5ParkCaseStudy() {
       </main>
 
       {/*
-        md:pl-80 clears the fixed sidebar (320px = w-80) the same way the
-        main content column does — CaseStudyNext is shared with every other
-        case study, so the offset is applied on a wrapper here rather than
-        inside the component itself.
+        No CaseStudyNext on this page — dropped for the new sidebar design.
+        The persistent "/ Works" link already covers the onward path back
+        to the index; revisit if/when more case studies move to this system
+        and a real "next" affordance is wanted again.
       */}
-      <div className="md:pl-80">
-        <CaseStudyNext currentHref="/case-studies/forty5park" />
-      </div>
-
       <CaseStudyJsonLd currentHref="/case-studies/forty5park" />
       <MobileFooter />
     </>
