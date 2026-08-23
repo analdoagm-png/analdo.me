@@ -1,5 +1,12 @@
 import Image from "next/image";
 
+/**
+ * `roundedClassName` now defaults to `rounded-token` (was `rounded-none`) —
+ * Figma's figure images round to match chips/cards under this system, only
+ * text/border surfaces (callouts, results boxes) stay sharp. `max-w-[1280px]
+ * w-full` on the root matches every other image on this system, centering
+ * within the page's `items-center` column once there's more room than that.
+ */
 export function CaseStudyFigure({
   src,
   alt,
@@ -8,7 +15,7 @@ export function CaseStudyFigure({
   aspectClassName,
   captionClassName = "text-white/70",
   gapClassName = "gap-2",
-  roundedClassName = "rounded-none",
+  roundedClassName = "rounded-token",
   priority = false,
 }: {
   src: string;
@@ -22,7 +29,7 @@ export function CaseStudyFigure({
   priority?: boolean;
 }) {
   return (
-    <div className={`flex w-full flex-col items-start ${gapClassName}`}>
+    <div className={`flex w-full max-w-[1280px] flex-col items-start ${gapClassName}`}>
       <div
         className={`relative w-full overflow-hidden bg-stroke-dark ${roundedClassName} ${aspectClassName ?? ""} animate-fade-up ${priority ? "[animation-delay:200ms]" : ""}`}
         style={

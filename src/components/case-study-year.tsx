@@ -9,7 +9,7 @@ export function CaseStudyYear({ year }: { year: number }) {
       <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
         Year
       </p>
-      <time dateTime={String(year)} className="text-body-h2 text-white">
+      <time dateTime={String(year)} className="font-mono text-body-h2 text-white">
         {year}
       </time>
     </div>

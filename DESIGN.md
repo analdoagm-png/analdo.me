@@ -17,7 +17,7 @@ This document is the living design-system reference for `analdo.me`. Keep it upd
 - Homepage cards: `src/components/case-study-card.tsx`
 - Sidebar/identity block, shared by the homepage and case studies on the new system: `src/components/home-sidebar.tsx`
 - Mobile top bar + menu, mobile footer: `src/components/mobile-top-bar.tsx`, `src/components/mobile-footer.tsx`
-- Contact icons for the new system: `src/components/contact-glyph.tsx` (distinct from `src/components/social-icon.tsx`, which `case-study-editorial-sidebar.tsx` still uses — see the Homepage Sidebar / Mobile Top Bar sections)
+- Contact icons: `src/components/contact-glyph.tsx` — the site's only icon set now that `social-icon.tsx` is gone (see Case Study Sidebar section)
 - Chips: `src/components/chip.tsx`
 - Editorial callouts: `src/components/case-study-callout.tsx`
 - Case study images and figures: `src/components/project-image.tsx`, `src/components/case-study-figure.tsx`
@@ -174,21 +174,23 @@ Standard visual QA widths:
 
 ### Header
 
-There is no shared `SiteHeader` anymore — it was homepage-only and was removed once the redesigned homepage stopped using it (see Homepage Sidebar below). `CaseStudyHeader` is now used by `/about` only — all three former showcase case studies (Forty5Park, Uber Suite, Github's Security Findings) have moved to the new sidebar system (see Case Study Sidebar below) and no longer render it. It wraps its "Back to portfolio" link in `<nav aria-label="Case study">`. The two editorial case studies (GoRight, Arrowhead Transit) use neither `SiteHeader` nor `CaseStudyHeader` — see Editorial Sidebar below.
+There is no shared `SiteHeader`, `CaseStudyHeader`, or `SiteFooter` anymore — all three were homepage/case-study-era components, and all three were deleted once every route moved to the new sidebar system (see Case Study Sidebar below for the full list of what was removed and when). Every route's chrome is now `(sidebar-shell)/layout.tsx` — see Sidebar Shell Layout below.
 
 ### Sidebar Shell Layout
 
 File: `src/app/(sidebar-shell)/layout.tsx`
 
-Every route on the new sidebar system — the homepage, `/about`, and the
-three showcase case studies — lives inside this route group now, sharing
-one `layout.tsx` that renders the skip link, `MobileTopBar`, `HomeSidebar`,
-and `MobileFooter` exactly once. `(sidebar-shell)` is a route group: the
-parentheses are invisible in the URL, so `/about` and
-`/case-studies/forty5park` are unaffected — only the file location moved.
-Each page under it (`page.tsx`, `about/page.tsx`,
-`case-studies/forty5park/page.tsx`, etc.) now returns *only* its own
-content column; the shell is no longer duplicated per page.
+**Every route on the site** — the homepage, `/about`, and all five case
+studies — lives inside this route group now, sharing one `layout.tsx` that
+renders the skip link, `MobileTopBar`, `HomeSidebar`, and `MobileFooter`
+exactly once. `(sidebar-shell)` is a route group: the parentheses are
+invisible in the URL, so `/about` and `/case-studies/goright` are
+unaffected — only the file location moved. Each page under it (`page.tsx`,
+`about/page.tsx`, `case-studies/goright/page.tsx`, etc.) now returns *only*
+its own content column; the shell is no longer duplicated per page. Only
+`/case-studies-deck` sits outside this group — a self-contained
+full-viewport presentation route with no header/footer chrome of its own
+kind to share.
 
 **Why this exists.** Before this layout, every page independently rendered
 its own copy of `HomeSidebar`/`MobileTopBar` — visually identical across
@@ -208,23 +210,20 @@ still there afterward, rather than a fresh one.)
 
 **`bioAs`/`activeNav` are derived from `usePathname`, making this layout a
 client component** — the sidebar no longer lives inside any individual
-page to receive them as props. `bioAs` is `"h1"` only on `/` itself, `"p"`
-everywhere else (a page can only have one `h1`, and a case-study/About
-page's `h1` is its own title/heading, not the sidebar's bio statement).
-`activeNav` is `"resume"` only on `/about`, `"works"` everywhere else —
-this replaced an earlier, incorrect assumption that `/ Works` should
-always render active regardless of route (based on every Figma frame
-showing the identical static state); the real requirement is a genuine
-current-page indicator, confirmed by explicit request. Server Components
-(every page under this layout) can still be passed as `children` into a
-Client Component layout without themselves becoming client components —
-this is a normal, supported React Server Components pattern, not a
-workaround.
-
-GoRight and Arrowhead Transit stay outside this route group entirely; they
-have no `layout.tsx` of their own and remain on the old
-`CaseStudyProjectHeader`/`EditorialSidebar` system (see Editorial Sidebar
-below).
+page to receive them as props. `bioAs` is `"h1"` on `/` **and** `/about`
+(both are "about Analdo himself" pages, so the sidebar's identity statement
+carries the `h1` role for both instead of each page restating a variant of
+it — see Homepage Sidebar below for why `/about` moved to this too), `"p"`
+everywhere else (a case-study page's `h1` is its own project title, not the
+sidebar's bio statement). `activeNav` is `"resume"` only on `/about`,
+`"works"` everywhere else — this replaced an earlier, incorrect assumption
+that `/ Works` should always render active regardless of route (based on
+every Figma frame showing the identical static state); the real
+requirement is a genuine current-page indicator, confirmed by explicit
+request. Server Components (every page under this layout) can still be
+passed as `children` into a Client Component layout without themselves
+becoming client components — this is a normal, supported React Server
+Components pattern, not a workaround.
 
 ### Homepage Sidebar
 
@@ -240,12 +239,16 @@ a link), the bio statement, the "based in / working with" tool sentence, a
 exactly once, by `(sidebar-shell)/layout.tsx` — see that section for why,
 and for where `bioAs`/`activeNav` actually come from now.
 
-**`bioAs`**: `"h1" | "p"` (default `"h1"`). The bio statement is the
-homepage's own `h1`, but a case-study/About page's `h1` is its own title —
-so those routes get `"p"`. This replaces what the old (pre-redesign) system
-did with two separate components, `HomeSidebar` and `EditorialSidebar` —
-see Case Study Sidebar below for why the *editorial* case studies (GoRight,
-Arrowhead) still use the old one for now.
+**`bioAs`**: `"h1" | "p"` (default `"h1"`). The bio statement is the `h1`
+on `/` and `/about` — both pages, so `About`'s own former headline
+("Product designer who builds systems...") is now `md:hidden` there
+(visible only below `md`, where the sidebar itself is hidden; see
+`about/page.tsx`) rather than duplicating the sidebar's identity statement
+at `md`+. Every case study's `h1` is its own project title, so those
+routes get `"p"`. This replaces what the old (pre-redesign) system did with
+two separate components, `HomeSidebar` and `EditorialSidebar` —
+`EditorialSidebar` is gone now that every page shares this one instead
+(see Case Study Sidebar below).
 
 **`activeNav`**: `"works" | "resume"` (default `"works"`), driving which
 nav link renders bold/active (with `aria-current="page"`) versus muted.
@@ -320,83 +323,84 @@ block; now, like `HomeSidebar` and `MobileTopBar`, rendered once by
 
 ### Case Study Sidebar (new system)
 
-All three showcase case studies (Forty5Park, Uber Suite, Github's Security
-Findings) are on the redesigned sidebar now — all three live in the
-`(sidebar-shell)` route group (see above) and share `HomeSidebar`
-(`bioAs="p"`)/`MobileTopBar`/`MobileFooter` with the homepage, not a
-dedicated case-study sidebar component. Each page's own comments
-explain why the surrounding text blocks (YEAR meta, intro statement,
-section headings) are written inline rather than through shared
-`CaseStudyYear`/`CaseStudyIntroBlock`/`CaseStudySectionBlock`-style
-components: doing that would have meant either changing typography on pages
-not yet moved (before all three were converted) or, now that all three
-share the identical inline pattern, is a good candidate to extract into one
-shared component the next time this page shape needs to change. (The old
-`CaseStudyIntroBlock`/`CaseStudySectionBlock` components — `case-study-
-text-block.tsx` — were deleted once all three showcase pages moved off
-them; they had no other callers left.)
+**Every case study is on the redesigned sidebar now — the migration is
+complete.** All five (Forty5Park, Uber Suite, Github's Security Findings,
+GoRight, Arrowhead Transit) live in the `(sidebar-shell)` route group along
+with the homepage and `/about`, sharing `HomeSidebar`/`MobileTopBar`/
+`MobileFooter` rather than a dedicated case-study sidebar component. There
+is no page left on the old `CaseStudyHeader`/`EditorialSidebar`/
+`SiteFooter`/`CaseStudyNext` system — all four of those components were
+deleted (see their own note below) once GoRight and Arrowhead Transit, the
+last two callers, moved off them.
 
-Structural things to carry forward to the next page moved to this system
-(the two editorial case studies, GoRight and Arrowhead Transit, are the
-remaining candidates):
+Structural pattern shared by every page in the group:
 
 - **`items-center` on the content column, with every child `w-full
-  max-w-[*]`** — matches Figma's `main-content` frame (node 333:451)
-  exactly: text at `max-w-[720px]`, images (each wrapped in its own `w-full
-  max-w-[1280px]` div, since `ProjectImage` itself has no width-cap prop)
-  at `max-w-[1280px]`. The `w-full` half is what makes these boxes actually
-  *scale down* to fill the available width at tablet, where the content
-  area is well under 720px once the sidebar and padding are subtracted,
-  rather than staying pinned at a fixed measure. The `items-center` half is
-  what centers the (width-capped) column within the wider content area —
-  a definite-width flex item is **not** centered by `items-stretch` (the
-  default) just because it's narrower than its container; that was a real
-  bug in the first Forty5Park pass, caught by a direct Figma comparison and
-  fixed after the fact.
-- **Images opt into `roundedClassName="rounded-token"`** on each
-  `ProjectImage` call (that prop already existed, unused elsewhere on this
-  branch until now) rather than changing `ProjectImage`'s own default —
-  which stays `rounded-none` for every other case study's images.
-- **No `CaseStudyNext`.** Dropped entirely on all three pages, per explicit
+  max-w-[*]`** — matches Figma's `main-content` frame exactly: text at
+  `max-w-[720px]`, images at `max-w-[1280px]`. The `w-full` half is what
+  makes these boxes actually *scale down* to fill the available width at
+  tablet, where the content area is well under 720px once the sidebar and
+  padding are subtracted, rather than staying pinned at a fixed measure.
+  The `items-center` half is what centers the (width-capped) column within
+  the wider content area — a definite-width flex item is **not** centered
+  by `items-stretch` (the default) just because it's narrower than its
+  container; that was a real bug in the first Forty5Park pass, caught by a
+  direct Figma comparison and fixed after the fact.
+- **Images round to `rounded-token`.** `ProjectImage`, `CaseStudyFigure`,
+  and `CaseStudyImagePair` all default to it now — a real default change
+  for the latter two (not just an opt-in prop), since after this migration
+  every remaining caller wants it. `ProjectImage`'s own default is still an
+  opt-in per call (`roundedClassName="rounded-token"`), since it has no
+  other callers left to affect either way, but keeping it opt-in there
+  cost nothing.
+- **No `CaseStudyNext`.** Dropped entirely on every page, per explicit
   request — the persistent `/ Works` sidebar link covers the onward path
-  back to the index instead. `CaseStudyNext` itself is untouched and still
-  renders on the two editorial pages.
-- **Per-image `aspect` overrides carry over unchanged** where a project's
-  screenshots aren't the component's `2880/1800` default (several of Uber
-  Suite's and Github's Security Findings' are portrait or near-square).
+  back to the index instead. The component itself is deleted.
+- **No divider lines between sections** on the two editorial pages —
+  Figma's editorial frame (node 339:596) has none; generous spacing alone
+  carries the separation, matching every other page on this system. The
+  pre-redesign version's `Divider` (`h-px bg-gray-dark`) helper is gone.
+- **Callouts and results boxes stay `rounded-none`.** Only photographic
+  images round under this system — Figma's `Callout` node has no radius,
+  so bordered text surfaces keep the sharp-corners rule that predates this
+  redesign.
+- Per-image `aspect` overrides carry over unchanged where a project's
+  screenshots aren't the shared default — several of Uber Suite's,
+  Github's Security Findings', and both editorial case studies' are
+  portrait, near-square, or unusually wide banners.
 
-### Editorial Sidebar
+**Editorial-specific corrections, found by comparing directly against
+Figma's `case-study-desktop` frame (node 339:596) rather than carrying the
+pre-redesign layout forward:**
 
-File: `src/components/case-study-editorial-sidebar.tsx` (`EditorialSidebar` + `EditorialMobileBar`)
+- No project subtitle under the title (GoRight's "Merlin Platform",
+  Arrowhead's "Intranet") — Figma's title node has no equivalent.
+  `CaseStudyProjectHeader` dropped the `subtitle` prop entirely.
+- "The Problem" and "Results" are a **stacked single column**
+  (`CaseStudyPointsGrid`, rebuilt), not the pre-redesign `md:flex-row` 3-up
+  grid — Figma has no multi-column version of this pattern anywhere on the
+  page. "The Problem" numbers "01"/"02"/"03"; "Results" numbers
+  "1."/"2."/"3." — a real inconsistency in Figma itself, not a copy error
+  to normalize away, so both pages reproduce it as-is.
+- Each "Decision"/"Constraint" is its own text block
+  (`CaseStudyDecisionBlock`, now text-only) **followed by** a full-width
+  `CaseStudyFigure` stacked directly below it — not the pre-redesign
+  version's side-by-side `lg:flex-row` layout with `reverseOnDesktop`.
+  Figma stacks every decision's text and figure as separate siblings, at
+  every breakpoint.
 
-GoRight and Arrowhead Transit use a persistent identity sidebar instead of `CaseStudyHeader`, inspired by `HomeSidebar` and the Figma wireframe at node 268:1037 — adapted, not a literal port, per that node's own "don't copy exactly" brief. Two real differences from `HomeSidebar` drove the adaptation rather than reuse:
+`CaseStudyYear`'s value gained `font-mono` (was plain) — it renders inside
+`CaseStudyProjectHeader`'s ROLE/TOOLS/YEAR row, which is now fully mono
+like everything else on this system.
 
-- The bio statement here is a plain `<p>`, never the page's `h1` — each case study's own title (in `CaseStudyProjectHeader`) owns that role, and a page can only have one `h1`.
-- The name/role lockup is a real `<Link href="/">` (with its own hover/active dim, since it isn't a single-tone element `text-white/60` alone would cover) and a separate "← Back to portfolio" link sits above it, reusing `CaseStudyHeader`'s exact arrow-icon-and-slide treatment — this page isn't the homepage, so it needs an explicit way back, which the wireframe itself didn't show.
-
-Responsive split, `lg`-only for the full sidebar rather than `HomeSidebar`'s three-tier stack: below `lg`, `EditorialMobileBar` renders a compact `border-b border-stroke-dark` bar with just the back link (matching `CaseStudyHeader`'s existing mobile/tablet treatment); `EditorialSidebar` itself is `hidden lg:flex`. The wireframe only supplied a desktop frame, and stacking the full bio/tools/icons block above a long case study's own title on a phone would push real content too far down — content should lead there, not identity.
-
-At `lg`, `EditorialSidebar` is `lg:sticky lg:top-16 lg:w-72`, matching `HomeSidebar`'s exact sticky/width treatment (see above) for consistency between the two sidebar-based layouts. The page wrapper (`mx-auto max-w-[1280px] ... lg:flex-row lg:gap-12 lg:p-16`) also matches the homepage's padding scale rather than the site's standard case-study padding, since both are the same "sidebar layout family" — distinct from the simpler single-column showcase-case-study/`/about` family that keeps `CaseStudyHeader` and the sitewide `px-6 md:px-10 lg:px-16` scale.
-
-Both editorial pages drop `SiteFooter` — the sidebar's own `© 2026` line covers that role, same reasoning as the homepage. `CaseStudyNext` still renders after `</main>`, full-width and unaffected by the sidebar, exactly as on every other case study page.
-
-### CaseStudyYear
-
-File: `src/components/case-study-year.tsx`
-
-A `YEAR` label at `text-body-h3 text-white/70` above the year at `text-body-h2 text-white`, reusing the `ROLE`/`TOOLS` grammar. Renders a real `<time dateTime>` element so the date is machine readable.
-
-`CaseStudyProjectHeader` places it as the third column of its meta row (ROLE / TOOLS / YEAR). The three showcase pages, which have no meta row, place it directly under their `h1`. Every case study shows a year — keep it that way when adding new work.
-
-### CaseStudyNext
-
-File: `src/components/case-study-next.tsx`
-
-The onward link closing every case study. A full-width `border-t border-stroke-dark` band holding a `text-body-h3 text-white/70` "Next case study" eyebrow above the project name at `text-heading-h4`, with the next project's cover image bleeding edge-to-edge on the right. The arrow reuses the `CaseStudyCard` idiom — hidden at rest, sliding in from `-translate-x-1` on hover — and the whole block dims with `hover:opacity-70` / `active:opacity-50` because it mixes two text tones; the image also zooms to `scale-105` on hover, the same `CaseStudyCard` idiom.
-
-Deliberate exception to the site's standard `px-6 md:px-10 lg:px-16` page padding: only the text side carries the responsive `pl-*` inset (`pl-6 md:pl-10 lg:pl-16`) — the image thumbnail has no right-side padding or rounding, so it sits flush against the `max-w-[1280px]` container's own right edge. This is the one image treatment on the site that isn't padded and rounded; it was chosen deliberately as a more editorial, image-forward closing beat, distinct from every other framed image. A `min-h-28 md:min-h-32 lg:min-h-40` floor on the text column keeps the image band a reasonable height even when the project title is short and wouldn't otherwise stretch the row.
-
-Renders between `</main>` and `SiteFooter`, outside `main`, as its own `nav` landmark — only still used by the two editorial case studies (GoRight, Arrowhead Transit), which have no `SiteFooter` of their own (their sidebar's `© 2026` line covers that role instead). The three showcase case studies dropped it entirely once they moved to the new sidebar system — see Case Study Sidebar above.
+**Deleted as part of this migration** (all confirmed to have zero
+remaining importers before removal): `case-study-header.tsx` (+ its
+Storybook story), `site-footer.tsx` (+ its Storybook story),
+`case-study-editorial-sidebar.tsx` (`EditorialSidebar` +
+`EditorialMobileBar`), `case-study-next.tsx`, and `social-icon.tsx` (used
+only by `EditorialSidebar`, so it went too). If a future page ever needs a
+generic "back" link or a footer separate from the sidebar's own copyright
+line, these are gone — rebuild rather than look for them.
 
 ### Share Cards
 
@@ -404,9 +408,7 @@ The site-wide Open Graph card is generated at build time by `src/app/opengraph-i
 
 ### Footer
 
-The shared `SiteFooter` centers its copyright and link group on mobile. From `md` upward it returns to a horizontal, left/right-aligned layout. Keep these elements as plain text links with the global focus treatment. Its Storybook references include a fluid story and pinned 390px, 768px, and 1440px states so this alignment change remains visible in component review.
-
-Vertical padding is `py-6` (24px top/bottom) at every breakpoint — deliberately not scaled up at `lg`, so the footer's height stays identical between tablet and desktop. Only horizontal padding follows the standard `px-6`/`md:px-10`/`lg:px-16` scale.
+There is no shared `SiteFooter` component anymore — deleted along with its Storybook story once `/about`, its last caller, moved to the new sidebar system. `MobileFooter` (see Case Study Sidebar / Sidebar Shell Layout above) covers the equivalent role below `md` sitewide now; `HomeSidebar`'s own `© Analdo Gomez / 2026` line covers it from `md` up.
 
 ### Storybook
 
@@ -414,7 +416,7 @@ Storybook is the isolated component reference for the portfolio. Its stories liv
 
 Document component variants that affect responsive behavior, content length, icon use, or accessibility. Storybook's viewport toolbar mirrors the portfolio's 390px, 768px, and 1440px review widths; use fluid stories to inspect any of those sizes. Pin dedicated reference stories to each width when a component changes layout across breakpoints.
 
-Review the accessibility add-on's Canvas results as part of component QA. The current reference stories cover `Chip`, `CaseStudyCard`, `CaseStudyHeader` (`case-study-header.stories.tsx` — `SiteHeader` was removed along with its story once the redesigned homepage stopped using it), and `SiteFooter`.
+Review the accessibility add-on's Canvas results as part of component QA. The current reference stories cover `Chip` and `CaseStudyCard` — `SiteHeader`'s, `CaseStudyHeader`'s, and `SiteFooter`'s stories were all removed along with their components as the site finished moving to the new sidebar system.
 
 ## Components
 

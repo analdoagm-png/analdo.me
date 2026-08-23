@@ -1,55 +1,32 @@
-import { CaseStudyFigure } from "@/components/case-study-figure";
-
+/**
+ * Label + title + description for one "Decision"/"Constraint" block.
+ * Text-only now — the old version paired this with a `CaseStudyFigure`
+ * inline, side-by-side at `lg` (`reverseOnDesktop` flipping which side).
+ * Figma's actual structure (node 339:801/339:805 for the first decision,
+ * repeated per decision) is simpler: this text block, then a full-width
+ * `CaseStudyFigure` stacked directly below it as its own sibling — no
+ * side-by-side layout at any breakpoint. Callers render the figure
+ * themselves right after this component instead of passing figure props
+ * into it.
+ */
 export function CaseStudyDecisionBlock({
   label,
   title,
   description,
-  figureSrc,
-  figureCaption,
-  figureAspect,
-  figureAspectClassName,
-  figureRoundedClassName,
-  reverseOnDesktop = false,
-  mdGapClassName = "md:gap-16",
-  figureCaptionHiddenAtDesktop = false,
 }: {
   label: string;
   title: string;
   description: string;
-  figureSrc: string;
-  figureCaption: string;
-  figureAspect?: string;
-  figureAspectClassName?: string;
-  figureRoundedClassName?: string;
-  reverseOnDesktop?: boolean;
-  mdGapClassName?: string;
-  figureCaptionHiddenAtDesktop?: boolean;
 }) {
   return (
-    <div
-      className={`flex w-full flex-col items-start gap-6 lg:items-start lg:gap-12 ${mdGapClassName} ${
-        reverseOnDesktop ? "lg:flex-row-reverse" : "lg:flex-row"
-      }`}
-    >
-      <div className="flex w-full flex-col items-start gap-2 animate-fade-up lg:w-[400px] lg:shrink-0">
-        <p className="font-mono text-body-h3 text-white">{label}</p>
-        <h3 className="w-full text-balance text-heading-h5 text-white">
-          {title}
-        </h3>
-        <p className="w-full max-w-[65ch] text-pretty text-body-h2 text-white/70">
-          {description}
-        </p>
-      </div>
-      <div className="w-full lg:flex-1 lg:min-w-0">
-        <CaseStudyFigure
-          src={figureSrc}
-          caption={figureCaption}
-          aspect={figureAspect}
-          aspectClassName={figureAspectClassName}
-          roundedClassName={figureRoundedClassName}
-          captionClassName={`text-white/70 lg:text-white${figureCaptionHiddenAtDesktop ? " lg:hidden" : ""}`}
-        />
-      </div>
+    <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-2">
+      <p className="font-mono text-body-h3 text-white">{label}</p>
+      <h3 className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
+        {title}
+      </h3>
+      <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+        {description}
+      </p>
     </div>
   );
 }
