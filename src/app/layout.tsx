@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Noto_Sans, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import {
   author,
@@ -14,14 +14,20 @@ import {
 import "./globals.css";
 
 /**
- * Two-family type system, split by function rather than by scale: Noto Sans
- * is everything you read (headings, prose, descriptions), JetBrains Mono is
- * everything you operate or scan (nav, standalone links, chips, meta labels
- * and values, counters). This replaced a three-tier setup whose display face
- * was Space Grotesk — see DESIGN.md's Typography section. Both are variable
- * Google fonts, so no `weight` array is passed; arbitrary CSS font-weight
- * values interpolate across each family's variable range.
+ * Three-tier type system (replaces the old single-family Inconsolata setup):
+ * Space Grotesk for display/heading-scale text, Noto Sans for reading body
+ * copy and links, JetBrains Mono for labels/chips/captions/meta. All three
+ * are variable Google fonts, so — like the previous Inconsolata setup — no
+ * `weight` array is passed; arbitrary CSS font-weight values interpolate
+ * across each family's variable range.
  */
+const spaceGrotesk = Space_Grotesk({
+  display: "swap",
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
 const notoSans = Noto_Sans({
   display: "swap",
   fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
@@ -105,7 +111,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${notoSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${notoSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-dark-primary">
         <script

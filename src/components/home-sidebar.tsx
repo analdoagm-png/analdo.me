@@ -1,0 +1,169 @@
+import Link from "next/link";
+import { ContactGlyph } from "@/components/contact-glyph";
+import { ToolIcon } from "@/components/tool-icon";
+import { author } from "@/lib/site";
+
+const navLinkStyles = "font-mono text-body-h3 transition-colors duration-200";
+const contactLinkStyles =
+  "inline-flex items-center gap-2 font-mono text-body-h3 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40";
+
+/**
+ * Persistent left column at `md` and up, shared by the homepage and (as of
+ * the Forty5Park pass) case-study pages using the new sidebar system —
+ * mobile gets its own top bar + inline hero instead (see `MobileTopBar` and
+ * each page's own mobile block).
+ *
+ * `bioAs` exists for that reuse: the homepage's own statement is its page
+ * `h1` (default `"h1"`), but a case-study page's `h1` is the project title
+ * — a page can only have one — so those call sites pass `bioAs="p"`. This
+ * mirrors the old (pre-redesign) split between `HomeSidebar` and
+ * `EditorialSidebar` on this branch, just as a prop instead of a second
+ * component, since everything else about the two is now identical.
+ *
+ * `fixed inset-y-0 left-0` (set at the call site, not here — see `page.tsx`)
+ * rather than `sticky`: a true app-shell rail flush to the viewport's top
+ * and bottom edges, always in view regardless of scroll position, not a
+ * scroll-until-it-hits-the-top sticky column. Because `fixed` takes the
+ * sidebar out of the document flow entirely, `page.tsx`'s content column
+ * carries its own `md:pl-*` offset (320px sidebar width + the page's own
+ * gutter) to keep from sitting underneath it — there's no flex/gap
+ * relationship between the two anymore.
+ *
+ * `overflow-y-auto` guards against a viewport short enough that the
+ * sidebar's own content (identity, statement, nav, contact links,
+ * copyright) doesn't fit — rather than letting it clip or push past the
+ * viewport bottom, which a `fixed` full-height element can't otherwise
+ * resolve on its own.
+ *
+ * Border is `border-r` only, not a full box: flush against the viewport's
+ * own top/left/bottom edges, a full border would just double up on top of
+ * the viewport frame. `border-r` reads as a structural divider between rail
+ * and content, matching how borders are used sitewide (dividers, not card
+ * outlines) rather than as a floating panel's own edge.
+ *
+ * Every piece of text in here is mono per this iteration's system-wide
+ * change (prose included, not just labels/nav — see DESIGN.md's Typography
+ * section). `w-80` (320px) matches the Figma sidebar's literal width,
+ * unlike the previous `lg:w-72` (288px), which was tuned against an older,
+ * narrower Figma frame that's no longer the source of truth.
+ *
+ * `activeNav` marks which nav link reads as current. Passed explicitly by
+ * each call site rather than derived from `usePathname` — every page
+ * already knows its own route at render time, so this stays a server
+ * component instead of becoming a client one just for this. "works" is the
+ * homepage and every case study (a case study is a piece of the work
+ * "Works" indexes); "resume" is `/about` only.
+ */
+export function HomeSidebar({
+  className = "",
+  bioAs = "h1",
+  activeNav = "works",
+}: {
+  className?: string;
+  bioAs?: "h1" | "p";
+  activeNav?: "works" | "resume";
+}) {
+  const Bio = bioAs;
+
+  return (
+    <div
+      className={`flex animate-fade-up flex-col gap-10 overflow-y-auto border-r border-stroke-dark p-8 ${className}`}
+    >
+      <div className="flex flex-col gap-2">
+        <p className="font-mono text-body-h1 font-bold text-white">Analdo Gomez</p>
+        <p className="font-mono text-body-h3 font-normal text-white/70">
+          Senior Product Designer
+        </p>
+      </div>
+
+      <Bio className="w-full text-pretty font-mono text-body-h2 text-white">
+        Over a decade solving complex B2B problems with design systems built
+        to ship straight to code, and clearer paths to better outcomes.
+      </Bio>
+
+      {/*
+        Plain inline text flow (not flex/flex-wrap items) so the browser's
+        normal line-breaking can wrap at any word boundary, including inside
+        the leading clause — see the equivalent note on `main`'s homepage
+        hero for why a flex-row-of-chunks structure strands short trailing
+        words instead.
+      */}
+      <p className="w-full text-balance font-mono text-body-h2 text-white/70">
+        Based in Colombia, working globally with{" "}
+        <span className="inline-flex items-center gap-1 align-middle">
+          <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
+            <ToolIcon name="figma" />
+          </span>
+          Figma
+        </span>
+        ,{" "}
+        <span className="inline-flex items-center gap-1 align-middle">
+          <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
+            <ToolIcon name="claude" />
+          </span>
+          Claude Code
+        </span>{" "}
+        and{" "}
+        <span className="inline-flex items-center gap-1 align-middle">
+          <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
+            <ToolIcon name="codex" />
+          </span>
+          Codex
+        </span>
+      </p>
+
+      <nav aria-label="Primary" className="flex flex-col gap-4">
+        <Link
+          href="/"
+          aria-current={activeNav === "works" ? "page" : undefined}
+          className={
+            activeNav === "works"
+              ? `${navLinkStyles} font-bold text-white`
+              : `${navLinkStyles} font-normal text-white/70 hover:text-white active:text-white/50`
+          }
+        >
+          / Works
+        </Link>
+        <Link
+          href="/about"
+          aria-current={activeNav === "resume" ? "page" : undefined}
+          className={
+            activeNav === "resume"
+              ? `${navLinkStyles} font-bold text-white`
+              : `${navLinkStyles} font-normal text-white/70 hover:text-white active:text-white/50`
+          }
+        >
+          / Resume
+        </Link>
+      </nav>
+
+      <div className="flex flex-col gap-4">
+        <a href={`mailto:${author.email}`} target="_blank" className={contactLinkStyles}>
+          <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+            <ContactGlyph name="mail" />
+          </span>
+          Contact me
+        </a>
+        <a href={author.linkedIn} target="_blank" className={contactLinkStyles}>
+          <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+            <ContactGlyph name="linkedin" />
+          </span>
+          LinkedIn
+        </a>
+        <a href={author.github} target="_blank" className={contactLinkStyles}>
+          <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+            <ContactGlyph name="github" />
+          </span>
+          GitHub
+        </a>
+      </div>
+
+      {/*
+        Figma specs 12px here, but that's under the site's established 14px
+        minimum readable size (see DESIGN.md's Typography rules) — bumped to
+        text-body-h3 (14px) rather than copied literally.
+      */}
+      <p className="font-mono text-body-h3 text-white/70">© Analdo Gomez / 2026</p>
+    </div>
+  );
+}

@@ -22,11 +22,27 @@ function ArrowForwardIcon() {
 }
 
 /**
- * Below `md` the card is full-bleed per the mobile design: no padding frame
- * and no resting ring, so the image runs edge to edge and the card reads as a
- * section of the page rather than a floating surface. The padded, ringed card
- * (and its hover lift) returns at `md` and up. The image keeps its own 1px
- * outline at every breakpoint.
+ * Stacked image-then-content card (replaces the old `md:flex-row`
+ * side-by-side layout), matching the new Figma iteration:
+ *
+ * - Below `md`: no card surface at all — image runs full-bleed and sharp
+ *   (`rounded-none`), content sits directly on the page background with
+ *   24px horizontal padding. Matches the Figma mobile frame's
+ *   `case-study-card` node, which has no background or border of its own.
+ * - `md` and up: a `bg-stroke-dark` card surface with 24px padding on every
+ *   side, `rounded-token` (4px) on both the card and the image — this
+ *   iteration's cards and images round to match chips, reversing the old
+ *   sharp-corners-everywhere rule (see DESIGN.md).
+ * - Thumbnail is `aspect-video` (16:9), not a fixed pixel height — a fixed
+ *   height combined with a fluid card width meant the effective crop ratio
+ *   drifted at every breakpoint (much wider/shorter at a 2-up desktop grid
+ *   than at a full-bleed mobile card), so the same source image was cropped
+ *   very differently depending on viewport. A real aspect ratio keeps that
+ *   crop identical everywhere.
+ *
+ * Every text element is explicit `font-mono` per this iteration's
+ * typography change; none of it can rely on inherited family the way body
+ * copy normally would, since prose is mono here too, not just labels.
  */
 export function CaseStudyCard({
   href,
@@ -49,43 +65,50 @@ export function CaseStudyCard({
     <Link
       href={href}
       style={style}
-      className="group flex w-full flex-col gap-6 rounded-none bg-dark-primary animate-fade-up transition-[scale,box-shadow] duration-200 ease-out active:scale-[0.99] md:p-2 md:shadow-[0_0_0_1px_oklch(1_0_0/0.08)] md:hover:shadow-[0_0_0_1px_oklch(1_0_0/0.13),0_8px_24px_oklch(0_0_0/0.35)]"
+      className="group flex w-full animate-fade-up flex-col gap-6 transition-[scale,box-shadow] duration-200 ease-out active:scale-[0.99] md:gap-5 md:rounded-token md:bg-stroke-dark md:p-6 md:shadow-[0_0_0_1px_rgba(255,255,255,0.08)] md:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.15)]"
     >
-      <div className="relative h-[220px] w-full overflow-hidden rounded-none outline outline-1 -outline-offset-1 outline-white/10 md:h-[240px] lg:h-[280px]">
-        {/*
-          Decorative: the link already contains the title and description, so
-          real alt text here would make the accessible name say the project
-          name three times. Same reasoning as CaseStudyNext's thumbnail.
-        */}
+      <div className="relative aspect-video w-full overflow-hidden rounded-none outline outline-1 -outline-offset-1 outline-white/10 md:rounded-token">
         <Image
           src={image}
-          alt=""
-          aria-hidden="true"
+          alt={`${title} project thumbnail`}
           fill
           priority={priority}
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           sizes="(min-width: 1024px) 50vw, 100vw"
         />
       </div>
-      <div className="flex w-full flex-col gap-3 px-6 pb-5 md:px-5">
-        <div className="flex items-center gap-2.5">
-          <h3 className="text-balance text-heading-h5 text-white md:text-heading-h4">
-            {title}
-          </h3>
-          <span
-            className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-[opacity,translate] duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
-            aria-hidden="true"
-          >
-            <ArrowForwardIcon />
-          </span>
+      <div className="flex w-full flex-col gap-4 px-6 pb-6 md:px-0 md:pb-0">
+        <div className="flex w-full flex-col gap-3">
+          <div className="flex items-center gap-2.5">
+            <h3 className="text-balance font-mono text-heading-h5 font-bold text-white">
+              {title}
+            </h3>
+            <span
+              className="inline-flex -translate-x-1 text-white/80 opacity-0 transition-[opacity,translate] duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100"
+              aria-hidden="true"
+            >
+              <ArrowForwardIcon />
+            </span>
+          </div>
+          <p className="text-pretty font-mono text-body-h2 text-white/70 md:text-body-h3">
+            {description}
+          </p>
         </div>
-        <p className="text-pretty text-body-h2 text-white/68">
-          {description}
-        </p>
-        <div className="flex flex-wrap items-start gap-2 pt-1">
-          {chips.map((chip) => (
-            <Chip key={chip} label={chip} />
-          ))}
+        <div className="flex flex-wrap items-start gap-2">
+          {chips.map((chip, index) =>
+            index === 0 ? (
+              // The leading tag is always the "Case Study"/"Showcase" type
+              // (see lib/case-studies.ts) — shown below `md` (mobile Figma
+              // frame keeps it) and hidden from `md` up (tablet Figma frame
+              // drops it). A real per-breakpoint disagreement in the
+              // source design, not an oversight.
+              <span key={chip} className="md:hidden">
+                <Chip label={chip} />
+              </span>
+            ) : (
+              <Chip key={chip} label={chip} />
+            ),
+          )}
         </div>
       </div>
     </Link>

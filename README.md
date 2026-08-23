@@ -1,51 +1,36 @@
-# analdo.me
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Personal portfolio for **Analdo Gomez**, Senior Product Designer — a homepage,
-a resume page, five case studies, and a presentation deck.
+## Getting Started
 
-Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS v4. Every page
-is a Server Component; the only client components are the deck and the mobile
-nav, both of which need real interaction. Type is a two-family system —
-Noto Sans for everything you read, JetBrains Mono for everything you operate.
-
-## Running it
+First, run the development server:
 
 ```bash
-npm install
-npm run dev          # http://localhost:3000
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-| Script | What it does |
-| --- | --- |
-| `npm run dev` | Dev server |
-| `npm run build` | Production build |
-| `npm run start` | Serve the production build |
-| `npm run lint` | ESLint |
-| `npm run storybook` | Component workshop on http://localhost:6006 |
-| `npm run build-storybook` | Static Storybook build |
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Layout
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```text
-src/app/          routes, metadata routes (robots, sitemap, opengraph-image), global CSS
-src/components/   shared components, flat — stories live beside them as *.stories.tsx
-src/lib/          site constants and the case-study registry
-public/images/    case-study imagery
-```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-`src/lib/case-studies.ts` is the single source of truth for the five projects:
-the homepage grid, the sitemap, and each page's metadata and structured data all
-read from it, so a project can't appear in one place and be missing from another.
+## Learn More
 
-## Before you change anything
+To learn more about Next.js, take a look at the following resources:
 
-- **[AGENTS.md](AGENTS.md)** — implementation rules: structure, responsive
-  conventions, accessibility, SEO, and the verification steps expected before
-  handoff.
-- **[DESIGN.md](DESIGN.md)** — the design system: tokens, typography, component
-  styling, motion.
-- **[FRONTEND.md](FRONTEND.md)** — a general playbook for handing frontend work
-  to a backend team. Reference material, not a description of this repo, which
-  has no backend.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Keep AGENTS.md and DESIGN.md updated when behavior or the visual system changes.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
