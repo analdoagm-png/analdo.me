@@ -47,12 +47,13 @@ const contactLinkStyles =
  * unlike the previous `lg:w-72` (288px), which was tuned against an older,
  * narrower Figma frame that's no longer the source of truth.
  *
- * `activeNav` marks which nav link reads as current. Passed explicitly by
- * each call site rather than derived from `usePathname` — every page
- * already knows its own route at render time, so this stays a server
- * component instead of becoming a client one just for this. "works" is the
- * homepage and every case study (a case study is a piece of the work
- * "Works" indexes); "resume" is `/about` only.
+ * `activeNav` marks which nav link reads as current. This component stays a
+ * plain server component — `bioAs`/`activeNav` are computed once, from
+ * `usePathname`, by `(sidebar-shell)/layout.tsx` (the client component that
+ * renders this once for every route) and passed down as props, rather than
+ * each page deriving them itself. "works" is the homepage and every case
+ * study (a case study is a piece of the work "Works" indexes); "resume" is
+ * `/about` only.
  */
 export function HomeSidebar({
   className = "",

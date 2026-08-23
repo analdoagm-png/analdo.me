@@ -6,12 +6,13 @@ import { MobileTopBar } from "@/components/mobile-top-bar";
 import { MobileFooter } from "@/components/mobile-footer";
 
 /**
- * Shared shell for every route on the new sidebar system (homepage, About,
- * and the three showcase case studies — the route group is invisible in
- * the URL, so `/about` and `/case-studies/forty5park` are unaffected).
- * GoRight and Arrowhead Transit stay outside this group; they're still on
- * the old `CaseStudyProjectHeader`/`EditorialSidebar` system and have no
- * layout of their own.
+ * Shared shell for every route on the site — homepage, About, and all five
+ * case studies, including GoRight and Arrowhead Transit now that they've
+ * moved off the old `EditorialSidebar` system onto this one (the route
+ * group is invisible in the URL, so `/about` and `/case-studies/goright`
+ * are unaffected — only the file location moved). Only `/case-studies-deck`
+ * sits outside this group, as a self-contained full-viewport presentation
+ * route with no shared header/footer chrome of its own kind.
  *
  * This exists specifically so `HomeSidebar` and `MobileTopBar` don't
  * remount on navigation between these routes. Before this layout, every
@@ -36,8 +37,8 @@ import { MobileFooter } from "@/components/mobile-footer";
  * both rather than each page restating a variant of it. Each of those two
  * pages still needs its own mobile-only (`md:hidden`) duplicate `h1`,
  * since the sidebar itself is hidden below `md` — see `page.tsx` and
- * `about/page.tsx`. The three case studies keep `bioAs="p"`: their own
- * project title is the real `h1` there.
+ * `about/page.tsx`. Every case study keeps `bioAs="p"`: its own project
+ * title is the real `h1` there.
  */
 export default function SidebarShellLayout({
   children,

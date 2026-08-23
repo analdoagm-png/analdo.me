@@ -589,7 +589,7 @@ This copy lives in `HomeSidebar` now (see the Homepage Sidebar component section
 
 `Based in Colombia, working globally with` `[icon] Figma` `,` `[icon] Claude Code` `and` `[icon] Codex`
 
-Each tool name is a decorative `ToolIcon` (`size-3`) plus its label in one `inline-flex` item at `text-body-h3 text-white/70` — no border, no background, matching the surrounding sentence rather than standing apart as a tag. The comma is a separate flex item. The whole line is `flex flex-wrap` at every breakpoint (no mobile-stack/`md`-row split) since the sidebar column is narrow everywhere, not just on mobile.
+Each tool name is a decorative `ToolIcon` (`size-3`) plus its label in one `inline-flex` item at `text-body-h3 text-white/70` — no border, no background, matching the surrounding sentence rather than standing apart as a tag. The sentence itself is **plain inline text flow inside one `<p>`**, not a `flex flex-wrap` container: the comma and connector word (`and`) are ordinary text nodes, not standalone flex items. Only each icon+label pairing gets its own `inline-flex` span. This is deliberate — a flex-row-of-chunks structure (comma and `and` as separate flex children) let the browser's line-breaking strand short trailing words like a lone "and" or "Codex" at the start of a wrapped line; plain inline flow lets it wrap at any normal word boundary instead. Same pattern, and same reasoning, for the mobile-only duplicate of this sentence in `page.tsx`'s hero block.
 
 ## Documentation Upkeep
 

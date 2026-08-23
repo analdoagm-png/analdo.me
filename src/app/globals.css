@@ -71,8 +71,10 @@
   --text-body-h3--line-height: 1.5;
   --text-body-h3--font-weight: 500;
 
-  /* Only chips keep a radius — every other surface (cards, images,
-     callouts, buttons) is sharp-cornered by design. */
+  /* Chips, skip-links, and — since the sidebar redesign — CaseStudyCard,
+     HomeSidebar, and MobileTopBar round to this token too. Everything else
+     (callouts, results boxes, buttons) stays sharp-cornered. See DESIGN.md's
+     Radius Tokens section for the full rule. */
   --radius-token: 4px;
   --radius-token-lg: 0px;
   --radius-token-xl: 0px;
