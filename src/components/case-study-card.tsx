@@ -33,6 +33,12 @@ function ArrowForwardIcon() {
  *   side, `rounded-token` (4px) on both the card and the image — this
  *   iteration's cards and images round to match chips, reversing the old
  *   sharp-corners-everywhere rule (see DESIGN.md).
+ * - Thumbnail is `aspect-video` (16:9), not a fixed pixel height — a fixed
+ *   height combined with a fluid card width meant the effective crop ratio
+ *   drifted at every breakpoint (much wider/shorter at a 2-up desktop grid
+ *   than at a full-bleed mobile card), so the same source image was cropped
+ *   very differently depending on viewport. A real aspect ratio keeps that
+ *   crop identical everywhere.
  *
  * Every text element is explicit `font-mono` per this iteration's
  * typography change; none of it can rely on inherited family the way body
@@ -61,7 +67,7 @@ export function CaseStudyCard({
       style={style}
       className="group flex w-full animate-fade-up flex-col gap-6 transition-[scale,box-shadow] duration-200 ease-out active:scale-[0.99] md:gap-5 md:rounded-token md:bg-stroke-dark md:p-6 md:shadow-[0_0_0_1px_rgba(255,255,255,0.08)] md:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.15)]"
     >
-      <div className="relative h-[220px] w-full overflow-hidden rounded-none outline outline-1 -outline-offset-1 outline-white/10 md:rounded-token">
+      <div className="relative aspect-video w-full overflow-hidden rounded-none outline outline-1 -outline-offset-1 outline-white/10 md:rounded-token">
         <Image
           src={image}
           alt={`${title} project thumbnail`}

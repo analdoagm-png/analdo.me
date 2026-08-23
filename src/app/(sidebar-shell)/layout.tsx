@@ -30,8 +30,14 @@ import { MobileFooter } from "@/components/mobile-footer";
  * `bioAs`/`activeNav` are derived from the pathname here (making this a
  * client component) rather than passed by each page, since the sidebar no
  * longer lives inside any individual page to receive them as props.
- * "works" is active in every case except `/about`; the bio statement is
- * only the page's own `h1` on `/` itself.
+ * "works" is active in every case except `/about`; the bio statement is the
+ * page's own `h1` on `/` and `/about` — both are "about Analdo himself"
+ * pages, so the sidebar's identity statement can carry the h1 role for
+ * both rather than each page restating a variant of it. Each of those two
+ * pages still needs its own mobile-only (`md:hidden`) duplicate `h1`,
+ * since the sidebar itself is hidden below `md` — see `page.tsx` and
+ * `about/page.tsx`. The three case studies keep `bioAs="p"`: their own
+ * project title is the real `h1` there.
  */
 export default function SidebarShellLayout({
   children,
@@ -39,7 +45,7 @@ export default function SidebarShellLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const bioAs = pathname === "/" ? "h1" : "p";
+  const bioAs = pathname === "/" || pathname === "/about" ? "h1" : "p";
   const activeNav = pathname === "/about" ? "resume" : "works";
 
   return (

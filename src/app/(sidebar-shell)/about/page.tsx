@@ -66,7 +66,14 @@ export default function AboutPage() {
         <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
           About
         </p>
-        <h1 className="w-full text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">
+        {/*
+          md:hidden: at md and up, HomeSidebar's own bio statement is this
+          page's h1 (see (sidebar-shell)/layout.tsx) — repeating a variant
+          of it here read as redundant. Below md the sidebar itself is
+          hidden, so this stays as the page's real h1 there, matching the
+          same mobile-duplicate-heading pattern the homepage uses.
+        */}
+        <h1 className="w-full text-balance font-mono text-heading-h3 font-bold text-white md:hidden">
           Product designer who builds systems B2B teams can ship
           straight to code.
         </h1>
