@@ -13,7 +13,7 @@ export const metadata = caseStudyMetadata({
   href: "/case-studies/arrowhead-transit",
   title: "Arrowhead Transit Dispatch Case Study",
   description:
-    "Arrowhead Transit books more than 100 healthcare transport rides a day — I replaced a single-file Access database with a live dispatch platform dispatchers, drivers, and billing could all see at once.",
+    "Arrowhead Transit books 100+ healthcare rides a day — I replaced a single-file Access database with a live dispatch platform everyone could see at once.",
 });
 
 /**

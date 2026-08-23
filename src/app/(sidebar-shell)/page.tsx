@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CaseStudyCard } from "@/components/case-study-card";
 import { ContactGlyph } from "@/components/contact-glyph";
 import { ToolIcon } from "@/components/tool-icon";
+import { bioStatement } from "@/components/home-sidebar";
 import { caseStudies } from "@/lib/case-studies";
 import { author } from "@/lib/site";
 
@@ -24,13 +25,17 @@ export default function Home() {
         from md up (name/role, statement, tool sentence, contact
         links) — kept out of the DOM twice by scoping this block to
         md:hidden rather than hiding pieces of HomeSidebar itself.
+        The real `<h1>` for this page is HomeSidebar's own sr-only
+        heading (present at every breakpoint) — this paragraph is a
+        purely visual duplicate for viewports where the sidebar itself
+        is hidden, not a second heading. See home-sidebar.tsx's doc
+        comment for why: two real h1s used to ship in the DOM at once
+        here, confirmed with a live curl audit.
       */}
       <div className="flex flex-col gap-6 md:hidden">
-        <h1 className="w-full text-pretty font-mono text-body-h2 text-white">
-          Over a decade solving complex B2B problems with design systems
-          built to ship straight to code, and clearer paths to better
-          outcomes.
-        </h1>
+        <p className="w-full text-pretty font-mono text-body-h2 text-white">
+          {bioStatement}
+        </p>
         <p className="w-full text-balance font-mono text-body-h2 text-white/70">
           Based in Colombia, working globally with{" "}
           <span className="inline-flex items-center gap-1 align-middle">

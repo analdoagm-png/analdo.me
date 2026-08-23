@@ -6,7 +6,7 @@ export const metadata = caseStudyMetadata({
   href: "/case-studies/uber-suite",
   title: "Uber Suite Internal Tooling Showcase",
   description:
-    "An all-in-one internal toolset for Uber, streamlining communication, boosting employee engagement, and enabling fast, AI-driven knowledge discovery across the organization.",
+    "An all-in-one internal toolset for Uber — streamlining communication, boosting employee engagement, and enabling fast, AI-driven knowledge discovery.",
 });
 
 /**

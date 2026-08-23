@@ -8,17 +8,49 @@ const contactLinkStyles =
   "inline-flex items-center gap-2 font-mono text-body-h3 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40";
 
 /**
+ * Single source of truth for the bio statement text, so `page.tsx`'s mobile
+ * duplicate can import it instead of carrying its own hand-copied string
+ * that could drift from this one. See the component doc comment below for
+ * why this text now also appears in a dedicated `sr-only` heading rather
+ * than directly tagging this component's own visible paragraph.
+ */
+export const bioStatement =
+  "Over a decade solving complex B2B problems with design systems built to ship straight to code, and clearer paths to better outcomes.";
+
+/**
  * Persistent left column at `md` and up, shared by the homepage and (as of
  * the Forty5Park pass) case-study pages using the new sidebar system —
  * mobile gets its own top bar + inline hero instead (see `MobileTopBar` and
  * each page's own mobile block).
  *
- * `bioAs` exists for that reuse: the homepage's own statement is its page
- * `h1` (default `"h1"`), but a case-study page's `h1` is the project title
- * — a page can only have one — so those call sites pass `bioAs="p"`. This
- * mirrors the old (pre-redesign) split between `HomeSidebar` and
- * `EditorialSidebar` on this branch, just as a prop instead of a second
- * component, since everything else about the two is now identical.
+ * `bioAs` exists for that reuse, but no longer picks the tag on this
+ * component's own visible statement paragraph — that stays a plain `<p>`
+ * unconditionally now (see below for why). On `/` and `/about`
+ * (`bioAs="h1"`), it instead renders one additional `sr-only` `<h1>` as a
+ * sibling of the whole sidebar, holding `bioStatement`. Case studies pass
+ * `bioAs="p"` and skip that extra heading entirely — their own project
+ * title is the real `h1` there.
+ *
+ * The extra heading exists as its own sibling, outside the sidebar's own
+ * `hidden md:flex` root div, specifically so it survives being visually
+ * hidden below `md` (a `display: none` element drops out of the
+ * accessibility tree, not just the visual layout — an `h1` trapped inside
+ * `md:hidden` would mean screen-reader users on narrower viewports see no
+ * `h1` on the page at all, and the reverse is equally true for `md:hidden`
+ * content past that width). `sr-only` (clip-based hiding) keeps it in both
+ * the DOM and the accessibility tree at every breakpoint instead, while
+ * staying invisible to sighted users everywhere, matching the same pattern
+ * this component's own `/ Works` and `/ Resume` pages use for `sr-only`
+ * section headings (see `(sidebar-shell)/page.tsx` and `about/page.tsx`).
+ *
+ * Before this, `/` and `/about` both shipped **two** real `<h1>` elements
+ * in the served HTML at once — one in this component's own statement
+ * (rendered as `<h1>` when `bioAs="h1"`), one in each page's separate
+ * `md:hidden` mobile duplicate — since Tailwind's `hidden`/`md:hidden`
+ * toggle only ever hides one of the two per viewport, never removes either
+ * from the DOM. A live audit caught this: verified with `curl` against
+ * production, not just source inspection, since responsive Tailwind
+ * classes make this exact bug invisible when only rendered.
  *
  * `fixed inset-y-0 left-0` (set at the call site, not here — see `page.tsx`)
  * rather than `sticky`: a true app-shell rail flush to the viewport's top
@@ -64,107 +96,107 @@ export function HomeSidebar({
   bioAs?: "h1" | "p";
   activeNav?: "works" | "resume";
 }) {
-  const Bio = bioAs;
-
   return (
-    <div
-      className={`flex animate-fade-up flex-col gap-10 overflow-y-auto border-r border-stroke-dark p-8 ${className}`}
-    >
-      <div className="flex flex-col gap-2">
-        <p className="font-mono text-body-h1 font-bold text-white">Analdo Gomez</p>
-        <p className="font-mono text-body-h3 font-normal text-white/70">
-          Senior Product Designer
+    <>
+      {bioAs === "h1" && <h1 className="sr-only">{bioStatement}</h1>}
+      <div
+        className={`flex animate-fade-up flex-col gap-10 overflow-y-auto border-r border-stroke-dark p-8 ${className}`}
+      >
+        <div className="flex flex-col gap-2">
+          <p className="font-mono text-body-h1 font-bold text-white">Analdo Gomez</p>
+          <p className="font-mono text-body-h3 font-normal text-white/70">
+            Senior Product Designer
+          </p>
+        </div>
+
+        <p className="w-full text-pretty font-mono text-body-h2 text-white">
+          {bioStatement}
         </p>
+
+        {/*
+          Plain inline text flow (not flex/flex-wrap items) so the browser's
+          normal line-breaking can wrap at any word boundary, including inside
+          the leading clause — see the equivalent note on `main`'s homepage
+          hero for why a flex-row-of-chunks structure strands short trailing
+          words instead.
+        */}
+        <p className="w-full text-balance font-mono text-body-h2 text-white/70">
+          Based in Colombia, working globally with{" "}
+          <span className="inline-flex items-center gap-1 align-middle">
+            <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
+              <ToolIcon name="figma" />
+            </span>
+            Figma
+          </span>
+          ,{" "}
+          <span className="inline-flex items-center gap-1 align-middle">
+            <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
+              <ToolIcon name="claude" />
+            </span>
+            Claude Code
+          </span>{" "}
+          and{" "}
+          <span className="inline-flex items-center gap-1 align-middle">
+            <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
+              <ToolIcon name="codex" />
+            </span>
+            Codex
+          </span>
+        </p>
+
+        <nav aria-label="Primary" className="flex flex-col gap-4">
+          <Link
+            href="/"
+            aria-current={activeNav === "works" ? "page" : undefined}
+            className={
+              activeNav === "works"
+                ? `${navLinkStyles} font-bold text-white`
+                : `${navLinkStyles} font-normal text-white/70 hover:text-white active:text-white/50`
+            }
+          >
+            / Works
+          </Link>
+          <Link
+            href="/about"
+            aria-current={activeNav === "resume" ? "page" : undefined}
+            className={
+              activeNav === "resume"
+                ? `${navLinkStyles} font-bold text-white`
+                : `${navLinkStyles} font-normal text-white/70 hover:text-white active:text-white/50`
+            }
+          >
+            / Resume
+          </Link>
+        </nav>
+
+        <div className="flex flex-col gap-4">
+          <a href={`mailto:${author.email}`} target="_blank" className={contactLinkStyles}>
+            <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+              <ContactGlyph name="mail" />
+            </span>
+            Contact me
+          </a>
+          <a href={author.linkedIn} target="_blank" className={contactLinkStyles}>
+            <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+              <ContactGlyph name="linkedin" />
+            </span>
+            LinkedIn
+          </a>
+          <a href={author.github} target="_blank" className={contactLinkStyles}>
+            <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
+              <ContactGlyph name="github" />
+            </span>
+            GitHub
+          </a>
+        </div>
+
+        {/*
+          Figma specs 12px here, but that's under the site's established 14px
+          minimum readable size (see DESIGN.md's Typography rules) — bumped to
+          text-body-h3 (14px) rather than copied literally.
+        */}
+        <p className="font-mono text-body-h3 text-white/70">© Analdo Gomez / 2026</p>
       </div>
-
-      <Bio className="w-full text-pretty font-mono text-body-h2 text-white">
-        Over a decade solving complex B2B problems with design systems built
-        to ship straight to code, and clearer paths to better outcomes.
-      </Bio>
-
-      {/*
-        Plain inline text flow (not flex/flex-wrap items) so the browser's
-        normal line-breaking can wrap at any word boundary, including inside
-        the leading clause — see the equivalent note on `main`'s homepage
-        hero for why a flex-row-of-chunks structure strands short trailing
-        words instead.
-      */}
-      <p className="w-full text-balance font-mono text-body-h2 text-white/70">
-        Based in Colombia, working globally with{" "}
-        <span className="inline-flex items-center gap-1 align-middle">
-          <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
-            <ToolIcon name="figma" />
-          </span>
-          Figma
-        </span>
-        ,{" "}
-        <span className="inline-flex items-center gap-1 align-middle">
-          <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
-            <ToolIcon name="claude" />
-          </span>
-          Claude Code
-        </span>{" "}
-        and{" "}
-        <span className="inline-flex items-center gap-1 align-middle">
-          <span aria-hidden="true" className="flex size-3 shrink-0 items-center justify-center">
-            <ToolIcon name="codex" />
-          </span>
-          Codex
-        </span>
-      </p>
-
-      <nav aria-label="Primary" className="flex flex-col gap-4">
-        <Link
-          href="/"
-          aria-current={activeNav === "works" ? "page" : undefined}
-          className={
-            activeNav === "works"
-              ? `${navLinkStyles} font-bold text-white`
-              : `${navLinkStyles} font-normal text-white/70 hover:text-white active:text-white/50`
-          }
-        >
-          / Works
-        </Link>
-        <Link
-          href="/about"
-          aria-current={activeNav === "resume" ? "page" : undefined}
-          className={
-            activeNav === "resume"
-              ? `${navLinkStyles} font-bold text-white`
-              : `${navLinkStyles} font-normal text-white/70 hover:text-white active:text-white/50`
-          }
-        >
-          / Resume
-        </Link>
-      </nav>
-
-      <div className="flex flex-col gap-4">
-        <a href={`mailto:${author.email}`} target="_blank" className={contactLinkStyles}>
-          <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
-            <ContactGlyph name="mail" />
-          </span>
-          Contact me
-        </a>
-        <a href={author.linkedIn} target="_blank" className={contactLinkStyles}>
-          <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
-            <ContactGlyph name="linkedin" />
-          </span>
-          LinkedIn
-        </a>
-        <a href={author.github} target="_blank" className={contactLinkStyles}>
-          <span aria-hidden="true" className="flex size-4 shrink-0 items-center justify-center">
-            <ContactGlyph name="github" />
-          </span>
-          GitHub
-        </a>
-      </div>
-
-      {/*
-        Figma specs 12px here, but that's under the site's established 14px
-        minimum readable size (see DESIGN.md's Typography rules) — bumped to
-        text-body-h3 (14px) rather than copied literally.
-      */}
-      <p className="font-mono text-body-h3 text-white/70">© Analdo Gomez / 2026</p>
-    </div>
+    </>
   );
 }

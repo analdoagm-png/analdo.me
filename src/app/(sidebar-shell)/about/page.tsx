@@ -48,16 +48,23 @@ const inlineLinkStyles =
  * extrapolated from the established pattern rather than matched to a
  * spec — flag for review if a real About/Resume frame shows up later.
  *
- * `CaseStudyPointsGrid` and `CaseStudySectionHeading` (the old page's
- * stats-grid and section-heading components) are still shared with GoRight
- * and Arrowhead Transit, which haven't moved to this system — so, matching
- * the showcase case studies, this page writes its stats grid and section
- * headings inline rather than editing those components' typography.
+ * This page writes its own stats grid and section headings inline rather
+ * than reusing `CaseStudyPointsGrid`/`CaseStudySectionHeading` — those are
+ * shared with GoRight and Arrowhead Transit, and editing them in place
+ * would change those pages' typography too.
  *
  * The stats row is the one exception to the 720px text measure: three
  * compact number+description blocks read better with the extra width a
  * multi-column row gets, so it's capped at `max-w-[1280px]` instead, the
  * same measure `ProjectImage`s use elsewhere on this system.
+ *
+ * The real `<h1>` for this page is `HomeSidebar`'s own `sr-only` heading
+ * (present at every breakpoint, holding the shared `bioStatement` text,
+ * not this page's own copy below) — the `md:hidden` heading right below is
+ * a purely visual mobile duplicate, demoted to a `<p>` for exactly that
+ * reason. See `home-sidebar.tsx`'s doc comment: this page used to ship two
+ * real, differently-worded `<h1>` elements in the DOM at once (this page's
+ * own statement and the sidebar's), confirmed with a live curl audit.
  */
 export default function AboutPage() {
   return (
@@ -67,20 +74,27 @@ export default function AboutPage() {
           About
         </p>
         {/*
-          md:hidden: at md and up, HomeSidebar's own bio statement is this
-          page's h1 (see (sidebar-shell)/layout.tsx) — repeating a variant
-          of it here read as redundant. Below md the sidebar itself is
-          hidden, so this stays as the page's real h1 there, matching the
-          same mobile-duplicate-heading pattern the homepage uses.
+          md:hidden: a purely visual mobile duplicate of the sidebar's own
+          identity statement — the sidebar itself (and its sr-only h1) is
+          hidden below md, so mobile needs its own visible copy here. Not a
+          heading: HomeSidebar's sr-only h1 is this page's one real h1 at
+          every breakpoint (see home-sidebar.tsx's doc comment).
         */}
-        <h1 className="w-full text-balance font-mono text-heading-h3 font-bold text-white md:hidden">
+        <p className="w-full text-balance font-mono text-heading-h3 font-bold text-white md:hidden">
           Product designer who builds systems B2B teams can ship
           straight to code.
-        </h1>
+        </p>
+        {/*
+          Explicit "X is Y" definition sentence, not just a fact fragment —
+          reuses `aboutDescription`'s own wording (name, role, years) so
+          AI answer engines extracting this page's core claim have it in
+          visible body copy, not only in <meta name="description">.
+        */}
         <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
-          14+ years designing intuitive, data-driven products for
-          fintech, retirement, and SaaS clients — based in Colombia,
-          working with teams across the US.
+          Analdo Gomez is a Senior Product Designer with 14+ years
+          designing intuitive, data-driven products for fintech,
+          retirement, and SaaS clients — based in Colombia, working with
+          teams across the US.
         </p>
       </div>
 

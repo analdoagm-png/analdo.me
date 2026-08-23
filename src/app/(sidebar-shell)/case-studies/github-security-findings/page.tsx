@@ -6,7 +6,7 @@ export const metadata = caseStudyMetadata({
   href: "/case-studies/github-security-findings",
   title: "Github's Security Findings UX Showcase",
   description:
-    "GH's Security Findings helps CTOs and managers ensure code security and reliability by tracking alerts, notifying the right stakeholders, and guiding issues to resolution through a clear, streamlined workflow.",
+    "GH's Security Findings helps CTOs and managers track alerts, notify the right stakeholders, and guide issues to resolution through one streamlined workflow.",
 });
 
 /**
@@ -17,9 +17,8 @@ export const metadata = caseStudyMetadata({
  * text / `w-full max-w-[1280px]` images, inline YEAR/intro/section text, no
  * `CaseStudyNext`).
  *
- * All three showcase case studies are now on this system; only the two
- * editorial ones (GoRight, Arrowhead Transit — still on
- * `CaseStudyProjectHeader`/`EditorialSidebar`) remain on the old one.
+ * All five case studies — this one plus Forty5Park, Uber Suite, GoRight,
+ * and Arrowhead Transit — are on this system now.
  *
  * Per-image `aspect` overrides are carried over unchanged from the old
  * version — several of this project's screenshots are portrait or

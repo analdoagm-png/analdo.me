@@ -239,16 +239,39 @@ a link), the bio statement, the "based in / working with" tool sentence, a
 exactly once, by `(sidebar-shell)/layout.tsx` — see that section for why,
 and for where `bioAs`/`activeNav` actually come from now.
 
-**`bioAs`**: `"h1" | "p"` (default `"h1"`). The bio statement is the `h1`
-on `/` and `/about` — both pages, so `About`'s own former headline
-("Product designer who builds systems...") is now `md:hidden` there
-(visible only below `md`, where the sidebar itself is hidden; see
-`about/page.tsx`) rather than duplicating the sidebar's identity statement
-at `md`+. Every case study's `h1` is its own project title, so those
-routes get `"p"`. This replaces what the old (pre-redesign) system did with
-two separate components, `HomeSidebar` and `EditorialSidebar` —
-`EditorialSidebar` is gone now that every page shares this one instead
-(see Case Study Sidebar below).
+**`bioAs`**: `"h1" | "p"` (default `"h1"`). This no longer picks the tag on
+the sidebar's own visible bio statement — that's always a plain `<p>` now.
+On `/` and `/about` (`bioAs="h1"`), it instead adds one extra `sr-only`
+`<h1>` as a sibling of the whole sidebar, holding the bio text (exported as
+`bioStatement` from this file, so `page.tsx`'s mobile duplicate can import
+it instead of hand-copying the string). Every case study passes `"p"` and
+skips that extra heading — its own project title is the real `h1` there.
+
+The `sr-only` heading has to live outside the sidebar's own `hidden
+md:flex` root: `display: none` (what `hidden` sets) removes an element
+from the accessibility tree, not just the visual layout, so an `h1` nested
+inside that toggle would vanish from the page entirely at whichever
+breakpoint hides it — not what "visually hidden but still a real heading"
+is supposed to mean. `sr-only` (clip-based hiding) keeps it in the DOM and
+the accessibility tree at every breakpoint while staying invisible to
+sighted users everywhere, the same pattern already used for this system's
+other `sr-only` section headings (`(sidebar-shell)/page.tsx`'s "Selected
+Case Studies", `about/page.tsx`'s "Highlights").
+
+This fixes a real bug a live audit caught: before it, `/` and `/about`
+each shipped **two** actual `<h1>` elements in the served HTML at once —
+one in the sidebar's own statement (when rendered as `<h1>`), one in each
+page's separate `md:hidden` mobile duplicate — since a responsive
+`hidden`/`md:hidden` toggle only ever hides one of the two per viewport,
+it never removes either from the DOM. Verified with `curl` against
+production, not just source inspection, since responsive Tailwind classes
+make this exact bug invisible when only rendered in a browser. `About`'s
+own former headline ("Product designer who builds systems...") is still
+`md:hidden` there, but is now a `<p>` rather than a second `<h1>` — a
+purely visual mobile duplicate, not a competing heading. This replaces
+what the old (pre-redesign) system did with two separate components,
+`HomeSidebar` and `EditorialSidebar` — `EditorialSidebar` is gone now that
+every page shares this one instead (see Case Study Sidebar below).
 
 **`activeNav`**: `"works" | "resume"` (default `"works"`), driving which
 nav link renders bold/active (with `aria-current="page"`) versus muted.
