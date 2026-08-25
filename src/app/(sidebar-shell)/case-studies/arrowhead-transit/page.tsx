@@ -1,5 +1,6 @@
 import { caseStudyMetadata } from "@/lib/case-studies";
 import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
+import { CaseStudyBackLink } from "@/components/case-study-back-link";
 import { CaseStudyProjectHeader } from "@/components/case-study-project-header";
 import { CaseStudySectionHeading } from "@/components/case-study-section-heading";
 import { CaseStudyPointsGrid } from "@/components/case-study-points-grid";
@@ -27,6 +28,7 @@ export const metadata = caseStudyMetadata({
 export default function ArrowheadTransitCaseStudy() {
   return (
     <>
+      <CaseStudyBackLink />
       <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
         <CaseStudyProjectHeader
           title="Arrowhead Transit"

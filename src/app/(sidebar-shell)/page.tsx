@@ -126,8 +126,21 @@ export default function Home() {
           to the viewport edges (see CaseStudyCard). Standard grid gap
           resumes, and reflows lg:grid-cols-2, once the sidebar is a real
           side column at md.
+
+          `w-full` only from `md:` up, not unconditionally: this div's
+          ancestors are `flex flex-col` containers, and a flex item with an
+          explicit `width: 100%` sizes against its flex container's content
+          box — the `-mx-6` negative margin shifts its left edge but the
+          negative margin math that would normally also expand a block
+          box's width never runs, since the width isn't `auto`. Below `md`
+          that left the grid ~48px narrower than the viewport (visible as a
+          gap on both sides of the mobile cards, caught in a live visual
+          check) instead of truly full-bleed. Leaving width unset below
+          `md` lets the negative margin resolve it to the real full
+          viewport width; `md:w-full` restores the old behavior once
+          `md:mx-0` cancels the negative margin anyway, where it's correct.
         */}
-        <div className="-mx-6 grid w-full grid-cols-1 gap-6 md:mx-0 lg:grid-cols-2 lg:gap-8">
+        <div className="-mx-6 grid grid-cols-1 gap-6 md:mx-0 md:w-full lg:grid-cols-2 lg:gap-8">
           {caseStudies.map((cs, index) => (
             <CaseStudyCard
               key={cs.href}

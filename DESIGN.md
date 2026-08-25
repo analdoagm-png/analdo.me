@@ -314,18 +314,49 @@ uses at `md`+. `inset-x-6 top-6` (24px) matches the Figma frame's own hero
 padding, not `main`'s `MobileNav` 16px pill inset — the two are separately
 specced, not a copy of one another.
 
-Figma only supplies the bar's collapsed state; the expanded menu (nav +
-contact links) is this component's own design, but reuses the same
-accessible dialog mechanics `main`'s `MobileNav` established: real
-`role="dialog"` + `aria-modal`, dismissible via the × button, Escape, or the
-`bg-black/50` scrim, body scroll locked while open, `autoFocus` on the Close
-button. An intentional client leaf, the branch's second one after
-`CaseStudiesDeck`.
+Figma now also specifies the expanded state (node 347:1016, `site-header`):
+"Home"/"Resume" as large centered bold rows (`text-heading-h5 font-bold`,
+no active/muted distinction between them — Figma shows both identically
+styled, unlike `HomeSidebar`'s nav), then a `border-t` divider and three
+centered 16px (`text-body-h2`, up from an earlier 14px) contact rows.
+"Home"/"Resume" is a deliberate difference from `HomeSidebar`'s "/ Works"/
+"/ Resume" phrasing — this frame's own copy, not a copy-paste miss.
 
-The menu icon is the exact path data exported from the new Figma iteration's
+Collapsed bar and expanded panel are **one always-mounted element**, not
+two — the "Analdo Gomez" + toggle header row never unmounts; only the
+content below it (nav + contacts) expands and collapses. An earlier version
+rendered the expanded panel as a wholly separate element, conditionally
+mounted with `isOpen ? <div> : null` — which put it in the DOM already in
+its "open" state with nothing to animate from, and skipped any exit
+transition entirely on close. Merging into one persistent card, with
+`isOpen` only toggling classes/attributes, is what makes a real transition
+possible: the content region expands/collapses via the
+`grid-template-rows: 0fr -> 1fr` technique (`grid-rows-[0fr]` /
+`grid-rows-[1fr]` on a `grid` wrapper, real content in a single
+`overflow-hidden` child), which animates to the content's actual rendered
+height with no JS measurement — 320ms, `cubic-bezier(0.16, 1, 0.3, 1)`,
+this site's one established motion curve. The `bg-black/50` scrim (also
+always mounted now, `pointer-events-none` and `opacity-0` while closed)
+fades on the same curve at 300ms. `inert` applies to just that expanding
+region now, not the whole card, since the header's toggle button must stay
+reachable at every state.
+
+The header's hamburger/close icon crossfades instead of swapping instantly:
+both icons stay in the DOM, absolute-stacked in a `relative size-6` button,
+trading opacity/scale/blur (0 → 1 opacity, 0.25 → 1 scale, 4px → 0 blur) on
+a quicker 200ms/`cubic-bezier(0.2, 0, 0, 1)` timing — the standard
+no-motion-library icon-crossfade recipe, deliberately snappier than the
+panel's own transition so the icon reads as leading it. Accessible dialog
+mechanics are unchanged from the original version: real `role="dialog"` +
+`aria-modal`, dismissible via the × button, Escape, or the scrim, body
+scroll locked while open, `autoFocus` on Close. An intentional client leaf,
+the branch's second one after `CaseStudiesDeck`.
+
+The menu icon is the exact path data exported from the Figma iteration's
 `site-header/menu-icon` node — which turned out to be the identical four-bar
-mark `main`'s `MobileNav` already uses — recoloured to `currentColor`. Do
-not re-trace by hand; re-export if the design changes.
+mark `main`'s `MobileNav` already uses — recoloured to `currentColor`. The
+close icon is Figma's own `close--large` glyph (node 347:1047), same
+treatment. Do not re-trace either by hand; re-export if the design changes.
 
 Each page's own `pt-24` (see Homepage Sidebar above) is tuned to this bar's
 height (24px inset + ~48px bar + breathing room) so mobile content clears
@@ -343,6 +374,29 @@ role from `md` up, so this never renders alongside it. Originally extracted
 out of the homepage's `page.tsx` once Forty5Park needed the identical
 block; now, like `HomeSidebar` and `MobileTopBar`, rendered once by
 `(sidebar-shell)/layout.tsx` rather than called per page.
+
+### Case Study Back Link
+
+File: `src/components/case-study-back-link.tsx`
+
+Fixed "back to the portfolio grid" affordance, `md`+ only, called
+individually by all five case study pages (not rendered by the shared
+layout — home and About don't need it). `hidden md:flex` below `md`: the
+mobile top bar's own menu already has a "Home" link, and a second fixed
+control in the same corner would duplicate it and risk overlapping
+`MobileTopBar`.
+
+Card treatment (`rounded-token`, `bg-dark-primary`, the same
+`shadow-[0_0_0_1px_rgba(255,255,255,0.08)]` ring `MobileTopBar` and
+`CaseStudyCard` use) so it reads as the same design language rather than a
+one-off control. `top-8` matches `HomeSidebar`'s own `p-8` internal
+padding — not responsive, so this isn't either — putting it at the same
+height as the sidebar's "Analdo Gomez" name at every breakpoint.
+`left-[368px]`/`lg:left-[384px]` matches every case study's own content
+offset, so its left edge lines up with where the content column begins.
+`fixed`, not inline, so it stays reachable while scrolling a case study of
+any length — the same reasoning `HomeSidebar` and `MobileTopBar` already
+use for their own persistent positioning.
 
 ### Case Study Sidebar (new system)
 

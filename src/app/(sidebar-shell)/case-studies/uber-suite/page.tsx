@@ -1,5 +1,6 @@
 import { caseStudyMetadata } from "@/lib/case-studies";
 import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
+import { CaseStudyBackLink } from "@/components/case-study-back-link";
 import { ProjectImage } from "@/components/project-image";
 
 export const metadata = caseStudyMetadata({
@@ -24,6 +25,7 @@ export const metadata = caseStudyMetadata({
 export default function UberSuiteCaseStudy() {
   return (
     <>
+      <CaseStudyBackLink />
       <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
         <h1 className="w-full max-w-[720px] animate-fade-up text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">
           Uber Suite
