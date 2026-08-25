@@ -46,7 +46,15 @@ export function CaseStudyProjectHeader({
         <CaseStudyYear year={year} />
       </div>
 
-      <p className="w-full text-pretty font-mono text-heading-h5 font-bold text-white">
+      {/*
+        leading-[1.5]: text-heading-h5's own 1.4 line-height sits exactly
+        at (not above) the floor for text that wraps 3+ lines — this intro
+        routinely does on mobile at bold weight. A typography audit flagged
+        the zero headroom; bumping to 1.5 here matches the rest of this
+        page's body copy without touching text-heading-h5's own (mostly
+        short, non-wrapping) uses elsewhere.
+      */}
+      <p className="w-full text-pretty font-mono text-heading-h5 font-bold leading-[1.5] text-white">
         {intro}
       </p>
     </div>

@@ -246,7 +246,7 @@ export default function ArrowheadTransitCaseStudy() {
           </p>
         </div>
 
-        <p className="w-full max-w-[720px] animate-fade-up text-center font-mono text-body-h2 text-white/70">
+        <p className="w-full max-w-[720px] animate-fade-up text-pretty text-center font-mono text-body-h2 text-white/70">
           ROLE — Lead Product Designer, product ideation through design
           &amp; development handoff. Handoff documented in Notion and
           prototyped in Figma for the engineering team.

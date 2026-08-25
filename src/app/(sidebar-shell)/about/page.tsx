@@ -159,7 +159,7 @@ export default function AboutPage() {
           <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
             Experience
           </p>
-          <h2 className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
+          <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
             Where I&rsquo;ve worked
           </h2>
         </div>
@@ -245,7 +245,7 @@ export default function AboutPage() {
           <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
             Skills
           </p>
-          <h2 className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
+          <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
             What I bring to a team
           </h2>
         </div>

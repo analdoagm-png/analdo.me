@@ -117,17 +117,24 @@ Global rendering:
 - `font-feature-settings: "kern" 1, "liga" 1, "calt" 1`
 - `text-rendering: optimizeLegibility`
 
-**Homepage-only exception (second iteration):** the new Figma pass for `/`
-is JetBrains Mono end-to-end — headings and prose included, not just labels.
-This is scoped to the homepage's own components (`HomeSidebar`,
-`MobileTopBar`, `CaseStudyCard`, and the mobile-only hero block in
-`page.tsx`), applied with explicit `font-mono` at each call site rather than
-by repointing the global `--font-sans`/`--font-heading` tokens — those stay
-Space Grotesk/Noto Sans for every other route (`/about`, all five case
-studies), since this redesign pass is homepage-only. Do not read this as a
-sitewide typography change; it's a local override, the same mechanism as any
-other `font-mono` opt-in, just applied more broadly within one page's own
-components than elsewhere on the site.
+**Mono-for-prose now covers the whole `(sidebar-shell)` system, not just the
+homepage.** This started as a homepage-only exception (`HomeSidebar`,
+`MobileTopBar`, `CaseStudyCard`, the mobile hero block) in an earlier Figma
+pass, but every route that followed — `/about` and all five case studies —
+adopted the identical pattern: `font-mono` on body prose, not just labels,
+applied explicitly at each call site rather than by repointing the global
+`--font-sans`/`--font-heading` tokens. A typography audit confirmed this
+directly (23 of 28 component/page files under `(sidebar-shell)` pair
+`font-mono` with body-text-scale classes) after this doc's earlier
+"homepage-only, every other route stays Space Grotesk/Noto Sans" framing
+was found to no longer match the code. The one route that genuinely still
+runs the original proportional-font system is `/case-studies-deck` — a
+separate presentation route outside `(sidebar-shell)` entirely, not
+described by anything in this section. Read this as: mono-for-prose is this
+system's actual voice everywhere except the deck, not a homepage-local
+override — `--font-sans`/`--font-heading` are unchanged (still Noto
+Sans/Space Grotesk) because the opt-in stays per-call-site `font-mono`
+rather than a token repoint, which is what keeps the deck unaffected.
 
 ### Type Tokens
 

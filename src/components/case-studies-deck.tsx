@@ -382,7 +382,7 @@ function ProjectSlide({
         <div className="deck-stagger grid gap-0 divide-y divide-white/15 border-y border-white/15">
           {project.problems.map((problem, index) => (
             <div key={problem.title} className="grid gap-3 py-5 md:grid-cols-[3.5rem_1fr] md:gap-6 md:py-7">
-              <p className="text-heading-h5 text-white/42">0{index + 1}</p>
+              <p className="text-heading-h5 text-white/50">0{index + 1}</p>
               <div className="flex max-w-xl flex-col gap-2">
                 <h3 className="text-balance text-heading-h4 text-white">{problem.title}</h3>
                 <p className="text-pretty text-body-h2 text-white/68">{problem.detail}</p>
@@ -470,7 +470,7 @@ function ProjectSlide({
                 }
                 onExpand={() => onExpand({ src: image.src, alt: image.alt, label: `Process view ${index + 1}` })}
               />
-              <figcaption className="text-heading-h5 text-white/42">0{index + 1}</figcaption>
+              <figcaption className="text-heading-h5 text-white/50">0{index + 1}</figcaption>
             </figure>
           ))}
         </div>
