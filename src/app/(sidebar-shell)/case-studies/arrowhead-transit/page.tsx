@@ -24,12 +24,15 @@ export const metadata = caseStudyMetadata({
  * figure instead of a side-by-side layout, no divider lines, no
  * `CaseStudyNext`). Both editorial case studies now share the exact same
  * rebuilt components as GoRight.
+ *
+ * `.stagger-section` on the content column (see globals.css / GoRight)
+ * cascades every direct animated child in on load, by DOM position.
  */
 export default function ArrowheadTransitCaseStudy() {
   return (
     <>
       <CaseStudyBackLink />
-      <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+      <div className="stagger-section flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
         <CaseStudyProjectHeader
           title="Arrowhead Transit"
           role="Lead Product Designer"
@@ -146,30 +149,24 @@ export default function ArrowheadTransitCaseStudy() {
           </p>
         </div>
 
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/arrowhead-transit/process-1.png"
-            alt="Design audit table comparing requirements against design impact for the dispatch workflow."
-            aspect="2048/669"
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/arrowhead-transit/process-2.png"
-            alt="Sitemap table defining view and edit permissions by role."
-            aspect="2048/467"
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/arrowhead-transit/process-3.png"
-            alt="Golden-path flowchart mapping a ride from booking through dispatch to completion."
-            aspectClassName="aspect-[2048/1025] lg:aspect-[2048/1079]"
-            roundedClassName="rounded-token"
-          />
-        </div>
+        <ProjectImage
+          src="/images/arrowhead-transit/process-1.png"
+          alt="Design audit table comparing requirements against design impact for the dispatch workflow."
+          aspect="2048/669"
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/arrowhead-transit/process-2.png"
+          alt="Sitemap table defining view and edit permissions by role."
+          aspect="2048/467"
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/arrowhead-transit/process-3.png"
+          alt="Golden-path flowchart mapping a ride from booking through dispatch to completion."
+          aspectClassName="aspect-[2048/1025] lg:aspect-[2048/1079]"
+          roundedClassName="rounded-token"
+        />
 
         <div className="flex w-full max-w-[720px] flex-col items-start gap-6">
           <CaseStudySectionHeading
@@ -182,38 +179,30 @@ export default function ArrowheadTransitCaseStudy() {
           </p>
         </div>
 
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/arrowhead-transit/platform-1.png"
-            alt="Arrowhead Transit dashboard showing this week's trips and available drivers."
-            aspectClassName="aspect-[8/5] lg:aspect-[2048/1623]"
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/arrowhead-transit/platform-2.png"
-            alt="Arrowhead Transit incoming referrals queue showing new ride requests."
-            aspectClassName="aspect-[8/5] lg:aspect-[2048/945]"
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/arrowhead-transit/platform-3.png"
-            alt="Arrowhead Transit trip detail view with a live route map."
-            aspectClassName="aspect-[8/5] lg:aspect-[2048/1165]"
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/arrowhead-transit/platform-4.png"
-            alt="Arrowhead Transit driver tracking view showing an active route on a map."
-            aspectClassName="aspect-[8/5] lg:aspect-[2048/1357]"
-            roundedClassName="rounded-token"
-          />
-        </div>
+        <ProjectImage
+          src="/images/arrowhead-transit/platform-1.png"
+          alt="Arrowhead Transit dashboard showing this week's trips and available drivers."
+          aspectClassName="aspect-[8/5] lg:aspect-[2048/1623]"
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/arrowhead-transit/platform-2.png"
+          alt="Arrowhead Transit incoming referrals queue showing new ride requests."
+          aspectClassName="aspect-[8/5] lg:aspect-[2048/945]"
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/arrowhead-transit/platform-3.png"
+          alt="Arrowhead Transit trip detail view with a live route map."
+          aspectClassName="aspect-[8/5] lg:aspect-[2048/1165]"
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/arrowhead-transit/platform-4.png"
+          alt="Arrowhead Transit driver tracking view showing an active route on a map."
+          aspectClassName="aspect-[8/5] lg:aspect-[2048/1357]"
+          roundedClassName="rounded-token"
+        />
 
         <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
           <CaseStudySectionHeading

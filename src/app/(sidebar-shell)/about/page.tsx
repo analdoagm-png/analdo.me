@@ -65,6 +65,18 @@ const inlineLinkStyles =
  * reason. See `home-sidebar.tsx`'s doc comment: this page used to ship two
  * real, differently-worded `<h1>` elements in the DOM at once (this page's
  * own statement and the sidebar's), confirmed with a live curl audit.
+ *
+ * Load-in stagger uses hand-assigned `[animation-delay:Nms]` in 60ms
+ * steps (0, 60, 120, 180, 240, 300 — intro, stats, Experience heading,
+ * Experience list, Skills heading, Skills chips) rather than
+ * globals.css's `.stagger-section` nth-child mechanism: that mechanism
+ * only staggers a container's *direct* children, and this page's
+ * Experience/Skills blocks nest their animated heading and their animated
+ * content two levels deep inside an unanimated wrapper (see
+ * `.stagger-section`'s own comment for why that wrapper stays
+ * unanimated — its children already carry the fade). `.stagger-section`
+ * is a better fit for the case-study pages, whose sections are flatter
+ * (direct siblings of one wrapper) — see those pages instead.
  */
 export default function AboutPage() {
   return (
@@ -114,7 +126,7 @@ export default function AboutPage() {
         ("3" vs "200+").
       */}
       <h2 className="sr-only">Highlights</h2>
-      <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-8 [animation-delay:80ms]">
+      <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-8 [animation-delay:60ms]">
         <div className="flex w-full items-baseline gap-6 border-b border-stroke-dark pb-8 md:gap-8">
           <h3 className="w-[72px] shrink-0 font-mono text-heading-h3 font-bold text-white md:w-[110px]">
             14+
@@ -143,7 +155,7 @@ export default function AboutPage() {
       </div>
 
       <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
-        <div className="flex w-full animate-fade-up flex-col items-start">
+        <div className="flex w-full animate-fade-up flex-col items-start [animation-delay:120ms]">
           <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
             Experience
           </p>
@@ -152,7 +164,7 @@ export default function AboutPage() {
           </h2>
         </div>
 
-        <div className="flex w-full animate-fade-up flex-col items-start gap-8">
+        <div className="flex w-full animate-fade-up flex-col items-start gap-8 [animation-delay:180ms]">
           <div className="flex w-full flex-col items-start gap-2 border-b border-stroke-dark pb-8">
             <div className="flex w-full flex-col items-start justify-between gap-1 md:flex-row md:items-baseline">
               <h3 className="text-balance font-mono text-heading-h5 font-bold text-white">
@@ -229,7 +241,7 @@ export default function AboutPage() {
       </div>
 
       <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
-        <div className="flex w-full animate-fade-up flex-col items-start">
+        <div className="flex w-full animate-fade-up flex-col items-start [animation-delay:240ms]">
           <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
             Skills
           </p>
@@ -238,7 +250,7 @@ export default function AboutPage() {
           </h2>
         </div>
 
-        <div className="flex w-full animate-fade-up flex-col items-start gap-6">
+        <div className="flex w-full animate-fade-up flex-col items-start gap-6 [animation-delay:300ms]">
           <div className="flex flex-col items-start gap-3">
             <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
               Design

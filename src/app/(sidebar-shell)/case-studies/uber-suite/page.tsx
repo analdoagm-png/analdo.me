@@ -21,17 +21,20 @@ export const metadata = caseStudyMetadata({
  * Per-image `aspect` overrides are carried over unchanged from the old
  * version — several of this project's screenshots are portrait or
  * near-square, not the component's `2880/1800` default.
+ *
+ * `.stagger-section` on the content column (see globals.css / Forty5Park)
+ * cascades every direct animated child in on load, by DOM position.
  */
 export default function UberSuiteCaseStudy() {
   return (
     <>
       <CaseStudyBackLink />
-      <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+      <div className="stagger-section flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
         <h1 className="w-full max-w-[720px] animate-fade-up text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">
           Uber Suite
         </h1>
 
-        <div className="flex w-full max-w-[720px] flex-col items-start">
+        <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start">
           <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
             Year
           </p>
@@ -40,7 +43,7 @@ export default function UberSuiteCaseStudy() {
           </time>
         </div>
 
-        <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6 [animation-delay:100ms]">
+        <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
           <p className="text-pretty font-mono text-body-h2 font-bold text-white">
             An all-in-one internal toolset for Uber, streamlining
             communication, boosting employee engagement, and enabling fast,
@@ -56,23 +59,19 @@ export default function UberSuiteCaseStudy() {
           </p>
         </div>
 
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/uber-suite/project-image-1.png"
-            alt="Uber Search results screen showing employee profile cards for a company-wide people search."
-            aspect="3200/3274"
-            roundedClassName="rounded-token"
-            priority
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/uber-suite/project-image-2.png"
-            alt="Uber Suite release plan form for configuring a company-wide announcement rollout."
-            aspect="3840/2800"
-            roundedClassName="rounded-token"
-          />
-        </div>
+        <ProjectImage
+          src="/images/uber-suite/project-image-1.png"
+          alt="Uber Search results screen showing employee profile cards for a company-wide people search."
+          aspect="3200/3274"
+          roundedClassName="rounded-token"
+          priority
+        />
+        <ProjectImage
+          src="/images/uber-suite/project-image-2.png"
+          alt="Uber Suite release plan form for configuring a company-wide announcement rollout."
+          aspect="3840/2800"
+          roundedClassName="rounded-token"
+        />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
           <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
@@ -87,42 +86,32 @@ export default function UberSuiteCaseStudy() {
           </p>
         </div>
 
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/uber-suite/project-image-3.png"
-            alt="Uber Suite dashboard showing recent announcements and release management tools."
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/uber-suite/project-image-4.png"
-            alt="Uber Suite mobile app screens showing team member profiles and a department page."
-            aspect="2880/2560"
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/uber-suite/project-image-5.png"
-            alt="Uber Suite messaging tool showing a contextual list of users and channels."
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/uber-suite/project-image-6.png"
-            alt="Uber Suite messaging tool showing channel search and multi-user selection."
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/uber-suite/project-image-7.png"
-            alt="Uber Suite messaging thread showing a conversation between team members."
-            roundedClassName="rounded-token"
-          />
-        </div>
+        <ProjectImage
+          src="/images/uber-suite/project-image-3.png"
+          alt="Uber Suite dashboard showing recent announcements and release management tools."
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/uber-suite/project-image-4.png"
+          alt="Uber Suite mobile app screens showing team member profiles and a department page."
+          aspect="2880/2560"
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/uber-suite/project-image-5.png"
+          alt="Uber Suite messaging tool showing a contextual list of users and channels."
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/uber-suite/project-image-6.png"
+          alt="Uber Suite messaging tool showing channel search and multi-user selection."
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/uber-suite/project-image-7.png"
+          alt="Uber Suite messaging thread showing a conversation between team members."
+          roundedClassName="rounded-token"
+        />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
           <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">

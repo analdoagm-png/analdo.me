@@ -6,6 +6,17 @@ import Image from "next/image";
  * text/border surfaces (callouts, results boxes) stay sharp. `max-w-[1280px]
  * w-full` on the root matches every other image on this system, centering
  * within the page's `items-center` column once there's more room than that.
+ *
+ * `.animate-fade-up` lives on this outer root (image + caption together),
+ * not on the inner image div — a page's `.stagger-section` (see
+ * globals.css) only assigns a delay to its *direct* children, and this
+ * component's return value, not its inner image div, is what actually sits
+ * at that position in a case study page. Putting it here also means the
+ * caption now fades in with its image as one unit instead of appearing
+ * statically while only the image above it animated. `priority` no longer
+ * adds its own one-off animation delay for the same reason `ProjectImage`
+ * dropped it: the page-level stagger supersedes it with a real
+ * position-based delay instead of one hardcoded special case.
  */
 export function CaseStudyFigure({
   src,
@@ -29,9 +40,11 @@ export function CaseStudyFigure({
   priority?: boolean;
 }) {
   return (
-    <div className={`flex w-full max-w-[1280px] flex-col items-start ${gapClassName}`}>
+    <div
+      className={`flex w-full max-w-[1280px] animate-fade-up flex-col items-start ${gapClassName}`}
+    >
       <div
-        className={`relative w-full overflow-hidden bg-stroke-dark ${roundedClassName} ${aspectClassName ?? ""} animate-fade-up ${priority ? "[animation-delay:200ms]" : ""}`}
+        className={`relative w-full overflow-hidden bg-stroke-dark ${roundedClassName} ${aspectClassName ?? ""}`}
         style={
           aspectClassName
             ? undefined

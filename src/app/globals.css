@@ -156,6 +156,63 @@ button:focus-visible {
   animation: fade-up 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/*
+ * Page-load stagger for a page's top-level content sections. Applied to one
+ * outer wrapper per page; each *direct child* that also carries
+ * `.animate-fade-up` gets an incrementing `animation-delay` by DOM
+ * position, so a page's sections cascade in top-to-bottom on load instead
+ * of every `.animate-fade-up` element firing at once (which is what a flat
+ * `animate-fade-up` with no delay looks like once a page has more than one
+ * of them — nearly the whole page fading up simultaneously, not a real
+ * stagger).
+ *
+ * Only direct children matching `.animate-fade-up` are targeted — a child
+ * without that class is simply skipped (no delay applied, nothing to
+ * apply it to), so a page can mix animated and static top-level children
+ * freely. Steps stop incrementing after 8 (480ms) and hold flat for
+ * anything further down a long page: content below the fold has already
+ * finished animating by the time a reader scrolls to it regardless of the
+ * exact delay, so extending the cascade indefinitely on a long case study
+ * only adds risk (a very fast scroll briefly catching mid-fade content)
+ * without adding any real staggered-reveal benefit past the first few
+ * steps.
+ *
+ * Deliberately NOT used for a section that already has its own internal
+ * multi-item stagger (CaseStudyPointsGrid, CaseStudyImagePair, the
+ * homepage's CaseStudyCard grid) — those wrapping divs stay off this
+ * mechanism (no `.animate-fade-up` of their own) so their internal,
+ * per-item delays aren't compounded by a second, outer fade running at the
+ * same time. Two elements in an ancestor/descendant relationship both
+ * animating opacity 0->1 concurrently compose multiplicatively (and their
+ * `translateY`s add), reading as one softer, slightly-off fade rather than
+ * two clean steps — the fix is to let exactly one of the two own the
+ * animation, not stack both.
+ */
+.stagger-section > .animate-fade-up:nth-child(1) {
+  animation-delay: 0ms;
+}
+.stagger-section > .animate-fade-up:nth-child(2) {
+  animation-delay: 60ms;
+}
+.stagger-section > .animate-fade-up:nth-child(3) {
+  animation-delay: 120ms;
+}
+.stagger-section > .animate-fade-up:nth-child(4) {
+  animation-delay: 180ms;
+}
+.stagger-section > .animate-fade-up:nth-child(5) {
+  animation-delay: 240ms;
+}
+.stagger-section > .animate-fade-up:nth-child(6) {
+  animation-delay: 300ms;
+}
+.stagger-section > .animate-fade-up:nth-child(7) {
+  animation-delay: 360ms;
+}
+.stagger-section > .animate-fade-up:nth-child(n + 8) {
+  animation-delay: 420ms;
+}
+
 @keyframes deck-slide-forward {
   from {
     opacity: 0;

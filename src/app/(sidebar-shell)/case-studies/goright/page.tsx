@@ -43,12 +43,22 @@ export const metadata = caseStudyMetadata({
  *
  * No `CaseStudyNext` — dropped for this system, matching the three
  * showcase case studies.
+ *
+ * `.stagger-section` on the content column (see globals.css / Forty5Park)
+ * cascades every direct animated child in on load, by DOM position. Every
+ * shared component used here (`CaseStudyProjectHeader`, `CaseStudyFigure`,
+ * `CaseStudyCallout`, `CaseStudyStatement`, `CaseStudyDecisionBlock`)
+ * already carries its own `.animate-fade-up` on its own root, so this page
+ * needed no other changes to participate. The plain wrapper divs around a
+ * `CaseStudySectionHeading` + `CaseStudyPointsGrid`/image group are
+ * deliberately left unanimated themselves (see `.stagger-section`'s own
+ * comment for why) — their children already carry the fade.
  */
 export default function GoRightCaseStudy() {
   return (
     <>
       <CaseStudyBackLink />
-      <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+      <div className="stagger-section flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
         <CaseStudyProjectHeader
           title="GoRight"
           role="Lead Product Designer"
@@ -183,14 +193,12 @@ export default function GoRightCaseStudy() {
           altB="Flowchart mapping the capability set across desktop and mobile roles."
         />
 
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/goright/process-wide.png"
-            alt="User journey flowchart for the on-road breakdown process, from dispatch to arrival."
-            aspect="2048/1025"
-            roundedClassName="rounded-token"
-          />
-        </div>
+        <ProjectImage
+          src="/images/goright/process-wide.png"
+          alt="User journey flowchart for the on-road breakdown process, from dispatch to arrival."
+          aspect="2048/1025"
+          roundedClassName="rounded-token"
+        />
 
         <div className="hidden w-full max-w-[1280px] flex-col items-start gap-16 lg:flex">
           <ProjectImage

@@ -23,6 +23,22 @@ export const bioStatement =
  * mobile gets its own top bar + inline hero instead (see `MobileTopBar` and
  * each page's own mobile block).
  *
+ * No `.animate-fade-up` on this component, by explicit request: navigation
+ * chrome should read as static structure, not content that "loads in" —
+ * only the page content inside `{children}` (in `(sidebar-shell)/layout.tsx`)
+ * gets an entrance transition. `MobileTopBar` and `MobileFooter` follow the
+ * same rule for the same reason (all three are rendered once by the shared
+ * layout and never remount on navigation, so this was never about avoiding
+ * a repeat-on-navigation glitch — it's a static-chrome-vs-animated-content
+ * split, not a de-dup fix).
+ *
+ * `CaseStudyBackLink` (each case study's own fixed "Back" link) follows
+ * this same rule too, even though it isn't hoisted into the shared layout
+ * and does remount per case study page: an entrance fade there would
+ * replay on every case-study-to-case-study navigation, which is exactly
+ * the kind of persistent-chrome flicker the sidebar-shell layout exists to
+ * avoid elsewhere.
+ *
  * `bioAs` exists for that reuse, but no longer picks the tag on this
  * component's own visible statement paragraph — that stays a plain `<p>`
  * unconditionally now (see below for why). On `/` and `/about`
@@ -100,7 +116,7 @@ export function HomeSidebar({
     <>
       {bioAs === "h1" && <h1 className="sr-only">{bioStatement}</h1>}
       <div
-        className={`flex animate-fade-up flex-col gap-10 overflow-y-auto border-r border-stroke-dark p-8 ${className}`}
+        className={`flex flex-col gap-10 overflow-y-auto border-r border-stroke-dark p-8 ${className}`}
       >
         <div className="flex flex-col gap-2">
           <p className="font-mono text-body-h1 font-bold text-white">Analdo Gomez</p>

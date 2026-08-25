@@ -625,6 +625,46 @@ Global animation:
 
 Use motion for page-load presence only. Do not add scroll-triggered motion without changing the architecture intentionally.
 
+### Page-Load Stagger
+
+Every page's content should cascade in on load, not fade up as one flat
+block. `.stagger-section` (globals.css) gives every *direct child*
+carrying `.animate-fade-up` an incrementing `animation-delay` by DOM
+position — 60ms per step, capped at 420ms after the 8th child (content
+below the fold has already finished animating by the time a reader
+scrolls to it regardless of the exact delay, so extending the cascade
+indefinitely on a long case study adds no real benefit past the first few
+steps). Applied to the outer content wrapper on the homepage and all five
+case studies — see any of those pages' own doc comments.
+
+**Never nest two elements that are both `.animate-fade-up` in an
+ancestor/descendant relationship.** Their opacities compose
+multiplicatively and their `translateY`s add, reading as one softer,
+slightly-off fade rather than two clean steps. A section wrapper whose
+children already carry their own fade (a heading next to
+`CaseStudyPointsGrid`, `CaseStudyImagePair`'s own 2-item stagger, the
+homepage's `CaseStudyCard` grid) stays unanimated itself for this
+reason — it simply won't get a `.stagger-section` delay (harmless, no
+rule fires), and its children's own internal stagger stands alone as
+that section's reveal.
+
+`.stagger-section` only reaches *direct* children, which is why
+`/about`'s Experience/Skills blocks (heading + content nested two levels
+inside an unanimated wrapper) use hand-assigned `[animation-delay:Nms]`
+in the same 60ms steps instead — see that page's own doc comment. Reach
+for `.stagger-section` when a page's sections are flat (direct siblings
+of one wrapper, true of every case study); hand-assign delays when they
+aren't.
+
+Persistent navigation chrome — `HomeSidebar`, `MobileTopBar`,
+`MobileFooter`, each case study's `CaseStudyBackLink` — carries no
+`.animate-fade-up` at all, by design: it should read as static structure,
+not content that "loads in." Only `{children}` (the page content the
+shared layout wraps) animates. See `home-sidebar.tsx`'s own doc comment
+for the full reasoning, including why this holds even for
+`CaseStudyBackLink`, which isn't part of the shared layout and does
+remount per case study page.
+
 Reduced motion:
 
 ```css

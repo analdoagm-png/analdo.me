@@ -24,17 +24,20 @@ export const metadata = caseStudyMetadata({
  * Per-image `aspect` overrides are carried over unchanged from the old
  * version — several of this project's screenshots are portrait or
  * near-square, not the component's `2880/1800` default.
+ *
+ * `.stagger-section` on the content column (see globals.css / Forty5Park)
+ * cascades every direct animated child in on load, by DOM position.
  */
 export default function GithubSecurityFindingsCaseStudy() {
   return (
     <>
       <CaseStudyBackLink />
-      <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+      <div className="stagger-section flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
         <h1 className="w-full max-w-[720px] animate-fade-up text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">
           Github&rsquo;s Security Findings
         </h1>
 
-        <div className="flex w-full max-w-[720px] flex-col items-start">
+        <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start">
           <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
             Year
           </p>
@@ -43,7 +46,7 @@ export default function GithubSecurityFindingsCaseStudy() {
           </time>
         </div>
 
-        <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6 [animation-delay:100ms]">
+        <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
           <p className="text-pretty font-mono text-body-h2 font-bold text-white">
             GH&rsquo;s Security Findings helps CTOs and managers ensure
             code security and reliability by tracking alerts, notifying
@@ -60,23 +63,19 @@ export default function GithubSecurityFindingsCaseStudy() {
           </p>
         </div>
 
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/github-security/project-image-1.png"
-            alt="Security Findings overview table showing total findings and SLA status metrics across services."
-            aspect="3360/3188"
-            roundedClassName="rounded-token"
-            priority
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/github-security/project-image-2.png"
-            alt="Security Findings detail view for a specific vulnerability, showing severity, impact, and a recommended resolution."
-            aspect="1680/1110"
-            roundedClassName="rounded-token"
-          />
-        </div>
+        <ProjectImage
+          src="/images/github-security/project-image-1.png"
+          alt="Security Findings overview table showing total findings and SLA status metrics across services."
+          aspect="3360/3188"
+          roundedClassName="rounded-token"
+          priority
+        />
+        <ProjectImage
+          src="/images/github-security/project-image-2.png"
+          alt="Security Findings detail view for a specific vulnerability, showing severity, impact, and a recommended resolution."
+          aspect="1680/1110"
+          roundedClassName="rounded-token"
+        />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
           <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
@@ -90,51 +89,39 @@ export default function GithubSecurityFindingsCaseStudy() {
           </p>
         </div>
 
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/github-security/project-image-3.png"
-            alt="Security Findings risk-selection step in the remediation workflow, listing CVEs by risk score."
-            aspect="1680/1805"
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/github-security/project-image-4.png"
-            alt="Security Findings exception-creation dialog for flagging a finding as a false positive or accepted risk."
-            aspect="1680/1110"
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/github-security/project-image-5.png"
-            alt="Security Findings job status screen showing a completed remediation export."
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/github-security/project-image-6.png"
-            alt="Security Findings activity feed showing recent exceptions and status changes."
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/github-security/project-image-7.png"
-            alt="Security Findings audit trail showing risk history by section and question."
-            roundedClassName="rounded-token"
-          />
-        </div>
-        <div className="w-full max-w-[1280px]">
-          <ProjectImage
-            src="/images/github-security/project-image-8.png"
-            alt="Security Findings full audit table showing every tracked finding and its resolution status."
-            aspect="3360/2400"
-            roundedClassName="rounded-token"
-          />
-        </div>
+        <ProjectImage
+          src="/images/github-security/project-image-3.png"
+          alt="Security Findings risk-selection step in the remediation workflow, listing CVEs by risk score."
+          aspect="1680/1805"
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/github-security/project-image-4.png"
+          alt="Security Findings exception-creation dialog for flagging a finding as a false positive or accepted risk."
+          aspect="1680/1110"
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/github-security/project-image-5.png"
+          alt="Security Findings job status screen showing a completed remediation export."
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/github-security/project-image-6.png"
+          alt="Security Findings activity feed showing recent exceptions and status changes."
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/github-security/project-image-7.png"
+          alt="Security Findings audit trail showing risk history by section and question."
+          roundedClassName="rounded-token"
+        />
+        <ProjectImage
+          src="/images/github-security/project-image-8.png"
+          alt="Security Findings full audit table showing every tracked finding and its resolution status."
+          aspect="3360/2400"
+          roundedClassName="rounded-token"
+        />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
           <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">

@@ -31,12 +31,18 @@ export default function Home() {
         is hidden, not a second heading. See home-sidebar.tsx's doc
         comment for why: two real h1s used to ship in the DOM at once
         here, confirmed with a live curl audit.
+
+        `stagger-section` on this wrapper (not the page root — see the
+        card grid below for why) cascades its own 3 children in on load;
+        the wrapper itself stays unanimated so its own opacity doesn't
+        compound with each child's (see globals.css's `.stagger-section`
+        comment for why that pairing is avoided).
       */}
-      <div className="flex flex-col gap-6 md:hidden">
-        <p className="w-full text-pretty font-mono text-body-h2 text-white">
+      <div className="stagger-section flex flex-col gap-6 md:hidden">
+        <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white">
           {bioStatement}
         </p>
-        <p className="w-full text-balance font-mono text-body-h2 text-white/70">
+        <p className="w-full animate-fade-up text-balance font-mono text-body-h2 text-white/70">
           Based in Colombia, working globally with{" "}
           <span className="inline-flex items-center gap-1 align-middle">
             <span
@@ -68,7 +74,7 @@ export default function Home() {
             Codex
           </span>
         </p>
-        <div className="flex flex-col gap-4">
+        <div className="flex animate-fade-up flex-col gap-4">
           <a
             href={`mailto:${author.email}`}
             target="_blank"
@@ -156,7 +162,13 @@ export default function Home() {
               chips={cs.chips}
               description={cs.description}
               priority={index === 0}
-              style={{ animationDelay: `${index * 70}ms` }}
+              // 240ms base offset continues the page's top-to-bottom
+              // cascade after the mobile hero block's own 3-item stagger
+              // (0/60/120ms, see the wrapper above) — without it, this
+              // grid's per-card stagger would start racing the hero's
+              // reveal from the same t=0, rather than reading as the
+              // page's next stagger step.
+              style={{ animationDelay: `${240 + index * 70}ms` }}
             />
           ))}
         </div>

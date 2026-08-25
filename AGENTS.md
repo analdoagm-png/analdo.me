@@ -139,7 +139,8 @@ Tool chips (used on `/about`, not the homepage) may pass a decorative `ToolIcon`
 - `CaseStudyCard` border shifts from `stroke-dark` to `gray-dark` and adds `hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]` at `md` and up, where the card has a visible border box; it's borderless on mobile. `active:scale-[0.99]` press applies at every breakpoint.
 - `CaseStudyCard`'s forward arrow slides in and fades in on hover (`-translate-x-1` → `translate-x-0`, `opacity-0` → `opacity-100`).
 - `.animate-fade-up` is a zero-JS page-load animation: 12px translateY + opacity, 700ms `cubic-bezier(0.16, 1, 0.3, 1)`, `both` fill mode.
-- Use small server-rendered stagger delays for side-by-side mapped items only. Sequential content blocks do not need individual staggering.
+- Every top-level content section on a page should carry `.animate-fade-up`, and every page's sections should cascade in, not fade up as one flat block. `.stagger-section` (globals.css) gives every direct `.animate-fade-up` child of a wrapper an incrementing delay by DOM position (60ms steps, capped at 420ms) — apply it to a page's outer content wrapper when that page's sections are flat siblings (every case study). For a page with sections nested two levels deep (`/about`'s Experience/Skills blocks), hand-assign `[animation-delay:Nms]` in the same 60ms steps instead — see DESIGN.md's Page-Load Stagger section for the full mechanism and why nesting two `.animate-fade-up` elements in an ancestor/descendant relationship must be avoided.
+- Persistent navigation chrome (`HomeSidebar`, `MobileTopBar`, `MobileFooter`, `CaseStudyBackLink`) never carries `.animate-fade-up` — it reads as static structure, not loading content. Only page content animates.
 
 ## Case Study Patterns
 
