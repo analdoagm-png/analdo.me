@@ -117,7 +117,20 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex w-full flex-col gap-8">
+      {/*
+        `md:items-center`, not unconditional `items-center`: this pairs
+        with the grid's own `md:max-w-[1280px]` below to center the capped
+        grid within the remaining content width once it stops filling it,
+        matching the `items-center` + `w-full max-w-[*]` centering pattern
+        every case study page already uses for its own capped columns (see
+        AGENTS.md's Design System section). Left unset below `md` on
+        purpose — the grid's mobile full-bleed trick depends on `stretch`
+        (this flex-col's default) to size the grid to the container's full
+        width before the `-mx-6` negative margin pushes it past the
+        viewport edges; switching to `items-center` there would shrink-wrap
+        the grid to its content instead and break that full-bleed effect.
+      */}
+      <div className="flex w-full flex-col gap-8 md:items-center">
         {/*
           Card titles are h3, so this names the section and keeps the
           document outline from jumping h1 (in HomeSidebar, or the
@@ -150,11 +163,11 @@ export default function Home() {
           (see DESIGN.md), applied here so the two-column card grid stops
           growing past it on very large monitors — otherwise `lg:grid-cols-2`
           stretches each card (and its 16:9 image) oversized once the
-          available content width well exceeds 1280px. Left-aligned rather
-          than centered, matching how every other element in this
-          sidebar-offset content column sits flush with the sidebar rather
-          than floating in the middle of the remaining viewport width.
-          `md:` scoped for the same reason `w-full` is: below `md` the grid
+          available content width well exceeds 1280px. Centered within the
+          remaining content width via the wrapper's own `md:items-center`
+          above, matching the `items-center` + `w-full max-w-[*]` pattern
+          every case study page already uses to center its own capped
+          columns. `md:` scoped for the same reason `w-full` is: below `md` the grid
           is full-bleed and unconstrained by design.
         */}
         <div className="-mx-6 grid grid-cols-1 gap-6 md:mx-0 md:w-full md:max-w-[1280px] lg:grid-cols-2 lg:gap-8">
