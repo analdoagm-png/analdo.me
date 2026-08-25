@@ -194,8 +194,12 @@ export function HomeSidebar({
           Figma specs 12px here, but that's under the site's established 14px
           minimum readable size (see DESIGN.md's Typography rules) — bumped to
           text-body-h3 (14px) rather than copied literally.
+
+          mt-auto: pushes this to the bottom of the sidebar's fixed-height
+          column instead of sitting immediately under the contact links,
+          without touching the flex gap between every other child.
         */}
-        <p className="font-mono text-body-h3 text-white/70">© Analdo Gomez / 2026</p>
+        <p className="mt-auto font-mono text-body-h3 text-white/70">© Analdo Gomez / 2026</p>
       </div>
     </>
   );

@@ -103,31 +103,40 @@ export default function AboutPage() {
         otherwise follow this h1 directly — sr-only h2 keeps the
         document outline valid (h1 -> h2 -> h3) without introducing new
         visible copy this page doesn't need.
+
+        Spec-sheet rows (number + description on one baseline, separated
+        by border-b) rather than a stacked list — deliberately mirrors the
+        Experience section's own border-b/pb-8 row rhythm right below this
+        block, so the two lists read as one consistent system instead of
+        two different layout languages on the same page. The number
+        column is a fixed width so the description's left edge lines up
+        identically across all three rows regardless of digit count
+        ("3" vs "200+").
       */}
       <h2 className="sr-only">Highlights</h2>
-      <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-8 [animation-delay:80ms]">
-        <div className="flex w-full flex-col items-start gap-2">
-          <h3 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+      <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-8 [animation-delay:80ms]">
+        <div className="flex w-full items-baseline gap-6 border-b border-stroke-dark pb-8 md:gap-8">
+          <h3 className="w-[72px] shrink-0 font-mono text-heading-h3 font-bold text-white md:w-[110px]">
             14+
           </h3>
-          <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+          <p className="flex-1 text-pretty font-mono text-body-h2 text-white/70">
             Years designing B2B products for fintech, retirement, and
             SaaS clients
           </p>
         </div>
-        <div className="flex w-full flex-col items-start gap-2">
-          <h3 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+        <div className="flex w-full items-baseline gap-6 border-b border-stroke-dark pb-8 md:gap-8">
+          <h3 className="w-[72px] shrink-0 font-mono text-heading-h3 font-bold text-white md:w-[110px]">
             3
           </h3>
-          <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+          <p className="flex-1 text-pretty font-mono text-body-h2 text-white/70">
             Design systems built and scaled from the ground up
           </p>
         </div>
-        <div className="flex w-full flex-col items-start gap-2">
-          <h3 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+        <div className="flex w-full items-baseline gap-6 md:gap-8">
+          <h3 className="w-[72px] shrink-0 font-mono text-heading-h3 font-bold text-white md:w-[110px]">
             200+
           </h3>
-          <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+          <p className="flex-1 text-pretty font-mono text-body-h2 text-white/70">
             Components shipped in the Merlin Design System for GoRight
           </p>
         </div>
