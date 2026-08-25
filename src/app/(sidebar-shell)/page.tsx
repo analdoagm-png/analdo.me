@@ -145,8 +145,19 @@ export default function Home() {
           `md` lets the negative margin resolve it to the real full
           viewport width; `md:w-full` restores the old behavior once
           `md:mx-0` cancels the negative margin anyway, where it's correct.
+
+          `md:max-w-[1280px]`: this system's standard page-container cap
+          (see DESIGN.md), applied here so the two-column card grid stops
+          growing past it on very large monitors — otherwise `lg:grid-cols-2`
+          stretches each card (and its 16:9 image) oversized once the
+          available content width well exceeds 1280px. Left-aligned rather
+          than centered, matching how every other element in this
+          sidebar-offset content column sits flush with the sidebar rather
+          than floating in the middle of the remaining viewport width.
+          `md:` scoped for the same reason `w-full` is: below `md` the grid
+          is full-bleed and unconstrained by design.
         */}
-        <div className="-mx-6 grid grid-cols-1 gap-6 md:mx-0 md:w-full lg:grid-cols-2 lg:gap-8">
+        <div className="-mx-6 grid grid-cols-1 gap-6 md:mx-0 md:w-full md:max-w-[1280px] lg:grid-cols-2 lg:gap-8">
           {caseStudies.map((cs, index) => (
             <CaseStudyCard
               key={cs.href}
