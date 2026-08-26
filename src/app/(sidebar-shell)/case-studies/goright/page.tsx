@@ -53,6 +53,12 @@ export const metadata = caseStudyMetadata({
  * `CaseStudySectionHeading` + `CaseStudyPointsGrid`/image group are
  * deliberately left unanimated themselves (see `.stagger-section`'s own
  * comment for why) — their children already carry the fade.
+ *
+ * The three inline lead paragraphs under "The Decisions" / "How I Got
+ * There" / "The Platform" (and the closing statement box's body copy) run
+ * `text-body-h2 text-white/70` — a typography pass brought them down from
+ * a louder `text-body-h1 text-white` to match `/about`'s one consistent
+ * quiet prose size/color, used there regardless of a paragraph's role.
  */
 export default function GoRightCaseStudy() {
   return (
@@ -120,7 +126,7 @@ export default function GoRightCaseStudy() {
             eyebrow="The Decisions"
             title="Three calls that shaped how it actually got used"
           />
-          <p className="w-full animate-fade-up text-pretty font-mono text-body-h1 text-white">
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             The brief was parity, progression, accessibility, immediate
             value. Getting there took a few specific calls — including one
             where the right move was reversing course.
@@ -177,7 +183,7 @@ export default function GoRightCaseStudy() {
             eyebrow="How I Got There"
             title="Audit, workshops, a journey map — then screens"
           />
-          <p className="w-full animate-fade-up text-pretty font-mono text-body-h1 text-white">
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             I audited the existing platform, then ran product ideation
             workshops with technicians, stakeholders, and on-road
             managers. Those sessions mapped the navigation, the
@@ -220,7 +226,7 @@ export default function GoRightCaseStudy() {
             eyebrow="The Platform"
             title="What managers and technicians see now"
           />
-          <p className="w-full animate-fade-up text-pretty font-mono text-body-h1 text-white">
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             One dashboard, branded and live — task counts, submitted vs.
             received, reports, and activity, all in the same system
             technicians report into.
@@ -311,7 +317,7 @@ export default function GoRightCaseStudy() {
           <p className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
             Technicians stopped calling it in.
           </p>
-          <p className="w-full text-pretty font-mono text-body-h1 text-white/70">
+          <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
             Status lives in one place now — a technician&rsquo;s next
             task, a manager&rsquo;s overview, and a report at the end of
             the week all pull from the same live signal. Beta testers

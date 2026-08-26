@@ -95,10 +95,12 @@ size class would force both uses into the same voice. Instead:
   unlayered — which beat every layered utility regardless of specificity and
   silently ignored `font-mono` on any heading-scale element — until the
   homepage redesign below needed the override and exposed the gotcha.
-  `text-overline` is included deliberately: it's the same element that
-  upgrades to `text-project-subtitle` at `md` in `CaseStudyProjectHeader`, so
-  both must share a family or that one piece of copy would visibly swap
-  typefaces at the breakpoint.
+  `text-project-subtitle` needs to be here because the deck uses it directly
+  alongside other heading-scale text. `text-overline` is kept in the list for
+  any future heading-scale kicker/eyebrow, even though a later typography
+  pass moved `CaseStudySectionHeading`'s own eyebrow off it onto `/about`'s
+  small uppercase-tracked mono label instead (see the Typography section's
+  "Aligned to `/about`'s System" note) — it currently has no caller.
 - Everything else defaults to Noto Sans (the `body` element's font-family),
   which is correct for prose and for interactive text links (`Resume`,
   `Back to portfolio`, `Contact me`/`LinkedIn`/`GitHub`, deck buttons) — the
@@ -135,6 +137,43 @@ system's actual voice everywhere except the deck, not a homepage-local
 override — `--font-sans`/`--font-heading` are unchanged (still Noto
 Sans/Space Grotesk) because the opt-in stays per-call-site `font-mono`
 rather than a token repoint, which is what keeps the deck unaffected.
+
+**Aligned to `/about`'s System.** A later typography pass took `/about`'s
+own prose treatment — the one page where every section eyebrow, heading,
+and body paragraph already shares one consistent scale — and brought every
+case study's typography in line with it, rather than each of the three
+case study variants (showcase, editorial, `/about` itself) using its own
+sizing:
+
+- **Section eyebrows** are now the same small `text-body-h3 text-white/70
+  uppercase tracking-[0.05em]` label everywhere a section is introduced:
+  `/about`'s "Experience"/"Skills", `CaseStudyProjectHeader`'s
+  ROLE/TOOLS/YEAR row, `CaseStudySectionHeading`'s eyebrow on GoRight and
+  Arrowhead Transit, and the two new eyebrows ("The Approach"/"Results")
+  added to each showcase page's mid-page section headings (Forty5Park, Uber
+  Suite, Github's Security Findings — previously eyebrow-less).
+  `CaseStudySectionHeading`'s eyebrow was previously a larger, differently
+  weighted `text-overline` matched to a specific Figma node — see that
+  component's own doc comment for the tradeoff.
+- **Section headings (h2)** are one size, `text-heading-h3 font-bold`,
+  everywhere: `/about`, `CaseStudySectionHeading`, and the showcase pages'
+  inline `h2`s (bumped up from a smaller `text-heading-h5`).
+- **Intro/lead paragraphs read as quiet prose, not display text.** `/about`
+  never bolds or upsizes its own opening sentence — it's the same
+  `text-body-h2 text-white/70` as every other paragraph on the page. Case
+  study intros used to stand out more: showcase pages bolded their first
+  paragraph white, and `CaseStudyProjectHeader`'s intro ran at bold
+  `text-heading-h5`. Both now match `/about`'s plain treatment, as do
+  GoRight's and Arrowhead Transit's three inline per-section lead
+  paragraphs (under "The Decisions" / "How I Got There" / "The Platform")
+  and their closing statement boxes' body copy — all previously
+  `text-body-h1 text-white(/70)`, a size up from `/about`'s prose.
+- **`CaseStudyCallout`** also came down from `text-body-h1` to
+  `text-body-h2` for the same reason (see its own section below).
+- **Not touched:** `CaseStudyPointsGrid`'s large numeral markers
+  (`text-body-h1`, a display numeral rather than prose) and
+  `CaseStudyStatement`'s pull-quote treatment — both are a different kind
+  of element than the prose this pass targeted, not an oversight.
 
 ### Type Tokens
 
@@ -597,8 +636,15 @@ flex w-full animate-fade-up items-start justify-start rounded-none border border
 Inner paragraph:
 
 ```tsx
-w-full text-pretty text-body-h1 text-white
+w-full text-pretty text-body-h2 text-white
 ```
+
+`text-body-h2`, not the `text-body-h1` this used to run at — a typography
+pass (see Typography section's "Aligned to `/about`'s System" note below)
+normalized every case study's prose size down to `/about`'s one consistent
+16px body size. Stays full `text-white` rather than `/70`: the border box
+already sets this text apart from surrounding prose, so muting it too
+would double up the same signal.
 
 Callouts and results boxes should fill the available width and align left. Do not center or cap the paragraph unless the block is intentionally a centered pull quote.
 

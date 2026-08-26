@@ -2,14 +2,21 @@ import { CaseStudyYear } from "@/components/case-study-year";
 
 /**
  * Title + ROLE/TOOLS/YEAR meta row + intro statement, matching Figma's
- * editorial `case-study-desktop` frame (node 339:596) exactly — including
- * dropping the project subtitle ("Merlin Platform", "Intranet") the old
- * version rendered under the title, which Figma's title node has no
- * equivalent for.
+ * editorial `case-study-desktop` frame (node 339:596) — including dropping
+ * the project subtitle ("Merlin Platform", "Intranet") the old version
+ * rendered under the title, which Figma's title node has no equivalent for.
  *
  * `max-w-[720px] w-full`, matching every other text block on this system —
  * the parent page's `items-center` column centers it once there's more
  * room than that.
+ *
+ * The intro paragraph is plain `text-body-h2 text-white/70` — a deliberate
+ * departure from Figma's own bold heading-scale treatment here, made as
+ * part of a typography pass that aligned every case study's prose to
+ * `/about`'s system: that page's own intro sentence (and every paragraph
+ * on it) uses this exact quiet, non-bold style regardless of role, and
+ * case studies previously stood out as the one place on the site where an
+ * intro paragraph got louder treatment than the rest of the page's prose.
  */
 export function CaseStudyProjectHeader({
   title,
@@ -46,15 +53,7 @@ export function CaseStudyProjectHeader({
         <CaseStudyYear year={year} />
       </div>
 
-      {/*
-        leading-[1.5]: text-heading-h5's own 1.4 line-height sits exactly
-        at (not above) the floor for text that wraps 3+ lines — this intro
-        routinely does on mobile at bold weight. A typography audit flagged
-        the zero headroom; bumping to 1.5 here matches the rest of this
-        page's body copy without touching text-heading-h5's own (mostly
-        short, non-wrapping) uses elsewhere.
-      */}
-      <p className="w-full text-pretty font-mono text-heading-h5 font-bold leading-[1.5] text-white">
+      <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
         {intro}
       </p>
     </div>

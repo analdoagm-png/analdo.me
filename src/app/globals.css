@@ -92,12 +92,16 @@ body {
 }
 
 /*
- * Every heading-scale utility gets the display typeface. text-overline is
- * included even though it's also used for a couple of small kicker/eyebrow
- * labels (About, CaseStudySectionHeading) — it's the same element that
- * upgrades to text-project-subtitle at `md` in CaseStudyProjectHeader, so
- * both need to share a family or that one piece of copy would visibly swap
- * fonts at the breakpoint.
+ * Every heading-scale utility gets the display typeface, text-overline
+ * included: it's kept in this list for whenever a future kicker/eyebrow
+ * label wants a heading-scale voice, even though a typography pass moved
+ * CaseStudySectionHeading's own eyebrow off it (onto /about's small
+ * uppercase-tracked mono label instead — see that component's own doc
+ * comment) and it currently has no other caller. text-project-subtitle
+ * needs to be here regardless: the deck's SlideEyebrow-adjacent project
+ * subtitle uses it directly, so it must share a family with the other
+ * heading-scale utilities or that copy would visibly swap fonts wherever
+ * it appears alongside them.
  *
  * These live in `@layer base`, deliberately, so a `font-mono` at the call
  * site still wins: utilities is the later layer. (They used to be unlayered,

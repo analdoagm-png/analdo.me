@@ -27,6 +27,12 @@ export const metadata = caseStudyMetadata({
  *
  * `.stagger-section` on the content column (see globals.css / GoRight)
  * cascades every direct animated child in on load, by DOM position.
+ *
+ * The three inline lead paragraphs under "The Decisions" / "How I Got
+ * There" / "The Platform" (and the closing statement box's body copy) run
+ * `text-body-h2 text-white/70` — a typography pass brought them down from
+ * a louder `text-body-h1 text-white` to match `/about`'s one consistent
+ * quiet prose size/color, used there regardless of a paragraph's role.
  */
 export default function ArrowheadTransitCaseStudy() {
   return (
@@ -95,7 +101,7 @@ export default function ArrowheadTransitCaseStudy() {
             eyebrow="The Decisions"
             title="Three calls that shaped how it actually got used"
           />
-          <p className="w-full animate-fade-up text-pretty font-mono text-body-h1 text-white">
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             The brief was simple — replace the database, cut manual
             entry, connect drivers and dispatch. Getting there took a
             few specific, and occasionally uncomfortable, calls.
@@ -140,7 +146,7 @@ export default function ArrowheadTransitCaseStudy() {
             eyebrow="How I Got There"
             title="Audit, interviews, flows — then screens"
           />
-          <p className="w-full animate-fade-up text-pretty font-mono text-body-h1 text-white">
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             I started with a design audit of the existing tool, then
             sat down with dispatchers to walk through their day-to-day.
             Those conversations became golden-path flows and a sitemap
@@ -173,7 +179,7 @@ export default function ArrowheadTransitCaseStudy() {
             eyebrow="The Platform"
             title="What dispatch, drivers, and billing actually see now"
           />
-          <p className="w-full animate-fade-up text-pretty font-mono text-body-h1 text-white">
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             One dashboard replaced the Access file — trips this week,
             incoming referrals, and available drivers, all live.
           </p>
@@ -236,7 +242,7 @@ export default function ArrowheadTransitCaseStudy() {
           <p className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
             The database is gone.
           </p>
-          <p className="w-full text-pretty font-mono text-body-h1 text-white/70">
+          <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
             Dispatchers plan two weeks out instead of two or three days.
             Drivers show up in the system instead of on a paper form.
             Referrals land in one queue instead of three separate

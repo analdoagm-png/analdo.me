@@ -27,6 +27,10 @@ export const metadata = caseStudyMetadata({
  *
  * `.stagger-section` on the content column (see globals.css / Forty5Park)
  * cascades every direct animated child in on load, by DOM position.
+ *
+ * Section headings and intro paragraphs follow the same typography pass
+ * as Forty5Park — see that page's own doc comment for the full rationale
+ * (eyebrow + `text-heading-h3` sizing, quiet non-bold intro copy).
  */
 export default function GithubSecurityFindingsCaseStudy() {
   return (
@@ -47,7 +51,7 @@ export default function GithubSecurityFindingsCaseStudy() {
         </div>
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <p className="text-pretty font-mono text-body-h2 font-bold text-white">
+          <p className="text-pretty font-mono text-body-h2 text-white/70">
             GH&rsquo;s Security Findings helps CTOs and managers ensure
             code security and reliability by tracking alerts, notifying
             the right stakeholders, and guiding issues to resolution
@@ -78,9 +82,14 @@ export default function GithubSecurityFindingsCaseStudy() {
         />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
-            From noise to ownership
-          </h2>
+          <div className="flex w-full flex-col items-start">
+            <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+              The Approach
+            </p>
+            <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+              From noise to ownership
+            </h2>
+          </div>
           <p className="text-pretty font-mono text-body-h2 text-white/70">
             The hardest part was designing for two distinct users:
             executives who need a high-level health signal, and managers
@@ -124,9 +133,14 @@ export default function GithubSecurityFindingsCaseStudy() {
         />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
-            Good security UX is invisible until something goes wrong
-          </h2>
+          <div className="flex w-full flex-col items-start">
+            <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+              Results
+            </p>
+            <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+              Good security UX is invisible until something goes wrong
+            </h2>
+          </div>
           <p className="text-pretty font-mono text-body-h2 text-white/70">
             Engineering managers gained a clear line of sight from alert to
             resolution — no more dropped issues or unclear ownership.

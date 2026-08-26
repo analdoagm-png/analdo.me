@@ -82,6 +82,7 @@ Current high-level design choices:
 - Use real semantic headings: page title `h1`, major sections `h2`, item/card/decision titles `h3`.
 - Body prose line-length caps use `ch` units when a cap is desired. Do not apply a `70ch` cap inside callout/result boxes that are meant to fill the whole box.
 - Avoid one-off arbitrary font sizes unless there is a clear visual reason. Prefer tokens from `globals.css`.
+- Section eyebrows, section heading (`h2`) size, and intro/lead-paragraph weight are unified across `/about` and every case study variant (showcase and editorial alike) — one small tracked-caps eyebrow style, one `h2` size, one quiet non-bold prose treatment for intros. See DESIGN.md's Typography section ("Aligned to `/about`'s System") for the full before/after and which components changed.
 
 ## Homepage Copy Pattern
 

@@ -39,6 +39,17 @@ export const metadata = caseStudyMetadata({
  * position — this page's flat structure (every section a direct sibling
  * of one wrapper, no extra nesting) is exactly what that mechanism is
  * built for, unlike `/about`'s more nested layout.
+ *
+ * Both mid-page section headings now carry the small uppercase-tracked
+ * eyebrow ("The Approach", "Results") that `/about` uses above every one
+ * of its own sections, and size up to `text-heading-h3` (from a previous
+ * `text-heading-h5`) to match `/about`'s and the editorial pages'
+ * `CaseStudySectionHeading` — a typography pass that aligned every case
+ * study's section-heading treatment to one shared system rather than each
+ * page variant using its own size. The opening intro's two paragraphs are
+ * both `text-body-h2 text-white/70` for the same reason: the first no
+ * longer bolds itself white, matching how `/about`'s own intro sentence
+ * reads no louder than the rest of its prose.
  */
 export default function Forty5ParkCaseStudy() {
   return (
@@ -63,7 +74,7 @@ export default function Forty5ParkCaseStudy() {
           side-by-side md:flex-row split, which this page doesn't use.
         */}
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <p className="text-pretty font-mono text-body-h2 font-bold text-white">
+          <p className="text-pretty font-mono text-body-h2 text-white/70">
             AI-powered platform for real estate companies to manage
             acquisitions, forecast property valuations up to a year ahead,
             and benchmark against sector peers.
@@ -91,9 +102,14 @@ export default function Forty5ParkCaseStudy() {
         />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
-            Designing for the deal, not the data
-          </h2>
+          <div className="flex w-full flex-col items-start">
+            <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+              The Approach
+            </p>
+            <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+              Designing for the deal, not the data
+            </h2>
+          </div>
           <p className="text-pretty font-mono text-body-h2 text-white/70">
             The core challenge was making complex financial data feel
             actionable, not overwhelming. I structured the interface
@@ -129,9 +145,14 @@ export default function Forty5ParkCaseStudy() {
         />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
-            Complexity handled, decisions simplified
-          </h2>
+          <div className="flex w-full flex-col items-start">
+            <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+              Results
+            </p>
+            <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+              Complexity handled, decisions simplified
+            </h2>
+          </div>
           <p className="text-pretty font-mono text-body-h2 text-white/70">
             Acquisition teams went from juggling spreadsheets across tools
             to evaluating and progressing deals inside a single platform.

@@ -24,6 +24,10 @@ export const metadata = caseStudyMetadata({
  *
  * `.stagger-section` on the content column (see globals.css / Forty5Park)
  * cascades every direct animated child in on load, by DOM position.
+ *
+ * Section headings and intro paragraphs follow the same typography pass
+ * as Forty5Park — see that page's own doc comment for the full rationale
+ * (eyebrow + `text-heading-h3` sizing, quiet non-bold intro copy).
  */
 export default function UberSuiteCaseStudy() {
   return (
@@ -44,7 +48,7 @@ export default function UberSuiteCaseStudy() {
         </div>
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <p className="text-pretty font-mono text-body-h2 font-bold text-white">
+          <p className="text-pretty font-mono text-body-h2 text-white/70">
             An all-in-one internal toolset for Uber, streamlining
             communication, boosting employee engagement, and enabling fast,
             AI-driven knowledge discovery across the organization.
@@ -74,9 +78,14 @@ export default function UberSuiteCaseStudy() {
         />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
-            One surface, many teams
-          </h2>
+          <div className="flex w-full flex-col items-start">
+            <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+              The Approach
+            </p>
+            <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+              One surface, many teams
+            </h2>
+          </div>
           <p className="text-pretty font-mono text-body-h2 text-white/70">
             The problem wasn&rsquo;t a lack of tools — it was too many
             disconnected ones. My focus was on reducing cognitive load for
@@ -114,9 +123,14 @@ export default function UberSuiteCaseStudy() {
         />
 
         <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <h2 className="text-balance font-mono text-heading-h5 font-bold text-white">
-            Scale changes everything about how people communicate
-          </h2>
+          <div className="flex w-full flex-col items-start">
+            <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
+              Results
+            </p>
+            <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
+              Scale changes everything about how people communicate
+            </h2>
+          </div>
           <p className="text-pretty font-mono text-body-h2 text-white/70">
             Consolidating fragmented internal tools into one surface
             reduced the time employees spent context-switching and

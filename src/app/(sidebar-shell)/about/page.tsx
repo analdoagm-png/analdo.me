@@ -116,18 +116,29 @@ export default function AboutPage() {
         document outline valid (h1 -> h2 -> h3) without introducing new
         visible copy this page doesn't need.
 
-        Spec-sheet rows (number + description on one baseline, separated
-        by border-b) rather than a stacked list — deliberately mirrors the
-        Experience section's own border-b/pb-8 row rhythm right below this
-        block, so the two lists read as one consistent system instead of
-        two different layout languages on the same page. The number
-        column is a fixed width so the description's left edge lines up
-        identically across all three rows regardless of digit count
-        ("3" vs "200+").
+        Spec-sheet rows (number + description, separated by border-b)
+        rather than a stacked list — deliberately mirrors the Experience
+        section's own border-b/pb-8 row rhythm right below this block, so
+        the two lists read as one consistent system instead of two
+        different layout languages on the same page. The number column is
+        a fixed width so the description's left edge lines up identically
+        across all three rows regardless of digit count ("3" vs "200+").
+
+        `items-center`, not `items-baseline` or `items-start`: the number
+        is a much larger font size than the description, so baseline
+        alignment sat the number's own baseline against the description's
+        *first-line* baseline only, making it look like it floated below
+        the paragraph's top edge on the two-line "14+" row. Top-aligning
+        instead fixed that row but broke the single-line rows ("3",
+        "200+") the other way — the number's own line-height padding sat
+        noticeably above the text's visual center. Centering the number
+        against the description's full height (however many lines it
+        wraps to) is the one treatment that reads as aligned in both
+        cases.
       */}
       <h2 className="sr-only">Highlights</h2>
       <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-8 [animation-delay:60ms]">
-        <div className="flex w-full items-baseline gap-6 border-b border-stroke-dark pb-8 md:gap-8">
+        <div className="flex w-full items-center gap-6 border-b border-stroke-dark pb-8 md:gap-8">
           <h3 className="w-[72px] shrink-0 font-mono text-heading-h3 font-bold text-white md:w-[110px]">
             14+
           </h3>
@@ -136,7 +147,7 @@ export default function AboutPage() {
             SaaS clients
           </p>
         </div>
-        <div className="flex w-full items-baseline gap-6 border-b border-stroke-dark pb-8 md:gap-8">
+        <div className="flex w-full items-center gap-6 border-b border-stroke-dark pb-8 md:gap-8">
           <h3 className="w-[72px] shrink-0 font-mono text-heading-h3 font-bold text-white md:w-[110px]">
             3
           </h3>
@@ -144,7 +155,7 @@ export default function AboutPage() {
             Design systems built and scaled from the ground up
           </p>
         </div>
-        <div className="flex w-full items-baseline gap-6 md:gap-8">
+        <div className="flex w-full items-center gap-6 md:gap-8">
           <h3 className="w-[72px] shrink-0 font-mono text-heading-h3 font-bold text-white md:w-[110px]">
             200+
           </h3>
