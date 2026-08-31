@@ -60,11 +60,13 @@ const inlineLinkStyles =
  *
  * The real `<h1>` for this page is `HomeSidebar`'s own `sr-only` heading
  * (present at every breakpoint, holding the shared `bioStatement` text,
- * not this page's own copy below) — the `md:hidden` heading right below is
- * a purely visual mobile duplicate, demoted to a `<p>` for exactly that
- * reason. See `home-sidebar.tsx`'s doc comment: this page used to ship two
- * real, differently-worded `<h1>` elements in the DOM at once (this page's
- * own statement and the sidebar's), confirmed with a live curl audit.
+ * not this page's own copy below) — the `lg:hidden` heading right below
+ * (was `md:hidden` until tablet navigation moved onto the same mobile
+ * pattern as phones) is a purely visual mobile/tablet duplicate, demoted
+ * to a `<p>` for exactly that reason. See `home-sidebar.tsx`'s doc
+ * comment: this page used to ship two real, differently-worded `<h1>`
+ * elements in the DOM at once (this page's own statement and the
+ * sidebar's), confirmed with a live curl audit.
  *
  * Load-in stagger uses hand-assigned `[animation-delay:Nms]` in 60ms
  * steps (0, 60, 120, 180, 240, 300 — intro, stats, Experience heading,
@@ -80,19 +82,21 @@ const inlineLinkStyles =
  */
 export default function AboutPage() {
   return (
-    <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+    <div className="flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pt-24 lg:p-16 lg:pl-[384px]">
       <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-6">
         <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
           About
         </p>
         {/*
-          md:hidden: a purely visual mobile duplicate of the sidebar's own
-          identity statement — the sidebar itself (and its sr-only h1) is
-          hidden below md, so mobile needs its own visible copy here. Not a
-          heading: HomeSidebar's sr-only h1 is this page's one real h1 at
-          every breakpoint (see home-sidebar.tsx's doc comment).
+          lg:hidden (was md:hidden until tablet navigation moved onto the
+          same mobile pattern as phones): a purely visual mobile/tablet
+          duplicate of the sidebar's own identity statement — the sidebar
+          itself (and its sr-only h1) is hidden below lg now, so mobile and
+          tablet both need their own visible copy here. Not a heading:
+          HomeSidebar's sr-only h1 is this page's one real h1 at every
+          breakpoint (see home-sidebar.tsx's doc comment).
         */}
-        <p className="w-full text-balance font-mono text-heading-h3 font-bold text-white md:hidden">
+        <p className="w-full text-balance font-mono text-heading-h3 font-bold text-white lg:hidden">
           Product designer who builds systems B2B teams can ship
           straight to code.
         </p>

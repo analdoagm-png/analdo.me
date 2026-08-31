@@ -19,8 +19,7 @@ This document is the living design-system reference for `analdo.me`. Keep it upd
 - Mobile top bar + menu, mobile footer: `src/components/mobile-top-bar.tsx`, `src/components/mobile-footer.tsx`
 - Contact icons: `src/components/contact-glyph.tsx` — the site's only icon set now that `social-icon.tsx` is gone (see Case Study Sidebar section)
 - Chips: `src/components/chip.tsx`
-- Editorial callouts: `src/components/case-study-callout.tsx`
-- Case study images and figures: `src/components/project-image.tsx`, `src/components/case-study-figure.tsx`
+- Case study images and figures: `src/components/project-image.tsx`, `src/components/case-study-figure.tsx`, `src/components/case-study-gallery.tsx`
 
 ## Color Tokens
 
@@ -108,7 +107,8 @@ size class would force both uses into the same voice. Instead:
   Genuinely mono contexts opt in explicitly with the `font-mono` utility at
   the call site: `Chip`, `CaseStudyYear`'s `YEAR` caption,
   `CaseStudyProjectHeader`'s `ROLE`/`TOOLS` captions,
-  `CaseStudyDecisionBlock`'s label, `CaseStudyNext`'s "Next case study"
+  `CaseStudySectionHeading`'s optional sequence number (six-part case study
+  format), `CaseStudyNext`'s "Next case study"
   eyebrow, `CaseStudyFigure`'s caption, About's job-date/location lines and
   `DESIGN`/`FRONT-END & TOOLS` group labels, the two case-study closing
   pull-quote attribution lines, and the deck's `SlideEyebrow`, platform-view
@@ -163,17 +163,18 @@ sizing:
   `text-body-h2 text-white/70` as every other paragraph on the page. Case
   study intros used to stand out more: showcase pages bolded their first
   paragraph white, and `CaseStudyProjectHeader`'s intro ran at bold
-  `text-heading-h5`. Both now match `/about`'s plain treatment, as do
-  GoRight's and Arrowhead Transit's three inline per-section lead
-  paragraphs (under "The Decisions" / "How I Got There" / "The Platform")
-  and their closing statement boxes' body copy — all previously
-  `text-body-h1 text-white(/70)`, a size up from `/about`'s prose.
-- **`CaseStudyCallout`** also came down from `text-body-h1` to
-  `text-body-h2` for the same reason (see its own section below).
+  `text-heading-h5`. Both now match `/about`'s plain treatment. GoRight's
+  and Arrowhead Transit's per-section lead paragraphs (originally under
+  "The Decisions" / "How I Got There" / "The Platform"; those sections
+  don't exist anymore — see the Six-Part Case Study Format section below)
+  and their old closing statement boxes' body copy got the same
+  `text-body-h1` → `text-body-h2` treatment at the time, before those two
+  pages moved to the newer format entirely.
 - **Not touched:** `CaseStudyPointsGrid`'s large numeral markers
-  (`text-body-h1`, a display numeral rather than prose) and
-  `CaseStudyStatement`'s pull-quote treatment — both are a different kind
-  of element than the prose this pass targeted, not an oversight.
+  (`text-body-h1`, a display numeral rather than prose) — a different kind
+  of element than the prose this pass targeted, not an oversight. (The
+  `CaseStudyCallout` and `CaseStudyStatement` this bullet originally paired
+  it with are gone — see the Six-Part Case Study Format section.)
 
 ### Type Tokens
 
@@ -294,7 +295,7 @@ it instead of hand-copying the string). Every case study passes `"p"` and
 skips that extra heading — its own project title is the real `h1` there.
 
 The `sr-only` heading has to live outside the sidebar's own `hidden
-md:flex` root: `display: none` (what `hidden` sets) removes an element
+lg:flex` root: `display: none` (what `hidden` sets) removes an element
 from the accessibility tree, not just the visual layout, so an `h1` nested
 inside that toggle would vanish from the page entirely at whichever
 breakpoint hides it — not what "visually hidden but still a real heading"
@@ -307,13 +308,15 @@ Case Studies", `about/page.tsx`'s "Highlights").
 This fixes a real bug a live audit caught: before it, `/` and `/about`
 each shipped **two** actual `<h1>` elements in the served HTML at once —
 one in the sidebar's own statement (when rendered as `<h1>`), one in each
-page's separate `md:hidden` mobile duplicate — since a responsive
-`hidden`/`md:hidden` toggle only ever hides one of the two per viewport,
+page's separate mobile/tablet-only duplicate — since a responsive
+`hidden`/`lg:hidden` toggle only ever hides one of the two per viewport,
 it never removes either from the DOM. Verified with `curl` against
 production, not just source inspection, since responsive Tailwind classes
 make this exact bug invisible when only rendered in a browser. `About`'s
 own former headline ("Product designer who builds systems...") is still
-`md:hidden` there, but is now a `<p>` rather than a second `<h1>` — a
+`lg:hidden` there (was `md:hidden` until tablet navigation moved onto the
+same mobile pattern as phones), but is now a `<p>` rather than a second
+`<h1>` — a
 purely visual mobile duplicate, not a competing heading. This replaces
 what the old (pre-redesign) system did with two separate components,
 `HomeSidebar` and `EditorialSidebar` — `EditorialSidebar` is gone now that
@@ -322,19 +325,21 @@ every page shares this one instead (see Case Study Sidebar below).
 **`activeNav`**: `"works" | "resume"` (default `"works"`), driving which
 nav link renders bold/active (with `aria-current="page"`) versus muted.
 
-**`md:fixed`, not `sticky` or a stacked block.** `md:fixed md:inset-y-0
-md:left-0 md:w-80` (320px) pins the sidebar flush to the viewport's
+**`lg:fixed`, not `sticky` or a stacked block.** `lg:fixed lg:inset-y-0
+lg:left-0 lg:w-80` (320px) pins the sidebar flush to the viewport's
 top/left/bottom edges at every scroll position — a true app-shell rail, not
 a scroll-until-it-hits-the-top column (an earlier pass here used `sticky`;
 verify against this file if you find stale references elsewhere). Below
-`md`, it's `hidden` entirely; `MobileTopBar` covers mobile instead (see
-below).
+`lg` (1024px), it's `hidden` entirely; `MobileTopBar` covers both mobile
+and tablet instead (see below). This was `md:fixed`/hidden below `md`
+(768px) until tablet navigation moved onto the same mobile pattern as
+phones — tablet used to get this rail, and now gets the mobile chrome
+instead.
 
 Because `fixed` removes the sidebar from document flow, **every page using
-it must offset its own content**: `md:pl-[368px] lg:pl-[384px]` (320px
-sidebar + that tier's own gutter) on the content wrapper, and `md:pl-80` on
-any full-width element that would otherwise run underneath the sidebar
-(e.g. `CaseStudyNext` — see its own section). This is manual per page, not
+it must offset its own content**: `lg:pl-[384px]` (320px sidebar + that
+tier's own gutter) on the content wrapper — no `md:` tier anymore, since
+the sidebar itself doesn't render until `lg`. This is manual per page, not
 automatic, since the sidebar and each page's content aren't siblings in a
 flex/grid relationship.
 
@@ -352,11 +357,16 @@ literally.
 
 File: `src/components/mobile-top-bar.tsx`
 
-Mobile-only (`md:hidden`) replacement for the previous static `border-b`
-bar: a `fixed inset-x-6 top-6` bar reading "Analdo Gomez" plus a menu
-toggle, `rounded-token`, `bg-dark-primary`, the same
-`shadow-[0_0_0_1px_rgba(255,255,255,0.08)]` resting ring `CaseStudyCard`
-uses at `md`+. `inset-x-6 top-6` (24px) matches the Figma frame's own hero
+Mobile-and-tablet (`lg:hidden`, below 1024px — was `md:hidden` until
+tablet navigation moved onto the same mobile pattern as phones)
+replacement for the previous static `border-b` bar: a `fixed inset-x-6
+top-6` bar reading "Analdo Gomez" plus a menu toggle, `rounded-token`,
+`bg-dark-primary`, the same `shadow-[0_0_0_1px_rgba(255,255,255,0.08)]`
+resting ring `CaseStudyCard` uses at `md`+. The card's width stays a fixed
+`inset-x-6` rather than growing with the viewport, so at the wide end of
+tablet there's a visibly large gap between the "Analdo Gomez" label and
+the toggle — an accepted tradeoff of reusing the mobile component as-is,
+not a tablet-tuned variant. `inset-x-6 top-6` (24px) matches the Figma frame's own hero
 padding, not `main`'s `MobileNav` 16px pill inset — the two are separately
 specced, not a copy of one another.
 
@@ -414,9 +424,11 @@ rendered once by `(sidebar-shell)/layout.tsx` now, not duplicated per page.
 
 File: `src/components/mobile-footer.tsx`
 
-Mobile-only (`md:hidden`) copyright + icon-only social row for pages on the
-new sidebar system — `HomeSidebar`'s own copyright line covers the same
-role from `md` up, so this never renders alongside it. Originally extracted
+Mobile-and-tablet (`lg:hidden`, below 1024px — was `md:hidden` until
+tablet navigation moved onto the same mobile pattern as phones) copyright
++ icon-only social row for pages on the new sidebar system —
+`HomeSidebar`'s own copyright line covers the same role from `lg` up, so
+this never renders alongside it. Originally extracted
 out of the homepage's `page.tsx` once Forty5Park needed the identical
 block; now, like `HomeSidebar` and `MobileTopBar`, rendered once by
 `(sidebar-shell)/layout.tsx` rather than called per page.
@@ -425,9 +437,10 @@ block; now, like `HomeSidebar` and `MobileTopBar`, rendered once by
 
 File: `src/components/case-study-back-link.tsx`
 
-Fixed "back to the portfolio grid" affordance, `md`+ only, called
+Fixed "back to the portfolio grid" affordance, `lg`+ only (was `md`+ until
+tablet navigation moved onto the same mobile pattern as phones), called
 individually by all five case study pages (not rendered by the shared
-layout — home and About don't need it). `hidden md:flex` below `md`: the
+layout — home and About don't need it). `hidden lg:flex` below `lg`: the
 mobile top bar's own menu already has a "Home" link, and a second fixed
 control in the same corner would duplicate it and risk overlapping
 `MobileTopBar`.
@@ -438,8 +451,9 @@ Card treatment (`rounded-token`, `bg-dark-primary`, the same
 one-off control. `top-8` matches `HomeSidebar`'s own `p-8` internal
 padding — not responsive, so this isn't either — putting it at the same
 height as the sidebar's "Analdo Gomez" name at every breakpoint.
-`left-[368px]`/`lg:left-[384px]` matches every case study's own content
-offset, so its left edge lines up with where the content column begins.
+`lg:left-[384px]` matches every case study's own content offset at `lg`,
+so its left edge lines up with where the content column begins — no
+tablet-specific value needed anymore since this never renders below `lg`.
 `fixed`, not inline, so it stays reachable while scrolling a case study of
 any length — the same reasoning `HomeSidebar` and `MobileTopBar` already
 use for their own persistent positioning.
@@ -470,23 +484,20 @@ Structural pattern shared by every page in the group:
   container; that was a real bug in the first Forty5Park pass, caught by a
   direct Figma comparison and fixed after the fact.
 - **Images round to `rounded-token`.** `ProjectImage`, `CaseStudyFigure`,
-  and `CaseStudyImagePair` all default to it now — a real default change
-  for the latter two (not just an opt-in prop), since after this migration
-  every remaining caller wants it. `ProjectImage`'s own default is still an
-  opt-in per call (`roundedClassName="rounded-token"`), since it has no
-  other callers left to affect either way, but keeping it opt-in there
-  cost nothing.
+  and `CaseStudyGallery` all default to it — every caller across every
+  case study wants it. `ProjectImage`'s own default is still an opt-in per
+  call (`roundedClassName="rounded-token"`), since it has no other callers
+  left to affect either way, but keeping it opt-in there cost nothing.
 - **No `CaseStudyNext`.** Dropped entirely on every page, per explicit
   request — the persistent `/ Works` sidebar link covers the onward path
   back to the index instead. The component itself is deleted.
-- **No divider lines between sections** on the two editorial pages —
-  Figma's editorial frame (node 339:596) has none; generous spacing alone
-  carries the separation, matching every other page on this system. The
-  pre-redesign version's `Divider` (`h-px bg-gray-dark`) helper is gone.
-- **Callouts and results boxes stay `rounded-none`.** Only photographic
-  images round under this system — Figma's `Callout` node has no radius,
-  so bordered text surfaces keep the sharp-corners rule that predates this
-  redesign.
+- **A thin divider sits above every numbered section, on every case
+  study.** This reverses what used to be a sitewide "no divider lines"
+  rule (Figma's editorial frame, node 339:596, has none) — see the
+  Six-Part Case Study Format section below for why the divider was
+  reintroduced once every case study's sections became a real numbered
+  sequence. The pre-redesign version's `Divider` (`h-px bg-gray-dark`)
+  helper predates this and is unrelated — that one is still gone.
 - Per-image `aspect` overrides carry over unchanged where a project's
   screenshots aren't the shared default — several of Uber Suite's,
   Github's Security Findings', and both editorial case studies' are
@@ -494,27 +505,127 @@ Structural pattern shared by every page in the group:
 
 **Editorial-specific corrections, found by comparing directly against
 Figma's `case-study-desktop` frame (node 339:596) rather than carrying the
-pre-redesign layout forward:**
+pre-redesign layout forward.** These describe the Figma-editorial pattern
+GoRight and Arrowhead Transit used before moving to the six-part format
+below; `CaseStudyProjectHeader`'s dropped `subtitle` prop and
+`CaseStudyDecisionBlock`'s text-block-then-figure structure still hold
+today, the rest is historical:
 
 - No project subtitle under the title (GoRight's "Merlin Platform",
   Arrowhead's "Intranet") — Figma's title node has no equivalent.
   `CaseStudyProjectHeader` dropped the `subtitle` prop entirely.
-- "The Problem" and "Results" are a **stacked single column**
-  (`CaseStudyPointsGrid`, rebuilt), not the pre-redesign `md:flex-row` 3-up
-  grid — Figma has no multi-column version of this pattern anywhere on the
-  page. "The Problem" numbers "01"/"02"/"03"; "Results" numbers
-  "1."/"2."/"3." — a real inconsistency in Figma itself, not a copy error
-  to normalize away, so both pages reproduce it as-is.
-- Each "Decision"/"Constraint" is its own text block
-  (`CaseStudyDecisionBlock`, now text-only) **followed by** a full-width
-  `CaseStudyFigure` stacked directly below it — not the pre-redesign
-  version's side-by-side `lg:flex-row` layout with `reverseOnDesktop`.
-  Figma stacks every decision's text and figure as separate siblings, at
-  every breakpoint.
+- "The Problem" and "Results" were a **stacked single column**
+  (`CaseStudyPointsGrid`), not a `md:flex-row` 3-up grid — Figma has no
+  multi-column version of this pattern anywhere on the page. Neither page
+  uses `CaseStudyPointsGrid` anymore (see below), but `/about` still does,
+  on the same stacked-column shape.
+- Each "Decision"/"Constraint" was its own text block
+  (`CaseStudyDecisionBlock`) **followed by** a full-width `CaseStudyFigure`
+  stacked directly below it, at every breakpoint — this part is unchanged
+  under the six-part format, just without the "Decision"/"Constraint"
+  eyebrow chip (see below).
 
 `CaseStudyYear`'s value gained `font-mono` (was plain) — it renders inside
 `CaseStudyProjectHeader`'s ROLE/TOOLS/YEAR row, which is now fully mono
 like everything else on this system.
+
+### Six-Part Case Study Format (all five case studies)
+
+Every case study is on one shared structure now: `Overview` / `Pain
+Points` / `Project Scope and Design` / `Challenges` / `Strategic
+Contributions` / `The Final Phase`, each prefixed with a sequence number
+("01"–"06"), deliberately non-Figma. It was piloted first as a standalone
+HTML draft modeled on a third-party case study's tone (plainer, more
+explanatory prose — every claim gets a "because" attached to it — over
+the previous showcase register's punchier fragments and rhetorical
+flourishes), approved on GoRight and Arrowhead Transit (which were
+replacing a Figma-editorial pattern — see above), then rolled out to
+Forty5Park, Uber Suite, and Github's Security Findings (which were
+replacing a lighter showcase shape with no Role/Tools row). See AGENTS.md's
+Case Study Patterns section for the implementation-facing version of this
+same change, including the content-depth note below.
+
+**Content depth varies honestly by project.** GoRight and Arrowhead
+Transit draw on several real named decisions each; the three showcase
+projects had no equivalent paper trail (each previously ran ~200 words),
+so their six-part versions were built from detail the site owner supplied
+specifically for this pass — a real Pain Points/Challenges angle, whether
+any hard numbers existed — not stretched or invented to match GoRight's
+depth. None of the three use `CaseStudyDecisionBlock` (each has one
+continuous design problem rather than a series of named calls), and all
+three keep "The Final Phase" qualitative since no adoption numbers were
+available. A thinner section on one of these three pages is a fact about
+that project, not a gap to quietly pad on a future pass.
+
+- **`CaseStudySectionHeading` takes an optional `number` prop.** Rendered
+  ahead of the eyebrow in `text-white/42 tabular-nums`, `aria-hidden` (the
+  eyebrow text alone is the accessible label). Genuinely informational, not
+  decorative numbering for its own sake — Structure Is Information's rule
+  from the artifact-design tradition this pilot drew on applies here too:
+  a number is only honest when the content really is a sequence, which
+  this format's sections are and the old grouped showcase sections
+  weren't. `/about` is the one page left that doesn't pass it.
+- **New `CaseStudyGallery` component** — a responsive grid of captioned
+  figures (`grid-cols-1 md:grid-cols-2`), each item keeping its own
+  natural aspect ratio rather than a forced crop, since a gallery here
+  clusters heterogeneous artifacts (a portrait sitemap next to a wide
+  flowchart) rather than same-shaped product screenshots. An item can pass
+  `span: true` to run `md:col-span-2`, used when an odd-numbered gallery
+  would otherwise leave a lopsided empty cell. Replaces
+  `CaseStudyImagePair` (deleted, zero other callers), which forced a fixed
+  crop height instead.
+- **New `CaseStudyZoomableImage` component** — click-to-expand lightbox for
+  every image in `CaseStudyFigure` and `CaseStudyGallery`, `md`+ only.
+  Mobile renders the exact same image with no interactive wrapper at all —
+  not a CSS-hidden button, an actually-absent one (`useSyncExternalStore`
+  against `matchMedia("(min-width: 768px)")`, server snapshot `false`, so
+  the trigger only exists once the client confirms the viewport). The
+  expanded view is a **portal into `document.body`**: every image sits
+  inside an `.animate-fade-up` ancestor, and `animation-fill-mode: both`
+  means that ancestor's entrance `transform: translateY(0)` never actually
+  clears to `none` — a lingering non-`none` transform creates a new
+  containing block for `position: fixed` descendants, which would
+  otherwise pin the lightbox to that ancestor's box instead of the
+  viewport. Reuses the deck's existing `.animate-lightbox-scrim`/
+  `.animate-lightbox-media` motion (see Motion below) and its
+  Escape/click-scrim/`autoFocus`/focus-returns-on-close interaction model
+  verbatim, rather than a second bespoke lightbox language just for case
+  studies. An intentional client leaf; `CaseStudyFigure` and
+  `CaseStudyGallery` both stay Server Components around it.
+- **`CaseStudyDecisionBlock` dropped its "Decision"/"Constraint" eyebrow
+  chip** — title + description only now. The chip read as a taxonomy the
+  reader didn't need; the `h3` title carries the same information in plain
+  language instead (e.g. "Read-only, except where it mattered" rather than
+  a "Decision" label plus a separate title line).
+- **`CaseStudyProjectHeader`'s `intro` is optional**, and every case study
+  now omits it — "01 Overview" opens with that same scene-setting role
+  instead, so the header and the first section don't say the same thing
+  twice in a row.
+- **`CaseStudyCallout` and `CaseStudyStatement` are deleted** (zero
+  remaining callers) — both were the old showcase-register flourish
+  components (a bordered pull quote, a big rhetorical statement) that read
+  as ad copy against this format's plainer prose. The old bordered
+  "results box" closing statement (see the now-removed Results Boxes
+  convention) is gone from GoRight and Arrowhead Transit for the same
+  reason, replaced by a plain closing paragraph in "The Final Phase."
+  `CaseStudyPointsGrid` is **not** deleted — `/about` still uses it — but
+  no case study calls it anymore, replaced by plain prose paragraphs.
+- **A thin `border-stroke-dark` divider sits above every numbered section**
+  (except each page's first) on every case study — a deliberate, scoped
+  exception to what used to be a sitewide "no divider lines" rule. That
+  rule described sections that were a grouped, non-sequential set; this
+  format's sections are a real numbered sequence, and the divider
+  reinforces that the way the numbers themselves do.
+- Two real asymmetries across the five pages, both driven by content
+  rather than a formatting gap. Between the two original six-part pages:
+  Arrowhead Transit moved *two* of its original three decisions into
+  "Challenges" (read-only driver permissions, and borrowing the design
+  system on a nonprofit's timeline — its two genuinely hard calls),
+  leaving only one in "Project Scope and Design"; GoRight moved just one
+  (the navigation walkback), keeping three. Between the two groups: the
+  three showcase-turned-six-part pages have no decision blocks at all (see
+  the content-depth note above), where GoRight and Arrowhead Transit have
+  several.
 
 **Deleted as part of this migration** (all confirmed to have zero
 remaining importers before removal): `case-study-header.tsx` (+ its
@@ -531,7 +642,7 @@ The site-wide Open Graph card is generated at build time by `src/app/opengraph-i
 
 ### Footer
 
-There is no shared `SiteFooter` component anymore — deleted along with its Storybook story once `/about`, its last caller, moved to the new sidebar system. `MobileFooter` (see Case Study Sidebar / Sidebar Shell Layout above) covers the equivalent role below `md` sitewide now; `HomeSidebar`'s own `© Analdo Gomez / 2026` line covers it from `md` up.
+There is no shared `SiteFooter` component anymore — deleted along with its Storybook story once `/about`, its last caller, moved to the new sidebar system. `MobileFooter` (see Case Study Sidebar / Sidebar Shell Layout above) covers the equivalent role below `lg` sitewide now (mobile and tablet); `HomeSidebar`'s own `© Analdo Gomez / 2026` line covers it from `lg` up.
 
 ### Storybook
 
@@ -623,39 +734,16 @@ The presentation route is a focused dark, full-viewport experience at `/case-stu
 - The image lightbox fades its scrim in (`.animate-lightbox-scrim`, 200ms opacity) and its media container in with a subtle scale (`.animate-lightbox-media`, 260ms, 0.97→1), rather than appearing instantly, matching the same ease-out-expo curve.
 - Maintain the global focus ring and reduced-motion behavior. Navigation is functional without hover and does not depend on animation. The global `prefers-reduced-motion: reduce` rule in `globals.css` zeroes every animation/transition duration site-wide, including all deck and lightbox variants above, with no per-component opt-out needed.
 
-### CaseStudyCallout
+### CaseStudyCallout, CaseStudyStatement, and Results Boxes (removed)
 
-File: `src/components/case-study-callout.tsx`
-
-Current style:
-
-```tsx
-flex w-full animate-fade-up items-start justify-start rounded-none border border-gray-dark p-8
-```
-
-Inner paragraph:
-
-```tsx
-w-full text-pretty text-body-h2 text-white
-```
-
-`text-body-h2`, not the `text-body-h1` this used to run at — a typography
-pass (see Typography section's "Aligned to `/about`'s System" note below)
-normalized every case study's prose size down to `/about`'s one consistent
-16px body size. Stays full `text-white` rather than `/70`: the border box
-already sets this text apart from surrounding prose, so muting it too
-would double up the same signal.
-
-Callouts and results boxes should fill the available width and align left. Do not center or cap the paragraph unless the block is intentionally a centered pull quote.
-
-### Results Boxes
-
-GoRight and Arrowhead results boxes follow the callout rule:
-
-- Container: full width, left aligned.
-- Title: full-width `text-heading-h5`.
-- Body: full-width `text-body-h2`, upgraded at larger breakpoints as needed.
-- No `max-w-[70ch]` cap inside these boxes.
+Both components, and the bordered "results box" closing-statement pattern
+GoRight and Arrowhead Transit used to end on, were deleted when those two
+pages moved to the six-part case study format — see that section above for
+why and what replaced them (a plain closing paragraph in "The Final
+Phase"). Neither component has any other caller. If a future page wants a
+bordered pull-quote or a big rhetorical statement, these are gone —
+rebuild rather than look for them, and consider whether the six-part
+format's plainer prose fits the page better first.
 
 ## Motion
 
@@ -678,6 +766,14 @@ Global animation:
 
 Use motion for page-load presence only. Do not add scroll-triggered motion without changing the architecture intentionally.
 
+The one interaction-triggered exception is the image lightbox — first
+built for `CaseStudiesDeck`'s process/platform-view images
+(`.animate-lightbox-scrim`, 200ms opacity; `.animate-lightbox-media`,
+260ms, 0.97→1 scale; both `cubic-bezier(0.16, 1, 0.3, 1)`), and reused
+verbatim by `CaseStudyZoomableImage` for every case-study image now (see
+the Six-Part Case Study Format section). One lightbox motion language
+sitewide, not two.
+
 ### Page-Load Stagger
 
 Every page's content should cascade in on load, not fade up as one flat
@@ -695,7 +791,7 @@ ancestor/descendant relationship.** Their opacities compose
 multiplicatively and their `translateY`s add, reading as one softer,
 slightly-off fade rather than two clean steps. A section wrapper whose
 children already carry their own fade (a heading next to
-`CaseStudyPointsGrid`, `CaseStudyImagePair`'s own 2-item stagger, the
+`CaseStudyPointsGrid`, `CaseStudyGallery`'s own per-item stagger, the
 homepage's `CaseStudyCard` grid) stays unanimated itself for this
 reason — it simply won't get a `.stagger-section` delay (harmless, no
 rule fires), and its children's own internal stagger stands alone as

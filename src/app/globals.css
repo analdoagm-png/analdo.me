@@ -182,7 +182,7 @@ button:focus-visible {
  * steps.
  *
  * Deliberately NOT used for a section that already has its own internal
- * multi-item stagger (CaseStudyPointsGrid, CaseStudyImagePair, the
+ * multi-item stagger (CaseStudyPointsGrid, CaseStudyGallery, the
  * homepage's CaseStudyCard grid) — those wrapping divs stay off this
  * mechanism (no `.animate-fade-up` of their own) so their internal,
  * per-item delays aren't compounded by a second, outer fade running at the

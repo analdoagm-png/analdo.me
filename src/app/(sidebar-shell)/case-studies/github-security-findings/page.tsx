@@ -1,7 +1,10 @@
 import { caseStudyMetadata } from "@/lib/case-studies";
 import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
 import { CaseStudyBackLink } from "@/components/case-study-back-link";
-import { ProjectImage } from "@/components/project-image";
+import { CaseStudyProjectHeader } from "@/components/case-study-project-header";
+import { CaseStudySectionHeading } from "@/components/case-study-section-heading";
+import { CaseStudyFigure } from "@/components/case-study-figure";
+import { CaseStudyGallery } from "@/components/case-study-gallery";
 
 export const metadata = caseStudyMetadata({
   href: "/case-studies/github-security-findings",
@@ -11,148 +14,216 @@ export const metadata = caseStudyMetadata({
 });
 
 /**
- * The shell (skip link, MobileTopBar, HomeSidebar, MobileFooter) lives in
- * `(sidebar-shell)/layout.tsx` now — this page only returns its own content
- * column plus `CaseStudyJsonLd`. See Forty5Park's own comments for the full
- * layout rationale (centered `items-center` column, `w-full max-w-[720px]`
- * text / `w-full max-w-[1280px]` images, inline YEAR/intro/section text, no
- * `CaseStudyNext`).
+ * Fifth and last case study on the six-part format — see GoRight's own doc
+ * comment for the full rationale. Like Forty5Park and Uber Suite, this
+ * page previously ran a lighter "intro / approach / results" shape with no
+ * Role/Tools row; both are added here from detail the site owner supplied
+ * for this pass (client project, staff product designer, Figma).
  *
- * All five case studies — this one plus Forty5Park, Uber Suite, GoRight,
- * and Arrowhead Transit — are on this system now.
+ * No `CaseStudyDecisionBlock` on this page, same reasoning as Forty5Park
+ * and Uber Suite — the real material is one continuous workflow design
+ * (see "Project Scope and Design") plus one real tension (see
+ * "Challenges"), not a series of discrete named decisions.
  *
- * Per-image `aspect` overrides are carried over unchanged from the old
- * version — several of this project's screenshots are portrait or
- * near-square, not the component's `2880/1800` default.
+ * "Challenges" keeps the exec-vs-manager tension the previous version's
+ * "Approach" section already named — confirmed as the genuine hard problem
+ * rather than replaced — fleshed out with how the layered-view system
+ * actually resolved it. Its figure (the vulnerability detail view) is a
+ * deliberate callback to "01 Overview"'s figure (the org-wide findings
+ * table): the two images together are the exec/manager altitude
+ * difference the section describes, without needing a two-image gallery
+ * to say so twice.
  *
- * `.stagger-section` on the content column (see globals.css / Forty5Park)
- * cascades every direct animated child in on load, by DOM position.
- *
- * Section headings and intro paragraphs follow the same typography pass
- * as Forty5Park — see that page's own doc comment for the full rationale
- * (eyebrow + `text-heading-h3` sizing, quiet non-bold intro copy).
+ * "The Final Phase" stays qualitative — no hard usage numbers were
+ * available for this project, so this page doesn't invent one.
  */
 export default function GithubSecurityFindingsCaseStudy() {
   return (
     <>
       <CaseStudyBackLink />
-      <div className="stagger-section flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
-        <h1 className="w-full max-w-[720px] animate-fade-up text-balance font-mono text-heading-h3 font-bold text-white md:text-heading-h1">
-          Github&rsquo;s Security Findings
-        </h1>
+      <div className="stagger-section flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pt-24 lg:p-16 lg:pl-[384px]">
+        <CaseStudyProjectHeader
+          title="Github&rsquo;s Security Findings"
+          role="Staff Product Designer"
+          tools="Figma"
+          year={2025}
+        />
 
-        <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start">
-          <p className="font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
-            Year
+        {/* 01 — Overview */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
+          <CaseStudySectionHeading
+            number="01"
+            eyebrow="Overview"
+            title="One workflow, from a raw alert to a resolved finding"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            Github&rsquo;s Security Findings helps CTOs and engineering
+            managers ensure code security and reliability by tracking
+            alerts, notifying the right stakeholders, and guiding issues to
+            resolution. I joined as staff product designer on this client
+            project, designing in Figma.
           </p>
-          <time dateTime="2025" className="font-mono text-body-h2 text-white">
-            2025
-          </time>
-        </div>
-
-        <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <p className="text-pretty font-mono text-body-h2 text-white/70">
-            GH&rsquo;s Security Findings helps CTOs and managers ensure
-            code security and reliability by tracking alerts, notifying
-            the right stakeholders, and guiding issues to resolution
-            through a clear, streamlined workflow.
-          </p>
-          <p className="text-pretty font-mono text-body-h2 text-white/70">
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             Security alerts are only useful if they reach the right person
             at the right time. Most teams deal with noisy dashboards,
             unclear ownership, and no clear path from alert to resolution.
-            I redesigned GitHub&rsquo;s Security Findings to solve exactly
-            that — giving CTOs and engineering managers a workflow that
-            tracks issues, assigns accountability, and drives closure.
           </p>
         </div>
-
-        <ProjectImage
+        <CaseStudyFigure
           src="/images/github-security/project-image-1.png"
-          alt="Security Findings overview table showing total findings and SLA status metrics across services."
+          caption="The findings overview — total findings and SLA status across every service."
           aspect="3360/3188"
-          roundedClassName="rounded-token"
           priority
         />
-        <ProjectImage
-          src="/images/github-security/project-image-2.png"
-          alt="Security Findings detail view for a specific vulnerability, showing severity, impact, and a recommended resolution."
-          aspect="1680/1110"
-          roundedClassName="rounded-token"
-        />
 
-        <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <div className="flex w-full flex-col items-start">
-            <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
-              The Approach
-            </p>
-            <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
-              From noise to ownership
-            </h2>
-          </div>
-          <p className="text-pretty font-mono text-body-h2 text-white/70">
-            The hardest part was designing for two distinct users:
-            executives who need a high-level health signal, and managers
-            who need to act on specific alerts. I created a layered view
-            system that serves both without compromise.
+        {/* 02 — Pain Points */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
+          <CaseStudySectionHeading
+            number="02"
+            eyebrow="Pain Points"
+            title="Noisy dashboards, and no record of who owned what"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            Security dashboards were noisy by default — every finding
+            surfaced with the same visual weight, regardless of severity
+            or who was actually responsible for it. A CTO scanning for
+            organizational risk saw the exact same view as a manager who
+            needed to fix one specific vulnerability today.
+          </p>
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            Nothing in the existing tooling tracked a finding from the
+            moment it was flagged to the moment it was actually resolved.
+            Issues could sit unassigned indefinitely, with no clear record
+            of who owned them or what happened next.
           </p>
         </div>
 
-        <ProjectImage
-          src="/images/github-security/project-image-3.png"
-          alt="Security Findings risk-selection step in the remediation workflow, listing CVEs by risk score."
-          aspect="1680/1805"
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/github-security/project-image-4.png"
-          alt="Security Findings exception-creation dialog for flagging a finding as a false positive or accepted risk."
-          aspect="1680/1110"
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/github-security/project-image-5.png"
-          alt="Security Findings job status screen showing a completed remediation export."
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/github-security/project-image-6.png"
-          alt="Security Findings activity feed showing recent exceptions and status changes."
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/github-security/project-image-7.png"
-          alt="Security Findings audit trail showing risk history by section and question."
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/github-security/project-image-8.png"
-          alt="Security Findings full audit table showing every tracked finding and its resolution status."
-          aspect="3360/2400"
-          roundedClassName="rounded-token"
+        {/* 03 — Project Scope and Design */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
+          <CaseStudySectionHeading
+            number="03"
+            eyebrow="Project Scope and Design"
+            title="A workflow, not just a dashboard"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            I designed the workflow end to end — from how a finding first
+            surfaces, through assigning ownership, to the remediation
+            steps that actually resolve it. Every screen had to answer the
+            same question: whose job is this right now, and what do they
+            need to do next.
+          </p>
+        </div>
+        <CaseStudyGallery
+          items={[
+            {
+              src: "/images/github-security/project-image-3.png",
+              alt: "Security Findings risk-selection step in the remediation workflow, listing CVEs by risk score.",
+              caption: "Remediation — selecting which CVEs to address, ranked by risk score.",
+              aspect: "1680/1805",
+            },
+            {
+              src: "/images/github-security/project-image-4.png",
+              alt: "Security Findings exception-creation dialog for flagging a finding as a false positive or accepted risk.",
+              caption: "Exceptions — flagging a finding as a false positive or an accepted risk.",
+              aspect: "1680/1110",
+            },
+          ]}
         />
 
-        <div className="flex w-full max-w-[720px] animate-fade-up flex-col gap-6">
-          <div className="flex w-full flex-col items-start">
-            <p className="w-full font-mono text-body-h3 text-white/70 uppercase tracking-[0.05em]">
-              Results
-            </p>
-            <h2 className="w-full text-balance font-mono text-heading-h3 font-bold text-white">
-              Good security UX is invisible until something goes wrong
-            </h2>
-          </div>
-          <p className="text-pretty font-mono text-body-h2 text-white/70">
+        {/* 04 — Challenges */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
+          <CaseStudySectionHeading
+            number="04"
+            eyebrow="Challenges"
+            title="Designing one product for two different altitudes"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            The hardest part was designing for two genuinely different
+            users inside the same product: executives who need a
+            high-level health signal across the whole organization, and
+            managers who need to act on one specific alert right now. A
+            dashboard built for the executive view buried the specific
+            alert a manager needed; a dashboard built for taking action
+            gave an executive no sense of overall risk. I built a layered
+            view system instead of picking one audience over the other —
+            the same underlying data, surfaced at the altitude each role
+            actually needed, so an executive could see organizational
+            health at a glance and a manager could drop straight into the
+            one finding they were responsible for.
+          </p>
+        </div>
+        <CaseStudyFigure
+          src="/images/github-security/project-image-2.png"
+          caption="The manager altitude — one vulnerability, its severity, impact, and a recommended resolution."
+          aspect="1680/1110"
+        />
+
+        {/* 05 — Strategic Contributions */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
+          <CaseStudySectionHeading
+            number="05"
+            eyebrow="Strategic Contributions"
+            title="What I owned, start to finish"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            My role covered the full workflow design — the alert-tracking
+            model, the layered executive and manager views, the assignment
+            and accountability system, and the remediation flow through to
+            resolution, all designed in Figma.
+          </p>
+        </div>
+
+        {/* 06 — The Final Phase */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
+          <CaseStudySectionHeading
+            number="06"
+            eyebrow="The Final Phase"
+            title="Good security UX is invisible until something goes wrong"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             Engineering managers gained a clear line of sight from alert to
             resolution — no more dropped issues or unclear ownership.
-            Security workflows that used to stall now move through a
-            defined, accountable process.
+          </p>
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            There&rsquo;s no adoption number I can point to here — the
+            real change was structural: security workflows that used to
+            stall on ambiguity now move through a defined, accountable
+            process, whether you&rsquo;re the executive checking overall
+            health or the manager closing out one finding.
           </p>
         </div>
+        <CaseStudyFigure
+          src="/images/github-security/project-image-5.png"
+          caption="A completed remediation, exported once resolved."
+        />
+        <CaseStudyGallery
+          items={[
+            {
+              src: "/images/github-security/project-image-6.png",
+              alt: "Security Findings activity feed showing recent exceptions and status changes.",
+              caption: "Activity feed — recent exceptions and status changes.",
+              aspect: "2880/1800",
+            },
+            {
+              src: "/images/github-security/project-image-7.png",
+              alt: "Security Findings audit trail showing risk history by section and question.",
+              caption: "Audit trail — risk history by section and question.",
+              aspect: "2880/1800",
+            },
+            {
+              src: "/images/github-security/project-image-8.png",
+              alt: "Security Findings full audit table showing every tracked finding and its resolution status.",
+              caption: "The full audit table — every tracked finding and its resolution status.",
+              aspect: "3360/2400",
+              span: true,
+            },
+          ]}
+        />
       </div>
 
       {/*
         No CaseStudyNext on this page — dropped for the new sidebar design,
-        matching Forty5Park and Uber Suite. The persistent "/ Works" sidebar
+        matching every other case study. The persistent "/ Works" sidebar
         link covers the onward path back to the index.
       */}
       <CaseStudyJsonLd currentHref="/case-studies/github-security-findings" />

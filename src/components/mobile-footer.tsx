@@ -2,10 +2,12 @@ import { ContactGlyph } from "@/components/contact-glyph";
 import { author } from "@/lib/site";
 
 /**
- * Mobile-only (`md:hidden`) footer for pages using the new sidebar system —
- * copyright + icon-only social links, matching the Figma redesign's
- * separate `site-footer` node. From `md` up, `HomeSidebar`'s own copyright
- * line covers that role instead, so this never renders alongside it.
+ * Mobile-and-tablet (`lg:hidden`, below 1024px) footer for pages using the
+ * new sidebar system — copyright + icon-only social links, matching the
+ * Figma redesign's separate `site-footer` node. Was `md:hidden` until
+ * tablet navigation moved onto the same mobile pattern as phones. From `lg`
+ * up, `HomeSidebar`'s own copyright line covers that role instead, so this
+ * never renders alongside it.
  *
  * Extracted out of the homepage's `page.tsx` once a second page
  * (Forty5Park) needed the identical block — first pass had it inline since
@@ -13,7 +15,7 @@ import { author } from "@/lib/site";
  */
 export function MobileFooter() {
   return (
-    <div className="flex items-center justify-between border-t border-stroke-dark px-6 py-6 md:hidden">
+    <div className="flex items-center justify-between border-t border-stroke-dark px-6 py-6 lg:hidden">
       <p className="font-mono text-body-h2 text-white/70">© Analdo Gomez / 2026</p>
       <div className="flex items-center gap-4">
         <a

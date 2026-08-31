@@ -35,7 +35,9 @@ function CloseIcon() {
 }
 
 /**
- * Mobile-only (`md:hidden`) replacement for the old `border-b` top bar. A
+ * Mobile-and-tablet (`lg:hidden`, below 1024px) replacement for the old
+ * `border-b` top bar — was `md:hidden` (below 768px) until tablet navigation
+ * moved off the desktop sidebar onto this same mobile pattern instead. A
  * single persistent `fixed inset-x-6 top-6` card holds both states — the
  * "Analdo Gomez" + toggle header row never unmounts, only the content below
  * it (nav + contact links) expands and collapses — rather than the earlier
@@ -112,7 +114,7 @@ export function MobileTopBar() {
     "inline-flex items-center gap-2 font-mono text-body-h2 text-white transition-colors duration-200 hover:text-white/60 active:text-white/40";
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <div
         aria-hidden="true"
         onClick={() => setIsOpen(false)}

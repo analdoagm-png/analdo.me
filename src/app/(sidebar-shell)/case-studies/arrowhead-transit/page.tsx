@@ -3,12 +3,9 @@ import { CaseStudyJsonLd } from "@/components/case-study-json-ld";
 import { CaseStudyBackLink } from "@/components/case-study-back-link";
 import { CaseStudyProjectHeader } from "@/components/case-study-project-header";
 import { CaseStudySectionHeading } from "@/components/case-study-section-heading";
-import { CaseStudyPointsGrid } from "@/components/case-study-points-grid";
-import { CaseStudyCallout } from "@/components/case-study-callout";
-import { CaseStudyStatement } from "@/components/case-study-statement";
 import { CaseStudyDecisionBlock } from "@/components/case-study-decision-block";
 import { CaseStudyFigure } from "@/components/case-study-figure";
-import { ProjectImage } from "@/components/project-image";
+import { CaseStudyGallery } from "@/components/case-study-gallery";
 
 export const metadata = caseStudyMetadata({
   href: "/case-studies/arrowhead-transit",
@@ -18,245 +15,245 @@ export const metadata = caseStudyMetadata({
 });
 
 /**
- * Second (and last) editorial case study moved to the new sidebar system —
- * see GoRight's own comments for the full rationale (no subtitle, stacked
- * points instead of a 3-up grid, decision blocks followed by a stacked
- * figure instead of a side-by-side layout, no divider lines, no
- * `CaseStudyNext`). Both editorial case studies now share the exact same
- * rebuilt components as GoRight.
+ * Second case study on the six-part format — see GoRight's own doc comment
+ * for the full rationale and the shared-component changes that came with
+ * it (`CaseStudySectionHeading`'s `number` prop, the new `CaseStudyGallery`,
+ * `CaseStudyDecisionBlock` dropping its eyebrow chip, `CaseStudyCallout` /
+ * `CaseStudyStatement` / `CaseStudyImagePair` deleted as orphaned).
  *
- * `.stagger-section` on the content column (see globals.css / GoRight)
- * cascades every direct animated child in on load, by DOM position.
- *
- * The three inline lead paragraphs under "The Decisions" / "How I Got
- * There" / "The Platform" (and the closing statement box's body copy) run
- * `text-body-h2 text-white/70` — a typography pass brought them down from
- * a louder `text-body-h1 text-white` to match `/about`'s one consistent
- * quiet prose size/color, used there regardless of a paragraph's role.
+ * One real asymmetry from GoRight, both driven by what this project
+ * actually has rather than a formatting gap:
+ * - "Project Scope and Design" keeps only one named decision (the
+ *   Incoming Trips queue) — the other two original decisions (read-only
+ *   driver permissions, borrowing the design system) moved wholesale into
+ *   "Challenges" instead, since together they're this project's two real
+ *   hard calls: one about trust, one about a nonprofit's budget and
+ *   timeline. GoRight only had one decision (the nav walkback) that
+ *   belonged in Challenges, so it kept three in Project Scope.
+ * - Both `CaseStudyGallery` calls here pass three items instead of four,
+ *   with the third carrying `span` so it runs full width under the first
+ *   two rather than leaving a lopsided empty grid cell.
  */
 export default function ArrowheadTransitCaseStudy() {
   return (
     <>
       <CaseStudyBackLink />
-      <div className="stagger-section flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+      <div className="stagger-section flex flex-col items-center gap-12 px-6 pt-24 pb-16 md:gap-16 md:p-12 md:pt-24 lg:p-16 lg:pl-[384px]">
         <CaseStudyProjectHeader
           title="Arrowhead Transit"
           role="Lead Product Designer"
           tools="Figma, Whimsical, Notion, Airtable"
           year={2019}
-          intro="Arrowhead Transit books more than 100 healthcare transport rides a day — every one of them scheduled through a single Access database file, copied by hand between desks. I replaced it with a live dispatch platform dispatchers, drivers, and billing could all see at once."
         />
 
+        {/* 01 — Overview */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
+          <CaseStudySectionHeading
+            number="01"
+            eyebrow="Overview"
+            title="A schedule that lived in one file, rebuilt as a platform everyone could see"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            Arrowhead Transit books more than 100 healthcare transport
+            rides a day, connecting patients in a rural service area to
+            their appointments. Before this project, the entire schedule
+            lived in a single Access database file — copied by hand between
+            desks, with no login and no way to work outside the office.
+          </p>
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            I replaced it with a live dispatch platform dispatchers,
+            drivers, and billing could all see at once — from a design
+            audit of the existing tool through this shipped platform.
+          </p>
+        </div>
         <CaseStudyFigure
           src="/images/arrowhead-transit/exhibit.png"
-          caption="Exhibit A — the entire operation, in one Access file. No login. No history. No way to work outside the office."
-          aspect="2880/1800"
+          caption="The entire operation, in one Access file — no login, no history, no way to work outside the office."
+          aspect="1738/1282"
           priority
         />
 
-        <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
+        {/* 02 — Pain Points */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
           <CaseStudySectionHeading
-            eyebrow="The Problem"
-            title="Three ways the system worked against the people who depended on it"
-          />
-          <CaseStudyPointsGrid
-            items={[
-              {
-                number: "01",
-                title: "One file, one desk",
-                description:
-                  "The entire schedule lived in a local Access database — copied by hand between computers, with no login and no way to work outside the office.",
-              },
-              {
-                number: "02",
-                title: "Every leg, typed twice",
-                description:
-                  "Dispatchers entered each ride manually, one leg at a time. The workflow was slow enough that planning more than two or three days out was rare.",
-              },
-              {
-                number: "03",
-                title: "Dispatch by phone call",
-                description:
-                  "With no online platform, every schedule change meant a phone call — or a paper form a driver filled out on the road and handed in later.",
-              },
-            ]}
-          />
-        </div>
-
-        <CaseStudyCallout>
-          Arrowhead Transit&rsquo;s core job is getting healthcare
-          patients to appointments. A scheduling system only one person
-          could see at a time wasn&rsquo;t just inconvenient — it was
-          risk sitting in a spreadsheet.
-        </CaseStudyCallout>
-
-        <CaseStudyStatement
-          lead="So I rebuilt the system of record — "
-          emphasis="as a platform everyone could see at once."
-          maxWidthClassName="md:max-w-[600px] lg:max-w-[657px]"
-        />
-
-        <div className="flex w-full max-w-[720px] flex-col items-start gap-6">
-          <CaseStudySectionHeading
-            eyebrow="The Decisions"
-            title="Three calls that shaped how it actually got used"
+            number="02"
+            eyebrow="Pain Points"
+            title="A system that worked against the people who depended on it"
           />
           <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
-            The brief was simple — replace the database, cut manual
-            entry, connect drivers and dispatch. Getting there took a
-            few specific, and occasionally uncomfortable, calls.
+            The entire schedule lived in a single Access database file,
+            copied by hand between desks. There was no login and no way to
+            work outside the office, so dispatchers entered every ride
+            manually, one leg at a time — a workflow slow enough that
+            planning more than two or three days out was rare.
+          </p>
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            Every schedule change meant a phone call, or a paper form a
+            driver filled out on the road and handed in later. Referrals
+            were also arriving from multiple insurance and referral sources
+            — Laserfiche, Novus — entirely outside the system, so
+            dispatchers were hunting new rides down by hand before they
+            could even schedule them.
           </p>
         </div>
 
-        <CaseStudyDecisionBlock
-          label="Decision"
-          title="Read-only, except where it mattered"
-          description="Drivers needed live visibility into logs, routes, and trip details — but editing rights on that data belonged to dispatch. I scoped the driver view to read-only, with one exception: odometer and time entries on billing, the two fields only a driver on-site could actually verify."
-        />
-        <CaseStudyFigure
-          src="/images/arrowhead-transit/decision-1-figure.png"
-          caption="From the sitemap — permission boundaries by role"
-          aspect="2048/1122"
+        {/* 03 — Project Scope and Design */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
+          <CaseStudySectionHeading
+            number="03"
+            eyebrow="Project Scope and Design"
+            title="Audit, interviews, a golden path — then one queue for referrals"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            I started with a design audit of the existing tool, then sat
+            down with dispatchers to walk through their day-to-day. Those
+            conversations became golden-path flows and a sitemap defining
+            who could see and edit what, before a single screen was
+            wireframed.
+          </p>
+        </div>
+
+        <CaseStudyGallery
+          items={[
+            {
+              src: "/images/arrowhead-transit/process-1.png",
+              alt: "Design audit table comparing requirements against design impact for the dispatch workflow.",
+              caption: "Design audit — comparing requirements against design impact.",
+              aspect: "2048/669",
+            },
+            {
+              src: "/images/arrowhead-transit/process-2.png",
+              alt: "Sitemap table defining view and edit permissions by role.",
+              caption: "Sitemap — view and edit permissions defined by role.",
+              aspect: "2048/467",
+            },
+            {
+              src: "/images/arrowhead-transit/process-3.png",
+              alt: "Golden-path flowchart mapping a ride from booking through dispatch to completion.",
+              caption: "The golden path — a ride from booking through dispatch to completion.",
+              aspect: "2048/1079",
+              span: true,
+            },
+          ]}
         />
 
         <CaseStudyDecisionBlock
-          label="Decision"
           title="One queue for every outside referral"
-          description="Ride referrals were arriving from multiple insurance and referral sources — Laserfiche, Novus — entirely outside the old system. Dispatchers were hunting them down by hand. I gave every external referral one landing point: an Incoming Trips queue, visible the moment a request comes in."
+          description="Ride referrals were arriving from multiple insurance and referral sources — Laserfiche, Novus — entirely outside the old system, and dispatchers were hunting them down by hand. I gave every external referral one landing point: an Incoming Trips queue, visible the moment a request comes in."
         />
         <CaseStudyFigure
           src="/images/arrowhead-transit/decision-2-figure.png"
-          caption="Queue management UI overview"
+          caption="The Incoming Trips queue, replacing three separate inboxes."
           aspect="2880/1800"
         />
 
-        <CaseStudyDecisionBlock
-          label="Constraint"
-          title="Borrowed the design system, on purpose"
-          description="This ran on a nonprofit's timeline, not a greenfield brand budget. Instead of building a bespoke visual system, I adapted my studio's existing framework to Arrowhead Transit's brand — trading a fully custom look for the weeks that went into the actual workflows instead."
+        {/* 04 — Challenges */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
+          <CaseStudySectionHeading
+            number="04"
+            eyebrow="Challenges"
+            title="Two hard calls: who to trust, and what to build from scratch"
+          />
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+            One of the harder calls in this project was about trust, not
+            technology. Drivers needed live visibility into logs, routes,
+            and trip details, but editing rights on that data belonged to
+            dispatch — a distinction that isn&rsquo;t a comfortable one to
+            design for, since it tells a driver directly what they can and
+            can&rsquo;t touch. I scoped the driver view to read-only, with
+            one deliberate exception: odometer and time entries on billing,
+            the two fields only a driver on-site could actually verify. The
+            exception mattered as much as the rule — a system that trusted
+            no one wouldn&rsquo;t have held up any better than one that
+            trusted everyone.
+          </p>
+        </div>
+        <CaseStudyFigure
+          src="/images/arrowhead-transit/decision-1-figure.png"
+          caption="Permission boundaries by role, from the sitemap."
+          aspect="2048/1137"
         />
+        <p className="w-full max-w-[720px] animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
+          The other constraint was money and time, not people. This ran on
+          a nonprofit&rsquo;s timeline, not a greenfield brand budget, and
+          building a fully custom visual system from zero wasn&rsquo;t a
+          realistic use of either. Instead, I adapted my studio&rsquo;s
+          existing design system to Arrowhead Transit&rsquo;s brand — a
+          deliberate trade of a fully bespoke look for the weeks that went
+          into the actual workflows instead. It&rsquo;s a less flattering
+          thing to put in a case study than an original brand system, but
+          it was the right call for what this project actually needed.
+        </p>
         <CaseStudyFigure
           src="/images/arrowhead-transit/decision-3-figure.png"
-          caption="Studio design system, adapted — not rebuilt from zero"
-          aspect="2048/1122"
+          caption="The studio's design system, adapted rather than rebuilt from zero."
+          aspect="2048/2034"
         />
 
-        <div className="flex w-full max-w-[720px] flex-col items-start gap-6">
+        {/* 05 — Strategic Contributions */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
           <CaseStudySectionHeading
-            eyebrow="How I Got There"
-            title="Audit, interviews, flows — then screens"
+            number="05"
+            eyebrow="Strategic Contributions"
+            title="What I owned, start to finish"
           />
           <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
-            I started with a design audit of the existing tool, then
-            sat down with dispatchers to walk through their day-to-day.
-            Those conversations became golden-path flows and a sitemap
-            defining who could see and edit what, wireframed before a
-            single screen was designed.
+            My role covered the full arc of this project: the design
+            audit, dispatcher interviews, golden-path flow mapping, sitemap
+            and permission design, and UI design for the shipped platform —
+            handed off to engineering through prototypes in Figma and
+            documentation in Notion.
           </p>
         </div>
 
-        <ProjectImage
-          src="/images/arrowhead-transit/process-1.png"
-          alt="Design audit table comparing requirements against design impact for the dispatch workflow."
-          aspect="2048/669"
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/arrowhead-transit/process-2.png"
-          alt="Sitemap table defining view and edit permissions by role."
-          aspect="2048/467"
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/arrowhead-transit/process-3.png"
-          alt="Golden-path flowchart mapping a ride from booking through dispatch to completion."
-          aspectClassName="aspect-[2048/1025] lg:aspect-[2048/1079]"
-          roundedClassName="rounded-token"
-        />
-
-        <div className="flex w-full max-w-[720px] flex-col items-start gap-6">
+        {/* 06 — The Final Phase */}
+        <div className="flex w-full max-w-[720px] flex-col items-start gap-8 border-t border-stroke-dark pt-16 md:pt-20 lg:pt-24">
           <CaseStudySectionHeading
-            eyebrow="The Platform"
-            title="What dispatch, drivers, and billing actually see now"
+            number="06"
+            eyebrow="The Final Phase"
+            title="One platform, replacing a database and a phone line"
           />
           <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
-            One dashboard replaced the Access file — trips this week,
-            incoming referrals, and available drivers, all live.
+            The Access file is gone. Dispatchers, drivers, and billing now
+            work from one live platform instead of a local database file,
+            a phone line, and a stack of paper forms.
           </p>
-        </div>
-
-        <ProjectImage
-          src="/images/arrowhead-transit/platform-1.png"
-          alt="Arrowhead Transit dashboard showing this week's trips and available drivers."
-          aspectClassName="aspect-[8/5] lg:aspect-[2048/1623]"
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/arrowhead-transit/platform-2.png"
-          alt="Arrowhead Transit incoming referrals queue showing new ride requests."
-          aspectClassName="aspect-[8/5] lg:aspect-[2048/945]"
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/arrowhead-transit/platform-3.png"
-          alt="Arrowhead Transit trip detail view with a live route map."
-          aspectClassName="aspect-[8/5] lg:aspect-[2048/1165]"
-          roundedClassName="rounded-token"
-        />
-        <ProjectImage
-          src="/images/arrowhead-transit/platform-4.png"
-          alt="Arrowhead Transit driver tracking view showing an active route on a map."
-          aspectClassName="aspect-[8/5] lg:aspect-[2048/1357]"
-          roundedClassName="rounded-token"
-        />
-
-        <div className="flex w-full max-w-[720px] flex-col items-start gap-8">
-          <CaseStudySectionHeading
-            eyebrow="Results"
-            title="What changed, operationally"
-          />
-          <CaseStudyPointsGrid
-            items={[
-              {
-                number: "1.",
-                title: "2–3 days → 2+ weeks",
-                description: "Booking horizon dispatchers could plan against",
-              },
-              {
-                number: "2.",
-                title: "Real-time",
-                description:
-                  "Driver tracking replaced phone-and-SMS check-ins",
-              },
-              {
-                number: "3.",
-                title: "Mostly automated",
-                description:
-                  "Manual entry, largely eliminated from the workflow",
-              },
-            ]}
-          />
-        </div>
-
-        <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-4 rounded-none border border-gray-dark p-8">
-          <p className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
-            The database is gone.
-          </p>
-          <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+          <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white/70">
             Dispatchers plan two weeks out instead of two or three days.
-            Drivers show up in the system instead of on a paper form.
-            Referrals land in one queue instead of three separate
-            inboxes. That&rsquo;s the point of replacing a spreadsheet
-            with a platform — not a prettier screen, but a system a
-            rural transit network can actually run on.
+            Driver tracking replaced phone-and-SMS check-ins with
+            real-time visibility. Referrals land in one queue instead of
+            three separate inboxes, and manual entry is largely gone from
+            the workflow.
           </p>
         </div>
-
-        <p className="w-full max-w-[720px] animate-fade-up text-pretty text-center font-mono text-body-h2 text-white/70">
-          ROLE — Lead Product Designer, product ideation through design
-          &amp; development handoff. Handoff documented in Notion and
-          prototyped in Figma for the engineering team.
-        </p>
+        <CaseStudyFigure
+          src="/images/arrowhead-transit/platform-1.png"
+          caption="Arrowhead Transit today — trips this week, incoming referrals, and available drivers, all live."
+          aspect="2048/1623"
+        />
+        <CaseStudyGallery
+          items={[
+            {
+              src: "/images/arrowhead-transit/platform-2.png",
+              alt: "Arrowhead Transit incoming referrals queue showing new ride requests.",
+              caption: "Incoming referrals — every outside request in one queue.",
+              aspect: "2048/945",
+            },
+            {
+              src: "/images/arrowhead-transit/platform-3.png",
+              alt: "Arrowhead Transit trip detail view with a live route map.",
+              caption: "Trip detail — a live route on the map.",
+              aspect: "2048/1165",
+            },
+            {
+              src: "/images/arrowhead-transit/platform-4.png",
+              alt: "Arrowhead Transit driver tracking view showing an active route on a map.",
+              caption: "Driver tracking — an active route, in real time.",
+              aspect: "2048/1357",
+              span: true,
+            },
+          ]}
+        />
       </div>
 
       <CaseStudyJsonLd currentHref="/case-studies/arrowhead-transit" />

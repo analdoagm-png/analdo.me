@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { CaseStudyZoomableImage } from "@/components/case-study-zoomable-image";
 
 /**
  * `roundedClassName` now defaults to `rounded-token` (was `rounded-none`) —
@@ -17,6 +17,11 @@ import Image from "next/image";
  * adds its own one-off animation delay for the same reason `ProjectImage`
  * dropped it: the page-level stagger supersedes it with a real
  * position-based delay instead of one hardcoded special case.
+ *
+ * The image itself is `CaseStudyZoomableImage` now, not a plain `next/image`
+ * — click-to-expand at `md`+, see that component's own doc comment for the
+ * full rationale. This component itself stays a Server Component; only the
+ * zoomable leaf is a client component.
  */
 export function CaseStudyFigure({
   src,
@@ -43,23 +48,16 @@ export function CaseStudyFigure({
     <div
       className={`flex w-full max-w-[1280px] animate-fade-up flex-col items-start ${gapClassName}`}
     >
-      <div
-        className={`relative w-full overflow-hidden bg-stroke-dark ${roundedClassName} ${aspectClassName ?? ""}`}
-        style={
-          aspectClassName
-            ? undefined
-            : { aspectRatio: aspect.replace("/", " / ") }
-        }
-      >
-        <Image
-          src={src}
-          alt={alt ?? caption}
-          fill
-          className="object-cover"
-          sizes="(min-width: 1280px) 1280px, 100vw"
-          priority={priority}
-        />
-      </div>
+      <CaseStudyZoomableImage
+        src={src}
+        alt={alt ?? caption}
+        caption={caption}
+        aspect={aspect}
+        aspectClassName={aspectClassName}
+        roundedClassName={roundedClassName}
+        sizes="(min-width: 1280px) 1280px, 100vw"
+        priority={priority}
+      />
       <p className={`w-full text-center font-mono text-body-h3 ${captionClassName}`}>
         {caption}
       </p>

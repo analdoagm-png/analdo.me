@@ -1,26 +1,26 @@
 /**
- * Label + title + description for one "Decision"/"Constraint" block.
- * Text-only now — the old version paired this with a `CaseStudyFigure`
- * inline, side-by-side at `lg` (`reverseOnDesktop` flipping which side).
- * Figma's actual structure (node 339:801/339:805 for the first decision,
- * repeated per decision) is simpler: this text block, then a full-width
- * `CaseStudyFigure` stacked directly below it as its own sibling — no
- * side-by-side layout at any breakpoint. Callers render the figure
- * themselves right after this component instead of passing figure props
- * into it.
+ * Title + description for one named sub-decision inside a "Project Scope
+ * and Design" or "Challenges" section. Text-only — callers render a
+ * `CaseStudyFigure` themselves right after this component as its own
+ * sibling, not passed in as a prop.
+ *
+ * Dropped the old "Decision"/"Constraint" eyebrow label as part of the
+ * six-part case study format's plainer register (see AGENTS.md's Case
+ * Study Patterns section) — that chip read as a taxonomy the reader didn't
+ * need; the `h3` title now carries the same information in plain language
+ * ("Read-only, except where it mattered" rather than "Decision" + a
+ * separate title line). Safe to simplify since GoRight and Arrowhead
+ * Transit are this component's only two callers.
  */
 export function CaseStudyDecisionBlock({
-  label,
   title,
   description,
 }: {
-  label: string;
   title: string;
   description: string;
 }) {
   return (
-    <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-2">
-      <p className="font-mono text-body-h3 text-white">{label}</p>
+    <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-3">
       <h3 className="w-full text-balance font-mono text-heading-h5 font-bold text-white">
         {title}
       </h3>

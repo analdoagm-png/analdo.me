@@ -35,10 +35,22 @@ import { MobileFooter } from "@/components/mobile-footer";
  * page's own `h1` on `/` and `/about` — both are "about Analdo himself"
  * pages, so the sidebar's identity statement can carry the h1 role for
  * both rather than each page restating a variant of it. Each of those two
- * pages still needs its own mobile-only (`md:hidden`) duplicate `h1`,
- * since the sidebar itself is hidden below `md` — see `page.tsx` and
- * `about/page.tsx`. Every case study keeps `bioAs="p"`: its own project
+ * pages still needs its own mobile/tablet-only (`lg:hidden`) duplicate
+ * `h1`, since the sidebar itself is hidden below `lg` now — see `page.tsx`
+ * and `about/page.tsx`. Every case study keeps `bioAs="p"`: its own project
  * title is the real `h1` there.
+ *
+ * `HomeSidebar` shows at `lg` (1024px) and up; `MobileTopBar`/`MobileFooter`
+ * cover both mobile and tablet (below `lg`) with the same mobile navigation
+ * pattern, rather than switching to the sidebar at `md` (768px) the way an
+ * earlier pass did. Tablet used to get the desktop rail; it now gets the
+ * same top bar + inline hero + footer as mobile, just at a wider viewport.
+ * `MobileTopBar`'s card stays a fixed `inset-x-6` width rather than
+ * growing with the viewport, so at the wide end of tablet (close to
+ * 1024px) there's a visibly large gap between the "Analdo Gomez" label and
+ * the menu toggle — a known, accepted tradeoff of reusing the mobile
+ * component as-is rather than a tablet-tuned variant; revisit if it reads
+ * as more than a minor cosmetic gap in practice.
  */
 export default function SidebarShellLayout({
   children,
@@ -64,7 +76,7 @@ export default function SidebarShellLayout({
         <HomeSidebar
           bioAs={bioAs}
           activeNav={activeNav}
-          className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80"
+          className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:flex lg:w-80"
         />
         {children}
       </main>

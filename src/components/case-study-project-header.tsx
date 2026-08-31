@@ -17,6 +17,13 @@ import { CaseStudyYear } from "@/components/case-study-year";
  * on it) uses this exact quiet, non-bold style regardless of role, and
  * case studies previously stood out as the one place on the site where an
  * intro paragraph got louder treatment than the rest of the page's prose.
+ *
+ * `intro` is optional as of the six-part case study format (GoRight,
+ * Arrowhead Transit): that format opens straight into a numbered "01
+ * Overview" section instead, which carries the same scene-setting role
+ * this paragraph used to — rendering both would say the same thing twice
+ * in a row. The three showcase case studies still pass `intro` and are
+ * unaffected.
  */
 export function CaseStudyProjectHeader({
   title,
@@ -29,7 +36,7 @@ export function CaseStudyProjectHeader({
   role: string;
   tools: string;
   year: number;
-  intro: string;
+  intro?: string;
 }) {
   return (
     <div className="flex w-full max-w-[720px] animate-fade-up flex-col items-start gap-6">
@@ -53,9 +60,11 @@ export function CaseStudyProjectHeader({
         <CaseStudyYear year={year} />
       </div>
 
-      <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
-        {intro}
-      </p>
+      {intro ? (
+        <p className="w-full text-pretty font-mono text-body-h2 text-white/70">
+          {intro}
+        </p>
+      ) : null}
     </div>
   );
 }

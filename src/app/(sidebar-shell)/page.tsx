@@ -19,12 +19,14 @@ export const metadata: Metadata = {
  */
 export default function Home() {
   return (
-    <div className="flex flex-col gap-8 px-6 pt-24 pb-8 md:p-12 md:pl-[368px] lg:p-16 lg:pl-[384px]">
+    <div className="flex flex-col gap-8 px-6 pt-24 pb-8 md:p-12 md:pt-24 lg:p-16 lg:pl-[384px]">
       {/*
-        Mobile-only hero content. HomeSidebar covers this same content
-        from md up (name/role, statement, tool sentence, contact
+        Mobile-and-tablet hero content (below lg — was md:hidden until
+        tablet navigation moved off the desktop sidebar onto the same
+        mobile pattern as phones). HomeSidebar covers this same content
+        from lg up (name/role, statement, tool sentence, contact
         links) — kept out of the DOM twice by scoping this block to
-        md:hidden rather than hiding pieces of HomeSidebar itself.
+        lg:hidden rather than hiding pieces of HomeSidebar itself.
         The real `<h1>` for this page is HomeSidebar's own sr-only
         heading (present at every breakpoint) — this paragraph is a
         purely visual duplicate for viewports where the sidebar itself
@@ -38,7 +40,7 @@ export default function Home() {
         compound with each child's (see globals.css's `.stagger-section`
         comment for why that pairing is avoided).
       */}
-      <div className="stagger-section flex flex-col gap-6 md:hidden">
+      <div className="stagger-section flex flex-col gap-6 lg:hidden">
         <p className="w-full animate-fade-up text-pretty font-mono text-body-h2 text-white">
           {bioStatement}
         </p>
